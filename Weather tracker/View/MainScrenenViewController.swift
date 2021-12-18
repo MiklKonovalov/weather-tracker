@@ -6,35 +6,28 @@
 //
 
 import UIKit
+import Kingfisher
+import CoreLocation
+
 
 class MainScrenenViewController: UIViewController {
     
     let viewModel: DayWeatherViewModel
     
-    private var main: Double? {
-        didSet {
-            DispatchQueue.main.async {
-                self.collectionView.reloadData()
-            }
-        }
-    }
+    let twentyFourHoursViewModel: TwentyFourHoursViewModel
     
-    private var minTemp: Double? {
-        didSet {
-            DispatchQueue.main.async {
-                self.collectionView.reloadData()
-            }
-        }
-    }
+    let weekViewModel: WeekViewModel
     
-    //MARK: ~VIEWS
+    let locationViewModel: LocationViewModel
+    
+    //MARK: - Views
     
     //UILabel
-    let cityLabel: UILabel = {
+    var cityLabel: UILabel = {
         let cityLabel = UILabel()
         cityLabel.font = UIFont(name: "Rubik-Medium", size: 18)
-        cityLabel.text = "City"
         cityLabel.textColor = .black
+        cityLabel.lineBreakMode = .byWordWrapping
         cityLabel.textAlignment = .center
         cityLabel.translatesAutoresizingMaskIntoConstraints = false
         return cityLabel
@@ -74,7 +67,7 @@ class MainScrenenViewController: UIViewController {
         layout.scrollDirection = .horizontal
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.register(DayWeatherCell.self, forCellWithReuseIdentifier: "sliderCell")
-        collectionView.layer.cornerRadius = 5
+        collectionView.layer.cornerRadius = 15
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.backgroundColor = UIColor(red: 0.125, green: 0.306, blue: 0.78, alpha: 1)
         return collectionView
@@ -101,8 +94,7 @@ class MainScrenenViewController: UIViewController {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         let todayCollectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        todayCollectionView.register(TodayCollectionViewCell.self, forCellWithReuseIdentifier: "todayCell")
-        //todayCollectionView.layer.cornerRadius = 22
+        todayCollectionView.register(TwentyFourHoursCollectionViewCell.self, forCellWithReuseIdentifier: "todayCell")
         todayCollectionView.translatesAutoresizingMaskIntoConstraints = false
         todayCollectionView.backgroundColor = .white
         return todayCollectionView
@@ -132,12 +124,11 @@ class MainScrenenViewController: UIViewController {
     }()
     
     //Bottom Collection view
-    var bottomCollectionView: UICollectionView = {
+    var weekCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         let bottomCollectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        bottomCollectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "bottomCell")
-        bottomCollectionView.layer.cornerRadius = 5
+        bottomCollectionView.register(WeekCollectionViewCell.self, forCellWithReuseIdentifier: "bottomCell")
         bottomCollectionView.translatesAutoresizingMaskIntoConstraints = false
         bottomCollectionView.backgroundColor = .white
         return bottomCollectionView
@@ -145,8 +136,11 @@ class MainScrenenViewController: UIViewController {
     
     //MARK: - Initialization
     
-    init(viewModel: DayWeatherViewModel) {
+    init(viewModel: DayWeatherViewModel, twentyFourHoursViewModel: TwentyFourHoursViewModel, weekViewModel: WeekViewModel, locationViewModel: LocationViewModel) {
         self.viewModel = viewModel
+        self.twentyFourHoursViewModel = twentyFourHoursViewModel
+        self.weekViewModel = weekViewModel
+        self.locationViewModel = locationViewModel
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -164,16 +158,17 @@ class MainScrenenViewController: UIViewController {
         view.addSubview(settingsButton)
         view.addSubview(locationButton)
         view.addSubview(cityLabel)
+        
         view.addSubview(collectionView)
         view.addSubview(pageControl)
         view.addSubview(detauls24Button)
         view.addSubview(todayCollectionView)
-        view.addSubview(bottomCollectionView)
+        view.addSubview(weekCollectionView)
         view.addSubview(everydayLabel)
         view.addSubview(twentyFiveDayButton)
         
         let attributeString = NSMutableAttributedString(string: "Подробнее на 24 часа", attributes: yourAttributes)
-        let twentyFiveDayButtonAttributeString = NSMutableAttributedString(string: "25 часов", attributes: yourAttributes)
+        let twentyFiveDayButtonAttributeString = NSMutableAttributedString(string: "25 дней", attributes: yourAttributes)
         detauls24Button.setAttributedTitle(attributeString, for: .normal)
         twentyFiveDayButton.setAttributedTitle(twentyFiveDayButtonAttributeString, for: .normal)
     
@@ -183,28 +178,57 @@ class MainScrenenViewController: UIViewController {
         todayCollectionView.dataSource = self
         todayCollectionView.delegate = self
         
-        bottomCollectionView.dataSource = self
-        bottomCollectionView.delegate = self
+        weekCollectionView.dataSource = self
+        weekCollectionView.delegate = self
         
         setupConstraints()
 
-        viewModel.weatherDidChange = { result in
-            //self.main?.append((result.main?.temp)!)
-            self.main = result.main?.temp
-            self.minTemp = result.main?.tempMax
-            print("TEMPERATURE: \(result.main?.temp)")
+        /*LocationManager.shared.getUserLocation { [weak self] location in
+            DispatchQueue.main.async {
+                guard let self = self else { return }
+                print("LOCATION: \(location)")
+                self.addMapPin(with: location)
+            }
+        }*/
+        
+        self.cityLabel.text = locationViewModel.locationMainScreenViewModel?.cityName
+        
+        viewModel.weatherDidChange = {
+            DispatchQueue.main.async {
+                self.collectionView.reloadData()
+            }
         }
         
-        /*viewModel.mainDidChange = { main in
-            self.main = main
-            
-        }*/
+        twentyFourHoursViewModel.twentyFourHoursWeatherDidChange = {
+            DispatchQueue.main.async {
+                self.todayCollectionView.reloadData()
+            }
+        }
+        
+        weekViewModel.weekWeatherDidChange = {
+            DispatchQueue.main.async {
+                self.weekCollectionView.reloadData()
+            }
+        }
+        
+        locationViewModel.locationDidChange = {
+            DispatchQueue.main.async {
+                self.cityLabel.text = self.viewModel.currentWeather?.cityName
+                self.view.reloadInputViews()
+            }
+        }
         
         viewModel.viewDidLoad()
         
+        twentyFourHoursViewModel.twentyFourHoursViewDidLoad()
+        
+        weekViewModel.weekViewDidLoad()
+        
+        locationViewModel.locationDidLoad()
+        
     }
     
-    //MARK: ~FUNCTIONS
+    //MARK: -Functions
     
     func setupConstraints() {
         
@@ -218,9 +242,8 @@ class MainScrenenViewController: UIViewController {
             locationButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10),
             locationButton.heightAnchor.constraint(equalToConstant: 22),
             
-            cityLabel.widthAnchor.constraint(equalToConstant: 147),
             cityLabel.heightAnchor.constraint(equalToConstant: 22),
-            cityLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 115),
+            cityLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             cityLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 41),
             
             collectionView.widthAnchor.constraint(equalToConstant: 344),
@@ -250,10 +273,10 @@ class MainScrenenViewController: UIViewController {
             twentyFiveDayButton.trailingAnchor.constraint(equalTo: todayCollectionView.trailingAnchor),
             twentyFiveDayButton.heightAnchor.constraint(equalToConstant: 30),
             
-            bottomCollectionView.topAnchor.constraint(equalTo: everydayLabel.bottomAnchor, constant: 10),
-            bottomCollectionView.leadingAnchor.constraint(equalTo: collectionView.leadingAnchor),
-            bottomCollectionView.trailingAnchor.constraint(equalTo: collectionView.trailingAnchor),
-            bottomCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            weekCollectionView.topAnchor.constraint(equalTo: everydayLabel.bottomAnchor, constant: 10),
+            weekCollectionView.leadingAnchor.constraint(equalTo: collectionView.leadingAnchor),
+            weekCollectionView.trailingAnchor.constraint(equalTo: collectionView.trailingAnchor),
+            weekCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             
             
         ]
@@ -272,11 +295,26 @@ class MainScrenenViewController: UIViewController {
         pageControl.currentPage = Int(offSet + horizontalCenter) / Int(width)
     }
     
-    //MARK: ~SELECTORS
+    //MARK: - Selectors
     
-    //UIAlertController
+    //MARK: -UIAlertController
     @objc func locationButtonTap() {
-        print("123")
+        let alert = UIAlertController(title: "Добавление города", message: nil, preferredStyle: .alert)
+        let addButton = UIAlertAction(title: "Добавить", style: .default) { action in
+            let textField = alert.textFields?.first
+            
+            //Эти данные должны передаться в...?
+            print(textField?.text)
+        }
+        alert.addAction(addButton)
+        let cancelButton = UIAlertAction(title: "Отмена", style: .default, handler: nil)
+        alert.addAction(cancelButton)
+        
+        alert.addTextField { textField in
+            textField.placeholder = "Введите город"
+        }
+        
+        present(alert, animated: true, completion: nil)
     }
     
     //ShowSettingsController
@@ -299,7 +337,7 @@ class MainScrenenViewController: UIViewController {
     
 }
 
-//MARK: COLLECTION
+//MARK: - Collection
 
 extension MainScrenenViewController: UICollectionViewDataSource {
     
@@ -307,44 +345,191 @@ extension MainScrenenViewController: UICollectionViewDataSource {
         if collectionView == self.collectionView {
             return 1
         } else if collectionView == self.todayCollectionView {
-            return 3
+            return twentyFourHoursViewModel.twentyFourHoursWeather?.twentyFourHoursTime?.count ?? 7
         } else {
-            return 7
+            return weekViewModel.weekMainScreenViewModel?.weekDate.count ?? 7
+        
         }
-    
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        //MARK: -Now Cell
         if collectionView == self.collectionView {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "sliderCell", for: indexPath) as! DayWeatherCell
              
-            if let myd: String? = String(main ?? 1.1) {
-                cell.mainTemperatureLabel.text = myd
+            if let main: String? = String(format: "%.0f", viewModel.currentWeather?.main ?? 1.1) {
+                cell.mainTemperatureLabel.text = "\(main ?? "No data") °"
             }
             
-            if let minTemp: String? = String(minTemp ?? 1.1) {
-                cell.minTemperatureLabel.text = minTemp
+            if let minTemp: String? = String(format: "%.0f", viewModel.currentWeather?.minTemp ?? 1.1) {
+                cell.minTemperatureLabel.text = "\(minTemp ?? "No data") °"
             }
+            
+            if let maxTemp: String? = String(format: "%.0f", viewModel.currentWeather?.maxTemp ?? 1.1) {
+                cell.maxTemperatureLabel.text = "\(maxTemp ?? "No data") °"
+            }
+            
+            if let description = viewModel.currentWeather?.weatherDescription {
+                switch (description) {
+                case .clear:
+                    cell.weatherDescriptionLabel.text = description.rawValue
+                case .clouds:
+                    cell.weatherDescriptionLabel.text = description.rawValue
+                case .rain:
+                    cell.weatherDescriptionLabel.text = description.rawValue
+                default:
+                    cell.weatherDescriptionLabel.text = "No data"
+                }
+            }
+            
+            if let windSpeed: String? = String(format: "%.0f", viewModel.currentWeather?.windSpeed ?? 1.1) {
+                cell.windSpeedLabel.text = "\(windSpeed ?? "No data") м/с"
+            }
+            
+            if let clouds: String? = String(viewModel.currentWeather?.clouds ?? 1) {
+                cell.cloudsLabel.text = clouds
+            }
+            
+            if let humidity: String? = String(viewModel.currentWeather?.humidity ?? 1) {
+                cell.humidityLabel.text = "\(humidity ?? "No data") %"
+            }
+            
+            let dateSunrise = viewModel.currentWeather?.sunrise
+            let formateSunrise = dateSunrise?.getFormattedDate(format: "HH:mm")
+            
+            cell.sunrise.text = formateSunrise
+            
+            let dateSunset = viewModel.currentWeather?.sunset
+            let formateSunset = dateSunset?.getFormattedDate(format: "HH:mm")
+            
+            cell.sunset.text = formateSunset
+            
+            let date = Date()
+            let dateFormatter = DateFormatter()
+            dateFormatter.locale = Locale(identifier: "ru_RU")
+            dateFormatter.dateFormat = "HH:mm, EE d MMMM"
+            let dateString = dateFormatter.string(from: date)
+            
+            cell.dateLabel.text = dateString
             
             return cell
-            
+        // MARK: -TodayCell
         } else if collectionView == self.todayCollectionView {
-        let cellTwo = collectionView.dequeueReusableCell(withReuseIdentifier: "todayCell", for: indexPath) as! TodayCollectionViewCell
         
-            cellTwo.backgroundColor = .red
-        
-        return cellTwo
-        } else {
-        let cellThree = collectionView.dequeueReusableCell(withReuseIdentifier: "bottomCell", for: indexPath)
+            let cellTwo = collectionView.dequeueReusableCell(withReuseIdentifier: "todayCell", for: indexPath) as! TwentyFourHoursCollectionViewCell
             
-        cellThree.backgroundColor = .red
+            //MARK: -Temp
+            if let arrayTemp = twentyFourHoursViewModel.twentyFourHoursWeather?.twentyFourHoursTemp {
+                let stringArray = arrayTemp.map({String(format: "%.0f", $0)})
+                cellTwo.mainTemperatureLabel.text = "\(stringArray[indexPath.item])" + " " + "°"
+            }
+            
+            //MARK: -Time
+            let time = self.twentyFourHoursViewModel.twentyFourHoursWeather?.twentyFourHoursTime
+            
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+            dateFormatter.locale = Locale(identifier: "ru_RU")
+            
+            //Array of Dates
+            let dateDate = time?.map({ dateFormatter.date(from: $0) })
+            
+            let dateFormatter2 = DateFormatter()
+            dateFormatter2.dateFormat = "HH:mm"
+            dateFormatter2.locale = Locale(identifier: "ru_RU")
+            
+            let dateString = dateDate?.map({ dateFormatter2.string(from: $0 ?? Date()) })
+        
+            cellTwo.timeLabel.text = dateString?[indexPath.item]
+            
+            //MARK: -Icon
+            if let icon = twentyFourHoursViewModel.twentyFourHoursWeather?.twentyFourHoursIcon {
+                for _ in icon {
+                    let iconArray = icon.map({$0})
+                    let urlStr = "http://openweathermap.org/img/w/" + (iconArray[indexPath.item]) + ".png"
+                    let url = URL(string: urlStr)
+                    cellTwo.imageView.kf.setImage(with: url) { result in
+                        print(result)
+                        cellTwo.setNeedsLayout()
+                    }
+                }
+            }
+            
+        return cellTwo
+        
+        } else {
+        //MARK: -WeekWeather
+            
+        let cellThree = collectionView.dequeueReusableCell(withReuseIdentifier: "bottomCell", for: indexPath) as! WeekCollectionViewCell
+            
+            //MARK: -Date
+            
+            if let dateInt = weekViewModel.weekMainScreenViewModel?.weekDate { //[Int]
+
+                for _ in dateInt {
+                    let dateIntArray = dateInt.map({$0})
+                    let timeInterval = TimeInterval(dateIntArray[indexPath.item])
+                    let myNSDate = Date(timeIntervalSince1970: timeInterval)
+                    
+                    let dateFormatter2 = DateFormatter()
+                    dateFormatter2.dateFormat = "dd/MM"
+                    dateFormatter2.locale = Locale(identifier: "ru_RU")
+                    let dateString = dateFormatter2.string(from: myNSDate)
+                    
+                    cellThree.dateTemperatureLabel.text = dateString
+                }
+            
+            }
           
+            //MARK: -Icon
+            
+            if let icon = weekViewModel.weekMainScreenViewModel?.weekIcon {
+                for _ in icon {
+                    let iconArray = icon.map({$0})
+                    let urlStr = "http://openweathermap.org/img/w/" + (iconArray[indexPath.item] ?? "00") + ".png"
+                    let url = URL(string: urlStr)
+                    cellThree.weatherImageView.kf.setImage(with: url) { result in
+                        print(result)
+                        cellThree.setNeedsLayout()
+                    }
+                }
+            }
+            
+            //MARK: -Rain
+            
+            /*if let arrayRain = weekViewModel.weekMainScreenViewModel?.weekRain {
+                let arrayRainString = String(format: "%.0f", arrayRain[indexPath.item]!)
+                cellThree.rainLabel.text = arrayRainString
+            }*/
+            
+            //MARK: -Description
+            
+            let weatherDescription = weekViewModel.weekMainScreenViewModel?.weekDescription
+            cellThree.weatherDescriptionLabel.text = weatherDescription?[indexPath.item]
+            
+            //MARK: -minTemp
+        
+            if let minTemp = weekViewModel.weekMainScreenViewModel?.weekMinTemp {
+                let minTempString = String(format: "%.0f", minTemp[indexPath.item])
+                
+                cellThree.minTemperatureLabel.text = "\(minTempString)" + "°" + "-"
+            }
+            
+            //MARK: -maxTemp
+        
+            if let maxTemp = weekViewModel.weekMainScreenViewModel?.weekMaxTemp {
+                let maxTempString = String(format: "%.0f", maxTemp[indexPath.item])
+                
+                cellThree.maxTemperatureLabel.text = "\(maxTempString)" + "°"
+            }
+            
         return cellThree
         }
     }
     
 }
 
+//MARK: -Extensions
 extension MainScrenenViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -364,11 +549,31 @@ extension MainScrenenViewController: UICollectionViewDelegateFlowLayout {
         if collectionView == self.collectionView {
             return CGSize(width: collectionView.frame.width, height: collectionView.frame.height)
         } else if collectionView == self.todayCollectionView {
-            return CGSize(width: collectionView.frame.width / 3, height: collectionView.frame.height)
+            return CGSize(width: collectionView.frame.width / 7, height: collectionView.frame.height)
         } else {
             return CGSize(width: collectionView.frame.width, height: 56)
         }
     }
 }
+
+extension Date {
+   func getFormattedDate(format: String) -> String {
+        let dateformat = DateFormatter()
+        dateformat.dateFormat = format
+        return dateformat.string(from: self)
+    }
+}
+
+extension Double {
+    func isInteger() -> Any {
+        let check = floor(self) == self
+        if check {
+            return Int(self)
+        } else {
+            return self
+        }
+    }
+}
+
 
 

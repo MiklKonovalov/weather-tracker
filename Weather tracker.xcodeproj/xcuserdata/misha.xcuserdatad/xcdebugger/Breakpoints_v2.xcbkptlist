@@ -14,8 +14,8 @@
             filePath = "Weather tracker/SceneDelegate.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "27"
-            endingLineNumber = "27"
+            startingLineNumber = "35"
+            endingLineNumber = "35"
             landmarkName = "scene(_:willConnectTo:options:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -46,8 +46,8 @@
             filePath = "Weather tracker/View/MainScrenenViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "163"
-            endingLineNumber = "163"
+            startingLineNumber = "157"
+            endingLineNumber = "157"
             landmarkName = "viewDidLoad()"
             landmarkType = "7">
          </BreakpointContent>
@@ -62,25 +62,9 @@
             filePath = "Weather tracker/SceneDelegate.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "25"
-            endingLineNumber = "25"
+            startingLineNumber = "33"
+            endingLineNumber = "33"
             landmarkName = "scene(_:willConnectTo:options:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "E6E74CCB-B2C8-4D55-9C7B-3FBFC8A90A8B"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Weather tracker/ViewModel/DayWeatherViewModel.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "44"
-            endingLineNumber = "44"
-            landmarkName = "getData(from:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -94,13 +78,13 @@
             filePath = "Weather tracker/View/MainScrenenViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "191"
-            endingLineNumber = "191"
+            startingLineNumber = "196"
+            endingLineNumber = "196"
             landmarkName = "viewDidLoad()"
             landmarkType = "7">
             <Locations>
                <Location
-                  uuid = "A9803526-BD6A-4D86-B504-2855F0AC8B44 - 84cbf2435fa71088"
+                  uuid = "A9803526-BD6A-4D86-B504-2855F0AC8B44 - 84cbf2435fa713f0"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
@@ -110,24 +94,24 @@
                   urlString = "file:///Users/misha/Documents/XCode/%D0%A2%D1%80%D0%B5%D0%BA%D0%B5%D1%80%20%D0%BF%D0%BE%D0%B3%D0%BE%D0%B4%D1%8B/Weather%20tracker/Weather%20tracker/View/MainScrenenViewController.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "183"
-                  endingLineNumber = "183"
-                  offsetFromSymbolStart = "4914">
+                  startingLineNumber = "191"
+                  endingLineNumber = "191"
+                  offsetFromSymbolStart = "5179">
                </Location>
                <Location
-                  uuid = "A9803526-BD6A-4D86-B504-2855F0AC8B44 - 7ce9817f19f3b1aa"
+                  uuid = "A9803526-BD6A-4D86-B504-2855F0AC8B44 - 9bfe8176cb1895e2"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Weather_tracker.CitiesWeather) -&gt; () in Weather_tracker.MainScrenenViewController.viewDidLoad() -&gt; ()"
+                  symbolName = "closure #2 () -&gt; () in Weather_tracker.MainScrenenViewController.viewDidLoad() -&gt; ()"
                   moduleName = "Weather tracker"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/misha/Documents/XCode/%D0%A2%D1%80%D0%B5%D0%BA%D0%B5%D1%80%20%D0%BF%D0%BE%D0%B3%D0%BE%D0%B4%D1%8B/Weather%20tracker/Weather%20tracker/View/MainScrenenViewController.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "185"
-                  endingLineNumber = "185"
-                  offsetFromSymbolStart = "123">
+                  startingLineNumber = "192"
+                  endingLineNumber = "192"
+                  offsetFromSymbolStart = "135">
                </Location>
             </Locations>
          </BreakpointContent>
@@ -142,8 +126,8 @@
             filePath = "Weather tracker/View/MainScrenenViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "317"
-            endingLineNumber = "317"
+            startingLineNumber = "355"
+            endingLineNumber = "355"
             landmarkName = "collectionView(_:cellForItemAt:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -158,8 +142,8 @@
             filePath = "Weather tracker/View/MainScrenenViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "321"
-            endingLineNumber = "321"
+            startingLineNumber = "360"
+            endingLineNumber = "360"
             landmarkName = "collectionView(_:cellForItemAt:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -167,20 +151,308 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "C06EB135-C5A6-477D-B808-43F2FADE3794"
+            uuid = "9A30AD64-4449-451B-817D-730353885F2B"
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Weather tracker/View/MainScrenenViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "198"
-            endingLineNumber = "198"
+            startingLineNumber = "368"
+            endingLineNumber = "368"
+            landmarkName = "collectionView(_:cellForItemAt:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "ADAB4140-DD38-4EB1-B94D-CA5E0D77C039"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Weather tracker/View/MainScrenenViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "372"
+            endingLineNumber = "372"
+            landmarkName = "collectionView(_:cellForItemAt:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "323DA0CA-E243-4F8D-83FE-6CF1315BDFFE"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Weather tracker/ViewModel/DayWeatherViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "34"
+            endingLineNumber = "34"
+            landmarkName = "viewDidLoad()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "75D433FF-79D7-4ED6-B8E1-A6D5F36388DC"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Weather tracker/Model/WeatherService.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "35"
+            endingLineNumber = "35"
+            landmarkName = "getCitiesWeather(completion:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "B8F4AFC2-E880-4E3E-A97C-EABAA5195A8F"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Weather tracker/Model/WeatherService.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "36"
+            endingLineNumber = "36"
+            landmarkName = "getCitiesWeather(completion:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "28EA728B-C99D-46FC-B6EC-16D429FDE417"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Weather tracker/ViewModel/DayWeatherViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "39"
+            endingLineNumber = "39"
+            landmarkName = "viewDidLoad()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "A032EBBD-47E6-40F9-ACAC-BFD5DF544876"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Weather tracker/ViewModel/DayWeatherViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "28"
+            endingLineNumber = "28"
+            landmarkName = "viewDidLoad()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "0F871158-BE8D-4636-965E-7A9DA53FFEED"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Weather tracker/ViewModel/DayWeatherViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "30"
+            endingLineNumber = "30"
+            landmarkName = "viewDidLoad()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "9B3A7A69-6236-4B29-8871-BA3EF3D5D9B3"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Weather tracker/ViewModel/TwentyFourHoursViewModel/TwentyFourHoursViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "28"
+            endingLineNumber = "28"
+            landmarkName = "twentyFourHoursViewDidLoad()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "3971F15B-D465-4DA0-B6C6-38881A4C58A6"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Weather tracker/ViewModel/TwentyFourHoursViewModel/TwentyFourHoursViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "29"
+            endingLineNumber = "29"
+            landmarkName = "twentyFourHoursViewDidLoad()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "F3B98DD6-B9A4-4FBF-B743-7CDCFDE420E5"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Weather tracker/Model/TwentyFourHoursWeatherModel/TwentyFourHoursWeatherService.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "48"
+            endingLineNumber = "48"
+            landmarkName = "getCitiesWeather(completion:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "B00D4BE1-275C-4011-A73B-A806D5121A03"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Weather tracker/Model/TwentyFourHoursWeatherModel/TwentyFourHoursWeatherService.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "33"
+            endingLineNumber = "33"
+            landmarkName = "getCitiesWeather(completion:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "69209C0F-C59D-45C2-BCDD-EBD3D8605886"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Weather tracker/View/MainScrenenViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "17"
+            endingLineNumber = "17"
+            landmarkName = "MainScrenenViewController"
+            landmarkType = "3">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "D3F17203-EE8C-423E-9155-FD8EC481CA8F"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Weather tracker/ViewModel/TwentyFourHoursViewModel/TwentyFourHoursViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "20"
+            endingLineNumber = "20"
+            landmarkName = "twentyFourHoursViewDidLoad()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "E117A9F3-2BC7-4672-AB4D-8C1EED4BFB0B"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Weather tracker/ViewModel/NowWeatherViewModel/DayWeatherViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "26"
+            endingLineNumber = "26"
+            landmarkName = "viewDidLoad()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "D3DB8527-9299-44D3-B570-B1876D37D41F"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Weather tracker/ViewModel/TwentyFourHoursViewModel/TwentyFourHoursViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "32"
+            endingLineNumber = "32"
+            landmarkName = "twentyFourHoursViewDidLoad()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "BC0E633E-9031-47A9-8E31-02F563C36FCA"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Weather tracker/View/MainScrenenViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "223"
+            endingLineNumber = "223"
+            landmarkName = "viewDidLoad()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "FF392C7A-9BFD-4473-B8A6-CA94C96D0525"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Weather tracker/View/MainScrenenViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "417"
+            endingLineNumber = "417"
+            landmarkName = "collectionView(_:cellForItemAt:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "94B8E2A2-9389-4BF2-B419-E05F7593A99D"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Weather tracker/View/MainScrenenViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "202"
+            endingLineNumber = "202"
             landmarkName = "viewDidLoad()"
             landmarkType = "7">
             <Locations>
                <Location
-                  uuid = "C06EB135-C5A6-477D-B808-43F2FADE3794 - 84cbf2435fa710ca"
+                  uuid = "94B8E2A2-9389-4BF2-B419-E05F7593A99D - 84cbf2435fa713b6"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
@@ -190,24 +462,24 @@
                   urlString = "file:///Users/misha/Documents/XCode/%D0%A2%D1%80%D0%B5%D0%BA%D0%B5%D1%80%20%D0%BF%D0%BE%D0%B3%D0%BE%D0%B4%D1%8B/Weather%20tracker/Weather%20tracker/View/MainScrenenViewController.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "185"
-                  endingLineNumber = "185"
-                  offsetFromSymbolStart = "4999">
+                  startingLineNumber = "189"
+                  endingLineNumber = "189"
+                  offsetFromSymbolStart = "5076">
                </Location>
                <Location
-                  uuid = "C06EB135-C5A6-477D-B808-43F2FADE3794 - e16f2414167fff97"
+                  uuid = "94B8E2A2-9389-4BF2-B419-E05F7593A99D - 9bfe8176cb1895a4"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "closure #2 (Swift.Array&lt;Weather_tracker.Main&gt;) -&gt; () in Weather_tracker.MainScrenenViewController.viewDidLoad() -&gt; ()"
+                  symbolName = "closure #2 () -&gt; () in Weather_tracker.MainScrenenViewController.viewDidLoad() -&gt; ()"
                   moduleName = "Weather tracker"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/misha/Documents/XCode/%D0%A2%D1%80%D0%B5%D0%BA%D0%B5%D1%80%20%D0%BF%D0%BE%D0%B3%D0%BE%D0%B4%D1%8B/Weather%20tracker/Weather%20tracker/View/MainScrenenViewController.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "186"
-                  endingLineNumber = "186"
-                  offsetFromSymbolStart = "42">
+                  startingLineNumber = "190"
+                  endingLineNumber = "190"
+                  offsetFromSymbolStart = "135">
                </Location>
             </Locations>
          </BreakpointContent>
@@ -215,72 +487,72 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "E7F53BB9-A6B9-40CB-BA03-20B0AD88D95D"
+            uuid = "91035496-C712-4BA6-A6F7-6DA9FBAD9B93"
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Weather tracker/View/MainScrenenViewController.swift"
+            filePath = "Weather tracker/ViewModel/TwentyFourHoursViewModel/TwentyFourHoursMainScreenViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "14"
             endingLineNumber = "14"
-            landmarkName = "main"
-            landmarkType = "24">
+            landmarkName = "TwentyFourHoursMainScreenWeatherModel"
+            landmarkType = "14">
             <Locations>
                <Location
-                  uuid = "E7F53BB9-A6B9-40CB-BA03-20B0AD88D95D - 39f8e2b8fba8b7de"
+                  uuid = "91035496-C712-4BA6-A6F7-6DA9FBAD9B93 - 8618af5367eb23dc"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "Weather_tracker.MainScrenenViewController.main.getter : Swift.Optional&lt;Swift.Double&gt;"
+                  symbolName = "Weather_tracker.TwentyFourHoursMainScreenWeatherModel.twentyFourHoursTemp.getter : Swift.Optional&lt;Swift.Double&gt;"
                   moduleName = "Weather tracker"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/misha/Documents/XCode/%D0%A2%D1%80%D0%B5%D0%BA%D0%B5%D1%80%20%D0%BF%D0%BE%D0%B3%D0%BE%D0%B4%D1%8B/Weather%20tracker/Weather%20tracker/View/MainScrenenViewController.swift"
+                  urlString = "file:///Users/misha/Documents/XCode/%D0%A2%D1%80%D0%B5%D0%BA%D0%B5%D1%80%20%D0%BF%D0%BE%D0%B3%D0%BE%D0%B4%D1%8B/Weather%20tracker/Weather%20tracker/ViewModel/TwentyFourHoursViewModel/TwentyFourHoursMainScreenViewModel.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "14"
                   endingLineNumber = "14"
-                  offsetFromSymbolStart = "124">
+                  offsetFromSymbolStart = "24">
                </Location>
                <Location
-                  uuid = "E7F53BB9-A6B9-40CB-BA03-20B0AD88D95D - 7d4a4766b56267ca"
+                  uuid = "91035496-C712-4BA6-A6F7-6DA9FBAD9B93 - 8618af5367eb23dc"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "Weather_tracker.MainScrenenViewController.main.setter : Swift.Optional&lt;Swift.Double&gt;"
+                  symbolName = "Weather_tracker.TwentyFourHoursMainScreenWeatherModel.twentyFourHoursTemp.setter : Swift.Optional&lt;Swift.Double&gt;"
                   moduleName = "Weather tracker"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/misha/Documents/XCode/%D0%A2%D1%80%D0%B5%D0%BA%D0%B5%D1%80%20%D0%BF%D0%BE%D0%B3%D0%BE%D0%B4%D1%8B/Weather%20tracker/Weather%20tracker/View/MainScrenenViewController.swift"
+                  urlString = "file:///Users/misha/Documents/XCode/%D0%A2%D1%80%D0%B5%D0%BA%D0%B5%D1%80%20%D0%BF%D0%BE%D0%B3%D0%BE%D0%B4%D1%8B/Weather%20tracker/Weather%20tracker/ViewModel/TwentyFourHoursViewModel/TwentyFourHoursMainScreenViewModel.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "14"
                   endingLineNumber = "14"
-                  offsetFromSymbolStart = "150">
+                  offsetFromSymbolStart = "57">
                </Location>
                <Location
-                  uuid = "E7F53BB9-A6B9-40CB-BA03-20B0AD88D95D - e2e8232a0df1690d"
+                  uuid = "91035496-C712-4BA6-A6F7-6DA9FBAD9B93 - 652379d4092c9893"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "Weather_tracker.MainScrenenViewController.main.modify : Swift.Optional&lt;Swift.Double&gt;"
+                  symbolName = "Weather_tracker.TwentyFourHoursMainScreenWeatherModel.twentyFourHoursTemp.modify : Swift.Optional&lt;Swift.Double&gt;"
                   moduleName = "Weather tracker"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/misha/Documents/XCode/%D0%A2%D1%80%D0%B5%D0%BA%D0%B5%D1%80%20%D0%BF%D0%BE%D0%B3%D0%BE%D0%B4%D1%8B/Weather%20tracker/Weather%20tracker/View/MainScrenenViewController.swift"
+                  urlString = "file:///Users/misha/Documents/XCode/%D0%A2%D1%80%D0%B5%D0%BA%D0%B5%D1%80%20%D0%BF%D0%BE%D0%B3%D0%BE%D0%B4%D1%8B/Weather%20tracker/Weather%20tracker/ViewModel/TwentyFourHoursViewModel/TwentyFourHoursMainScreenViewModel.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "0"
                   endingLineNumber = "0"
-                  offsetFromSymbolStart = "18">
+                  offsetFromSymbolStart = "14">
                </Location>
                <Location
-                  uuid = "E7F53BB9-A6B9-40CB-BA03-20B0AD88D95D - ffd6e48ecdc3da9c"
+                  uuid = "91035496-C712-4BA6-A6F7-6DA9FBAD9B93 - 244b64dbcce43ea4"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "Weather_tracker.MainScrenenViewController.main.modify : Swift.Optional&lt;Swift.Double&gt; with unmangled suffix &quot;.resume.0&quot;"
+                  symbolName = "Weather_tracker.TwentyFourHoursMainScreenWeatherModel.twentyFourHoursTemp.modify : Swift.Optional&lt;Swift.Double&gt; with unmangled suffix &quot;.resume.0&quot;"
                   moduleName = "Weather tracker"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/misha/Documents/XCode/%D0%A2%D1%80%D0%B5%D0%BA%D0%B5%D1%80%20%D0%BF%D0%BE%D0%B3%D0%BE%D0%B4%D1%8B/Weather%20tracker/Weather%20tracker/View/MainScrenenViewController.swift"
+                  urlString = "file:///Users/misha/Documents/XCode/%D0%A2%D1%80%D0%B5%D0%BA%D0%B5%D1%80%20%D0%BF%D0%BE%D0%B3%D0%BE%D0%B4%D1%8B/Weather%20tracker/Weather%20tracker/ViewModel/TwentyFourHoursViewModel/TwentyFourHoursMainScreenViewModel.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "14"
@@ -288,6 +560,707 @@
                   offsetFromSymbolStart = "10">
                </Location>
             </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "0A6ECDC1-5F61-4507-811F-B7997BC12A74"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Weather tracker/View/MainScrenenViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "442"
+            endingLineNumber = "442"
+            landmarkName = "collectionView(_:cellForItemAt:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "5BDF72D3-93B7-4629-921D-360FBE343063"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Weather tracker/View/MainScrenenViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "229"
+            endingLineNumber = "229"
+            landmarkName = "viewDidLoad()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "92B2096F-23D1-4ED4-8A40-9639452AFCA5"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Weather tracker/View/MainScrenenViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "445"
+            endingLineNumber = "445"
+            landmarkName = "collectionView(_:cellForItemAt:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "A053FB39-B042-4F35-816D-E157BD9387B3"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Weather tracker/View/MainScrenenViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "244"
+            endingLineNumber = "244"
+            landmarkName = "setupConstraints()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "BEED7C9E-4FF5-461C-A42C-400307D467B3"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Weather tracker/ViewModel/WeekWeatherViewModel/WeekViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "71"
+            endingLineNumber = "71"
+            landmarkName = "weekViewDidLoad()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "75D31202-A703-4C86-AE67-C62207E33CBE"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Weather tracker/View/MainScrenenViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "225"
+            endingLineNumber = "225"
+            landmarkName = "viewDidLoad()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "AB52B61D-2F11-49EB-BA09-A21EB3E8945C"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Weather tracker/ViewModel/WeekWeatherViewModel/WeekViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "20"
+            endingLineNumber = "20"
+            landmarkName = "weekViewDidLoad()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "21FC5983-9AF4-493A-8078-348588344050"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Weather tracker/Model/WeekWeatherModel/WeekWeatherService.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "33"
+            endingLineNumber = "33"
+            landmarkName = "getCitiesWeather(completion:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "5753DCFF-4219-4083-A451-02194EFC5984"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Weather tracker/Model/NowWeatherModel/WeatherService.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "29"
+            endingLineNumber = "29"
+            landmarkName = "getCitiesWeather(completion:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "3E7A7296-A8E6-4BF2-BBA8-106E8DF9209B"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Weather tracker/ViewModel/WeekWeatherViewModel/WeekViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "72"
+            endingLineNumber = "72"
+            landmarkName = "weekViewDidLoad()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "01D9EB11-A271-4862-BB23-BC32FCCB55C7"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Weather tracker/View/MainScrenenViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "479"
+            endingLineNumber = "479"
+            landmarkName = "collectionView(_:cellForItemAt:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "E61AA454-DBC0-44D9-B2B6-EB73BD8DFF74"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Weather tracker/View/MainScrenenViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "467"
+            endingLineNumber = "467"
+            landmarkName = "collectionView(_:cellForItemAt:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "95B5691F-0E32-4807-867F-B61844AECF06"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Weather tracker/View/MainScrenenViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "463"
+            endingLineNumber = "463"
+            landmarkName = "collectionView(_:cellForItemAt:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "8A6EF042-E835-4C51-B290-BE55A19FB979"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Weather tracker/View/MainScrenenViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "460"
+            endingLineNumber = "460"
+            landmarkName = "collectionView(_:cellForItemAt:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "2000E107-27A3-4D2D-8CB9-3D955BD8AC1E"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Weather tracker/View/MainScrenenViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "208"
+            endingLineNumber = "208"
+            landmarkName = "viewDidLoad()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "2000E107-27A3-4D2D-8CB9-3D955BD8AC1E - 84cbf2435fa7135d"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Weather_tracker.MainScrenenViewController.viewDidLoad() -&gt; ()"
+                  moduleName = "Weather tracker"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/misha/Documents/XCode/%D0%A2%D1%80%D0%B5%D0%BA%D0%B5%D1%80%20%D0%BF%D0%BE%D0%B3%D0%BE%D0%B4%D1%8B/Weather%20tracker/Weather%20tracker/View/MainScrenenViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "196"
+                  endingLineNumber = "196"
+                  offsetFromSymbolStart = "5225">
+               </Location>
+               <Location
+                  uuid = "2000E107-27A3-4D2D-8CB9-3D955BD8AC1E - c0b06994ae85c28c"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #3 () -&gt; () in Weather_tracker.MainScrenenViewController.viewDidLoad() -&gt; ()"
+                  moduleName = "Weather tracker"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/misha/Documents/XCode/%D0%A2%D1%80%D0%B5%D0%BA%D0%B5%D1%80%20%D0%BF%D0%BE%D0%B3%D0%BE%D0%B4%D1%8B/Weather%20tracker/Weather%20tracker/View/MainScrenenViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "197"
+                  endingLineNumber = "197"
+                  offsetFromSymbolStart = "135">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "213A6DD5-D46C-48E7-9F9F-DABCB6799FC6"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Weather tracker/ViewModel/WeekWeatherViewModel/WeekMainScreenViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "15"
+            endingLineNumber = "15"
+            landmarkName = "WeekMainScreenViewModel"
+            landmarkType = "14">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "4FE426FF-C4AC-4B08-AB32-BA484747766A"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Weather tracker/View/MainScrenenViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "500"
+            endingLineNumber = "500"
+            landmarkName = "collectionView(_:cellForItemAt:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "9EEF70DA-0F37-43AA-9FFA-F56E132E7873"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Weather tracker/Model/LocationService.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "38"
+            endingLineNumber = "38"
+            landmarkName = "resolveLocationName(with:completion:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "31965085-076C-48E0-B834-AF59BB36B000"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Weather tracker/Model/LocationModel/LocationService.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "56"
+            endingLineNumber = "56"
+            landmarkName = "locationManager(_:didUpdateLocations:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "70785F4A-65BC-4496-A22F-F59C3DC66C04"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Weather tracker/Model/LocationModel/LocationService.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "58"
+            endingLineNumber = "58"
+            landmarkName = "locationManager(_:didUpdateLocations:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "84F8B5E1-DA84-43DE-A968-2CAF4C6E437C"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Weather tracker/View/MainScrenenViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "186"
+            endingLineNumber = "186"
+            landmarkName = "viewDidLoad()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "84F8B5E1-DA84-43DE-A968-2CAF4C6E437C - 84cbf2435fa71088"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Weather_tracker.MainScrenenViewController.viewDidLoad() -&gt; ()"
+                  moduleName = "Weather tracker"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/misha/Documents/XCode/%D0%A2%D1%80%D0%B5%D0%BA%D0%B5%D1%80%20%D0%BF%D0%BE%D0%B3%D0%BE%D0%B4%D1%8B/Weather%20tracker/Weather%20tracker/View/MainScrenenViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "183"
+                  endingLineNumber = "183"
+                  offsetFromSymbolStart = "4905">
+               </Location>
+               <Location
+                  uuid = "84F8B5E1-DA84-43DE-A968-2CAF4C6E437C - 5e636f6a8b41a781"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (__C.CLLocation) -&gt; () in Weather_tracker.MainScrenenViewController.viewDidLoad() -&gt; ()"
+                  moduleName = "Weather tracker"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/misha/Documents/XCode/%D0%A2%D1%80%D0%B5%D0%BA%D0%B5%D1%80%20%D0%BF%D0%BE%D0%B3%D0%BE%D0%B4%D1%8B/Weather%20tracker/Weather%20tracker/View/MainScrenenViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "183"
+                  endingLineNumber = "183"
+                  offsetFromSymbolStart = "143">
+               </Location>
+               <Location
+                  uuid = "84F8B5E1-DA84-43DE-A968-2CAF4C6E437C - 9ad97190aa3811c2"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 () -&gt; () in closure #1 (__C.CLLocation) -&gt; () in Weather_tracker.MainScrenenViewController.viewDidLoad() -&gt; ()"
+                  moduleName = "Weather tracker"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/misha/Documents/XCode/%D0%A2%D1%80%D0%B5%D0%BA%D0%B5%D1%80%20%D0%BF%D0%BE%D0%B3%D0%BE%D0%B4%D1%8B/Weather%20tracker/Weather%20tracker/View/MainScrenenViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "183"
+                  endingLineNumber = "183"
+                  offsetFromSymbolStart = "119">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "089B4D67-BAE5-4611-8821-076E4F6A376F"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Weather tracker/Model/LocationModel/LocationService.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "48"
+            endingLineNumber = "48"
+            landmarkName = "resolveLocationName(with:completion:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "F0307FB4-6700-4FC7-BB86-2E62B4FF7428"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Weather tracker/Model/LocationModel/LocationService.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "29"
+            endingLineNumber = "29"
+            landmarkName = "resolveLocationName(with:completion:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "FADC84D9-D3FB-4715-BCC0-B8DF97E8D0FD"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Weather tracker/Model/LocationModel/LocationService.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "22"
+            endingLineNumber = "22"
+            landmarkName = "getUserLocation(completion:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "9B4D1579-AD5A-4D4B-AC92-8FE91206D1A3"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Weather tracker/ViewModel/NowWeatherViewModel/DayWeatherViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "57"
+            endingLineNumber = "57"
+            landmarkName = "DayWeatherViewModel"
+            landmarkType = "3">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "E518695A-32C8-4363-8EDE-8AE2E0E83EEB"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Weather tracker/ViewModel/NowWeatherViewModel/DayWeatherViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "55"
+            endingLineNumber = "55"
+            landmarkName = "viewDidLoad()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "6099DDEB-44A7-4AB0-95DA-0E0F30AFF907"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Weather tracker/ViewModel/NowWeatherViewModel/DayWeatherViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "62"
+            endingLineNumber = "62">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "6AFD1C8F-2D64-40BA-A8D4-C340D63D63FC"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Weather tracker/ViewModel/NowWeatherViewModel/DayWeatherViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "50"
+            endingLineNumber = "50"
+            landmarkName = "viewDidLoad()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "4688EF2F-211E-41FF-AB62-C035CCC3832F"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Weather tracker/View/MainScrenenViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "189"
+            endingLineNumber = "189"
+            landmarkName = "viewDidLoad()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "9B35C1C6-91CB-4073-B052-D64D3EBA51C7"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Weather tracker/ViewModel/LocationViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "27"
+            endingLineNumber = "27"
+            landmarkName = "locationDidLoad()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "925CA553-4BF8-4A20-B72C-F9E9574D5D50"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Weather tracker/ViewModel/LocationViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "35"
+            endingLineNumber = "35"
+            landmarkName = "addMapPin(with:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "26EBBF3E-0C74-4C74-B366-5A33A6A11942"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Weather tracker/View/MainScrenenViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "214"
+            endingLineNumber = "214"
+            landmarkName = "viewDidLoad()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "26EBBF3E-0C74-4C74-B366-5A33A6A11942 - 84cbf2435fa7148f"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Weather_tracker.MainScrenenViewController.viewDidLoad() -&gt; ()"
+                  moduleName = "Weather tracker"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/misha/Documents/XCode/%D0%A2%D1%80%D0%B5%D0%BA%D0%B5%D1%80%20%D0%BF%D0%BE%D0%B3%D0%BE%D0%B4%D1%8B/Weather%20tracker/Weather%20tracker/View/MainScrenenViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "214"
+                  endingLineNumber = "214"
+                  offsetFromSymbolStart = "5819">
+               </Location>
+               <Location
+                  uuid = "26EBBF3E-0C74-4C74-B366-5A33A6A11942 - 972303a8de30ed9"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #4 () -&gt; () in Weather_tracker.MainScrenenViewController.viewDidLoad() -&gt; ()"
+                  moduleName = "Weather tracker"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/misha/Documents/XCode/%D0%A2%D1%80%D0%B5%D0%BA%D0%B5%D1%80%20%D0%BF%D0%BE%D0%B3%D0%BE%D0%B4%D1%8B/Weather%20tracker/Weather%20tracker/View/MainScrenenViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "215"
+                  endingLineNumber = "215"
+                  offsetFromSymbolStart = "135">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "8B1E5805-4DBB-4874-9E7E-FBD27A2A195D"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Weather tracker/ViewModel/LocationViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "28"
+            endingLineNumber = "28"
+            landmarkName = "locationDidLoad()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "2C4D433D-2F09-4657-89F4-EA81848F2033"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Weather tracker/ViewModel/LocationViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "21"
+            endingLineNumber = "21"
+            landmarkName = "locationDidLoad()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "7BE973F4-1702-4663-B501-1C26210CA29E"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Weather tracker/View/MainScrenenViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "227"
+            endingLineNumber = "227"
+            landmarkName = "viewDidLoad()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "F86B37CB-FA5C-40A0-B37B-D95861E49C99"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Weather tracker/ViewModel/LocationViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "33"
+            endingLineNumber = "33"
+            landmarkName = "addMapPin(with:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "975A632E-3E0F-4075-BE33-EE5DEC46090D"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Weather tracker/View/MainScrenenViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "194"
+            endingLineNumber = "194"
+            landmarkName = "viewDidLoad()"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

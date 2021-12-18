@@ -45,7 +45,7 @@ struct Sys : Decodable {
 }
 
 struct Main : Decodable {
-    let temp, tempMin, tempMax : Double?
+    let temp, temp_min, temp_max : Double?
     let pressure, humidity : Int?
 }
 
@@ -62,4 +62,5 @@ enum MainEnum: String, Decodable {
     case clear = "Clear"
     case clouds = "Clouds"
     case rain = "Rain"
+    case snow = "Snow"
 }
