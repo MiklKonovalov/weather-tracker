@@ -23,11 +23,8 @@ class LocationViewModel {
         locationService.getUserLocation {[weak self] location in
             guard let self = self else { return }
             self.addMapPin(with: location)
-            //self.locationMainScreenViewModel = .init(cityName: location.)
-            print(location)
-            
+            self.locationDidChange?()
         }
-        locationDidChange?()
     }
     
     func addMapPin(with location: CLLocation) {

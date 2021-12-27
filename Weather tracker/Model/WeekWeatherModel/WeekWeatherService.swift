@@ -10,7 +10,7 @@ import CoreLocation
 
 protocol IWeekWeatherService {
     
-    func getCitiesWeather(completion: @escaping (Result<WeekWeather, Error>) -> Void)
+    func getCitiesWeather(location: CLLocation?, completion: @escaping (Result<WeekWeather, Error>) -> Void)
     
     func weatherURLString(forCoordinates coordinates: CLLocationCoordinate2D) -> String
     
@@ -30,11 +30,15 @@ final class WeekWeatherService: IWeekWeatherService {
        return "https://api.openweathermap.org/data/2.5/onecall?lat=\(coordinates.latitude)&lon=\(coordinates.longitude)&exclude=hourly&units=metric&appid=b382e4a70dfb690b16b9381daac545ac&lang=ru"
     }
     
-    func getCitiesWeather(completion: @escaping (Result<WeekWeather, Error>) -> Void) {
+    func getCitiesWeather(location: CLLocation?, completion: @escaping (Result<WeekWeather, Error>) -> Void) {
         
-        LocationManager.shared.completion = { location in
-            let locValue : CLLocationCoordinate2D = location.coordinate
-            print(locValue)
+        guard let location = LocationManager.shared.lastKnowLocation else {
+            completion(.failure(WeatherServiceError.lastKnownLocationIsEmpty))
+            return
+        }
+        
+        let locValue : CLLocationCoordinate2D = location.coordinate
+        print(locValue)
         
         guard let url = URL(string: self.weatherURLString(forCoordinates: locValue)) else {
             return completion(.failure(WeekWeatherServiceError.badUrl))
@@ -54,4 +58,4 @@ final class WeekWeatherService: IWeekWeatherService {
         task.resume()
     }
     }
-}
+

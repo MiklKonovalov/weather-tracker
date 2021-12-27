@@ -28,9 +28,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let twentyFourHoursViewModel = TwentyFourHoursViewModel(twentyFourHoursWeatherService: twentyFourHoursWeatherService)
         let weekViewModel = WeekViewModel(weekWeatherService: weekWeatherService)
         let locationViewModel = LocationViewModel(locationService: locationService)
+        let locationGroup = LocationGroup()
         
         let welcomeViewController = WelcomeViewController()
-        let mainScreenViewController = MainScrenenViewController(viewModel: viewModel, twentyFourHoursViewModel: twentyFourHoursViewModel, weekViewModel: weekViewModel, locationViewModel: locationViewModel)
+        let mainScreenViewController = MainScrenenViewController(viewModel: viewModel, twentyFourHoursViewModel: twentyFourHoursViewModel, weekViewModel: weekViewModel, locationViewModel: locationViewModel, locationGroup: locationGroup)
         
         if WelcomeCore.shared.isNewUser() {
             window.rootViewController = welcomeViewController

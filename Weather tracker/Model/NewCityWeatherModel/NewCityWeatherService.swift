@@ -1,44 +1,41 @@
 //
-//  WeatherService.swift
+//  NewCityWeatherService.swift
 //  Weather tracker
 //
-//  Created by Misha on 30.11.2021.
+//  Created by Misha on 27.12.2021.
 //
 
 import Foundation
 import CoreLocation
 
-protocol IWeatherService {
-    
-    func weatherURLString(forCoordinates coordinates: CLLocationCoordinate2D) -> String
-    
-    func getCitiesWeather(location: CLLocation?, completion: @escaping (Result<CitiesWeather, Error>) -> Void)
-    
-}
-
-enum WeatherServiceError: Error {
+enum NewCityWeatherServiceError: Error {
     case badUrl
     case lastKnownLocationIsEmpty
 }
 
-final class WeatherService: IWeatherService {
+final class NewCityWeatherService {
      
-    func weatherURLString(forCoordinates coordinates: CLLocationCoordinate2D) -> String {
-       return "https://api.openweathermap.org/data/2.5/weather?lat=\(coordinates.latitude)&lon=\(coordinates.longitude)&units=metric&appid=b382e4a70dfb690b16b9381daac545ac&lang=ru"
+    var locationGroup: LocationGroup?
+    
+    func weatherURLString(coordinatesOne: Double, coordinatesTwo: Double) -> String {
+        return "https://api.openweathermap.org/data/2.5/weather?lat=\(coordinatesOne)&lon=\(coordinatesTwo)&units=metric&appid=b382e4a70dfb690b16b9381daac545ac&lang=ru"
     }
     
     func getCitiesWeather(location: CLLocation?, completion: @escaping (Result<CitiesWeather, Error>) -> Void) {
         
-        guard let location = LocationManager.shared.lastKnowLocation else {
+        //Getting new locations from Location Group (Double, Double)
+        
+        guard let location = locationGroup?.fetchLocation() else {
             completion(.failure(WeatherServiceError.lastKnownLocationIsEmpty))
             return
         }
         
-        let locValue : CLLocationCoordinate2D = location.coordinate
-        print(locValue)
+        let locValueOne = location.0
+        
+        let locValueTwo = location.1
             
         //Проверка, что у нас есть url адрес
-        guard let url = URL(string: self.weatherURLString(forCoordinates: locValue)) else {
+        guard let url = URL(string: self.weatherURLString(coordinatesOne: locValueOne, coordinatesTwo: locValueTwo)) else {
             return completion(.failure(WeatherServiceError.badUrl))
         }
             
@@ -58,6 +55,3 @@ final class WeatherService: IWeatherService {
     }
         
 }
-
-
-

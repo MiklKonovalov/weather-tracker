@@ -19,7 +19,7 @@ class TwentyFourHoursViewModel {
     
     func twentyFourHoursViewDidLoad() {
         
-        twentyFourHoursWeatherService.getCitiesWeather { [weak self] result in
+        twentyFourHoursWeatherService.getCitiesWeather(location: nil) { [weak self] result in
             guard let self = self else { return }
             
             switch result {

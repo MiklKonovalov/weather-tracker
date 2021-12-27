@@ -10,7 +10,7 @@ import CoreLocation
 
 protocol ITwentyFourHoursWeatherService {
     
-    func getCitiesWeather(completion: @escaping (Result<TwentyFourHoursCitiesWeather, Error>) -> Void)
+    func getCitiesWeather(location: CLLocation?, completion: @escaping (Result<TwentyFourHoursCitiesWeather, Error>) -> Void)
     
     func weatherURLString(forCoordinates coordinates: CLLocationCoordinate2D) -> String
     
@@ -18,6 +18,7 @@ protocol ITwentyFourHoursWeatherService {
 
 enum TwentyFourHoursWeatherServiceError: Error {
     case badUrl
+    case lastKnownLocationIsEmpty
 }
 
 /*private extension String {
@@ -25,16 +26,20 @@ enum TwentyFourHoursWeatherServiceError: Error {
 }*/
     
 final class TwentyFourHoursWeatherService: ITwentyFourHoursWeatherService {
-
+    
     func weatherURLString(forCoordinates coordinates: CLLocationCoordinate2D) -> String {
        return "https://api.openweathermap.org/data/2.5/forecast?lat=\(coordinates.latitude)&lon=\(coordinates.longitude)&cnt=7&units=metric&appid=b382e4a70dfb690b16b9381daac545ac"
     }
     
-    func getCitiesWeather(completion: @escaping (Result<TwentyFourHoursCitiesWeather, Error>) -> Void) {
+    func getCitiesWeather(location: CLLocation?, completion: @escaping (Result<TwentyFourHoursCitiesWeather, Error>) -> Void) {
         
-        LocationManager.shared.completion = { location in
-            let locValue : CLLocationCoordinate2D = location.coordinate
-            print(locValue)
+        guard let location = LocationManager.shared.lastKnowLocation else {
+            completion(.failure(WeatherServiceError.lastKnownLocationIsEmpty))
+            return
+        }
+        
+        let locValue : CLLocationCoordinate2D = location.coordinate
+        print(locValue)
         
         guard let url = URL(string: self.weatherURLString(forCoordinates: locValue)) else {
             return completion(.failure(TwentyFourHoursWeatherServiceError.badUrl))
@@ -53,5 +58,5 @@ final class TwentyFourHoursWeatherService: ITwentyFourHoursWeatherService {
 
         task.resume()
     }
-    }
 }
+

@@ -19,7 +19,7 @@ class WeekViewModel {
     
     func weekViewDidLoad() {
         
-        weekWeatherService.getCitiesWeather { [weak self] result in
+        weekWeatherService.getCitiesWeather(location: nil) { [weak self] result in
             guard let self = self else { return }
             
             switch result {
@@ -69,7 +69,6 @@ class WeekViewModel {
                                   result.daily[6].temp.max]
                 )
                 self.weekWeatherDidChange?()
-                print("RAIN FORMAT: \(result.daily[0].temp.min)")
             case .failure(let error):
                 print(error.localizedDescription)
             }

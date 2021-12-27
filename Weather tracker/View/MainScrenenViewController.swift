@@ -9,7 +9,6 @@ import UIKit
 import Kingfisher
 import CoreLocation
 
-
 class MainScrenenViewController: UIViewController {
     
     let viewModel: DayWeatherViewModel
@@ -19,6 +18,12 @@ class MainScrenenViewController: UIViewController {
     let weekViewModel: WeekViewModel
     
     let locationViewModel: LocationViewModel
+    
+    var locationGroup: LocationGroup
+    
+    var processJson: ((LocationData) -> Void)?
+    
+    var cityArray = [(Any)?]()
     
     //MARK: - Views
     
@@ -136,11 +141,12 @@ class MainScrenenViewController: UIViewController {
     
     //MARK: - Initialization
     
-    init(viewModel: DayWeatherViewModel, twentyFourHoursViewModel: TwentyFourHoursViewModel, weekViewModel: WeekViewModel, locationViewModel: LocationViewModel) {
+    init(viewModel: DayWeatherViewModel, twentyFourHoursViewModel: TwentyFourHoursViewModel, weekViewModel: WeekViewModel, locationViewModel: LocationViewModel, locationGroup: LocationGroup) {
         self.viewModel = viewModel
         self.twentyFourHoursViewModel = twentyFourHoursViewModel
         self.weekViewModel = weekViewModel
         self.locationViewModel = locationViewModel
+        self.locationGroup = locationGroup
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -182,19 +188,27 @@ class MainScrenenViewController: UIViewController {
         weekCollectionView.delegate = self
         
         setupConstraints()
-
-        /*LocationManager.shared.getUserLocation { [weak self] location in
-            DispatchQueue.main.async {
-                guard let self = self else { return }
-                print("LOCATION: \(location)")
-                self.addMapPin(with: location)
-            }
-        }*/
         
-        self.cityLabel.text = locationViewModel.locationMainScreenViewModel?.cityName
+        
+        
+        locationViewModel.locationDidChange = {
+            DispatchQueue.main.async {
+                let mainCoord = LocationManager.shared.lastKnowLocation?.coordinate
+                guard let mainCoord = mainCoord else { return print("No coord") }
+                self.cityArray.append(mainCoord)
+                
+                print(self.locationGroup.fetchLocation())
+                
+                self.viewModel.viewDidLoad()
+                self.twentyFourHoursViewModel.twentyFourHoursViewDidLoad()
+                self.weekViewModel.weekViewDidLoad()
+                self.view.reloadInputViews()
+            }
+        }
         
         viewModel.weatherDidChange = {
             DispatchQueue.main.async {
+                self.cityLabel.text = self.viewModel.currentWeather?.cityName
                 self.collectionView.reloadData()
             }
         }
@@ -211,20 +225,11 @@ class MainScrenenViewController: UIViewController {
             }
         }
         
-        locationViewModel.locationDidChange = {
-            DispatchQueue.main.async {
-                self.cityLabel.text = self.viewModel.currentWeather?.cityName
-                self.view.reloadInputViews()
-            }
-        }
-        
-        viewModel.viewDidLoad()
-        
-        twentyFourHoursViewModel.twentyFourHoursViewDidLoad()
-        
-        weekViewModel.weekViewDidLoad()
-        
         locationViewModel.locationDidLoad()
+        
+        //self.cityArray.append((locationGroup.coord))
+        
+        //print(cityArray)
         
     }
     
@@ -284,7 +289,7 @@ class MainScrenenViewController: UIViewController {
     }
 
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
+        return cityArray.count
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -295,26 +300,35 @@ class MainScrenenViewController: UIViewController {
         pageControl.currentPage = Int(offSet + horizontalCenter) / Int(width)
     }
     
+    
     //MARK: - Selectors
     
-    //MARK: -UIAlertController
+    //MARK: - UIAlertController
     @objc func locationButtonTap() {
         let alert = UIAlertController(title: "Добавление города", message: nil, preferredStyle: .alert)
-        let addButton = UIAlertAction(title: "Добавить", style: .default) { action in
-            let textField = alert.textFields?.first
-            
-            //Эти данные должны передаться в...?
-            print(textField?.text)
-        }
-        alert.addAction(addButton)
-        let cancelButton = UIAlertAction(title: "Отмена", style: .default, handler: nil)
-        alert.addAction(cancelButton)
         
         alert.addTextField { textField in
             textField.placeholder = "Введите город"
         }
         
-        present(alert, animated: true, completion: nil)
+        alert.addAction(UIAlertAction(title: "Добавить", style: .default) { action in
+            //Получаю значение текстового поля и передаю его в переменную textField
+            let textField = alert.textFields?.first
+            
+            if textField?.text != "" {
+                print("Text field: \(textField?.text)")
+                //Передаю значение textField в функцию в качестве параметра
+                self.locationGroup.addLocation(textField?.text ?? "No City") { info in
+                    self.processJson?(info)
+                }
+            }
+            
+        })
+        
+        
+        alert.addAction(UIAlertAction(title: "Отмена", style: .default, handler: nil))
+
+        self.present(alert, animated: true, completion: nil)
     }
     
     //ShowSettingsController
@@ -512,7 +526,7 @@ extension MainScrenenViewController: UICollectionViewDataSource {
             if let minTemp = weekViewModel.weekMainScreenViewModel?.weekMinTemp {
                 let minTempString = String(format: "%.0f", minTemp[indexPath.item])
                 
-                cellThree.minTemperatureLabel.text = "\(minTempString)" + "°" + "-"
+                cellThree.minTemperatureLabel.text = "\(minTempString)" + "°" + "..."
             }
             
             //MARK: -maxTemp

@@ -24,13 +24,8 @@ class DayWeatherViewModel {
     }
     
     func viewDidLoad() {
-        
-
-        
-        
-        
-        //Тут есть только долгота и широта
-        weatherService.getCitiesWeather() { [weak self] result in
+    
+        weatherService.getCitiesWeather(location: nil) { [weak self] result in
             guard let self = self else { return }
             
             switch result {

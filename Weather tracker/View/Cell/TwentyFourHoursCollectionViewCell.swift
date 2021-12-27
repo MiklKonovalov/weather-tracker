@@ -58,10 +58,10 @@ class TwentyFourHoursCollectionViewCell: UICollectionViewCell {
         
         let constraints = [
             
-            mainTemperatureLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10),
+            mainTemperatureLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -5),
             mainTemperatureLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            mainTemperatureLabel.heightAnchor.constraint(equalToConstant: 30),
-            mainTemperatureLabel.widthAnchor.constraint(equalToConstant: 30),
+            mainTemperatureLabel.heightAnchor.constraint(equalToConstant: 40),
+            mainTemperatureLabel.widthAnchor.constraint(equalToConstant: 40),
             
             imageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             imageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
