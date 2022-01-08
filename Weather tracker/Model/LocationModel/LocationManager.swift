@@ -23,7 +23,7 @@ class LocationManager: NSObject, ILocationService, CLLocationManagerDelegate {
     
     //Получение локации!
     public func getUserLocation(completion: @escaping ((CLLocation) -> Void)) {
-        self.completion = completion
+        self.completion = completion //Что это значит?
         manager.requestWhenInUseAuthorization()
         manager.delegate = self
         manager.startUpdatingLocation()
@@ -36,7 +36,7 @@ class LocationManager: NSObject, ILocationService, CLLocationManagerDelegate {
                 completion(nil)
                 return
             }
-            print(location)
+            print("resolveLocationName: \(location)")
             
             var name = ""
             
@@ -60,8 +60,8 @@ class LocationManager: NSObject, ILocationService, CLLocationManagerDelegate {
         completion?(location)
         
         //Эти значения надо передать в WeatherService
-        print(location.coordinate.latitude)
-        print(location.coordinate.longitude)
+        print("Долгота: \(location.coordinate.latitude)")
+        print("Широта: \(location.coordinate.longitude)")
         
         //Если я тут вызову функцию, то она должна передать координаты в массив cityArray
         

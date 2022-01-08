@@ -13,7 +13,7 @@ protocol ILocationGroup {
     //Надо принять название города
     func addLocation(_ name: String, completion: @escaping ((LocationData) -> Void))
     
-    func fetchLocation() -> (Double, Double)?
+    func fetchLocation() -> CLLocationCoordinate2D?
     
 }
 
@@ -36,8 +36,11 @@ class LocationGroup: ILocationGroup {
                 let result = try JSONDecoder().decode(LocationData.self, from: data)
                 completion(result)
                 
-                //3.Сохраняем координаты в UserDefaults
-                UserDefaults.standard.set(result, forKey: "Coord")
+                /*let coordinates: [CLLocationCoordinate2D] = result.map {
+                    return .init(latitude: $0.lat, longitude: $0.lon)
+                }*/
+                //3.Сохраняем массив (координаты) в UserDefaults
+                UserDefaults.standard.set(data, forKey: "Coord")
             }
             catch {
                 print("failed to convert \(error)")
@@ -47,24 +50,14 @@ class LocationGroup: ILocationGroup {
         
     }
     
-    func fetchLocation() -> (Double, Double)? {
-        
-        if let savedCoord = UserDefaults.standard.object(forKey: "Coord") as? Data {
-            let decoder = JSONDecoder()
-            if let loadedCoord = try? decoder.decode(LocationData.self, from: savedCoord) {
-                guard let coordLat = loadedCoord.first?.lat, let coordLon = loadedCoord.first?.lon else { return (1.1, 1.1) }
-                return (coordLat, coordLon)
-            } else {
-                return (1.1, 1.1)
-            }
-            
-        } else {
+    func fetchLocation() -> CLLocationCoordinate2D? {
+        let decoder = JSONDecoder()
+        guard let data = UserDefaults.standard.object(forKey: "Coord") as? Data, let coordinates = try? decoder.decode(LocationData.self, from: data).first
+        else {
             return nil
         }
         
+        return .init(latitude: coordinates.lat, longitude: coordinates.lon)
     }
-    
-    
-    /*return UserDefaults.standard.array(forKey: "Coord") as? [CLLocationCoordinate2D] ?? [CLLocationCoordinate2D(latitude: 1.1, longitude: 1.1)]*/
 }
 

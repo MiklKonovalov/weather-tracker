@@ -13,7 +13,7 @@ struct MainScreenViewModel {
     let minTemp: Double?
     let maxTemp: Double?
     
-    let weatherDescription: MainEnum?
+    let weatherDescription: String?
     
     let windSpeed: Double?
     let clouds: Int?

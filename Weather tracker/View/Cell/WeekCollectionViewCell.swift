@@ -99,8 +99,10 @@ class WeekCollectionViewCell: UICollectionViewCell {
             weatherImageView.heightAnchor.constraint(equalToConstant: 20),
             weatherImageView.widthAnchor.constraint(equalToConstant: 20),
             
-            rainLabel.topAnchor.constraint(equalTo: weatherImageView.topAnchor),
-            rainLabel.leadingAnchor.constraint(equalTo: weatherImageView.trailingAnchor, constant: 10),
+            rainLabel.topAnchor.constraint(equalTo: dateTemperatureLabel.bottomAnchor, constant: 1),
+            rainLabel.leadingAnchor.constraint(equalTo: weatherImageView.trailingAnchor, constant: 1),
+            //rainLabel.widthAnchor.constraint(equalToConstant: 5),
+            //rainLabel.heightAnchor.constraint(equalToConstant: 5),
             
             weatherDescriptionLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             weatherDescriptionLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
@@ -112,7 +114,7 @@ class WeekCollectionViewCell: UICollectionViewCell {
             maxTemperatureLabel.leadingAnchor.constraint(equalTo: minTemperatureLabel.trailingAnchor, constant: 0),
             
             arrowImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            arrowImageView.leadingAnchor.constraint(equalTo: maxTemperatureLabel.trailingAnchor, constant: -10),
+            arrowImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -1),
             
         ]
         NSLayoutConstraint.activate(constraints)

@@ -20,10 +20,6 @@ enum TwentyFourHoursWeatherServiceError: Error {
     case badUrl
     case lastKnownLocationIsEmpty
 }
-
-/*private extension String {
-    static let url = "https://api.openweathermap.org/data/2.5/forecast?q=London&cnt=7&units=metric&appid=b382e4a70dfb690b16b9381daac545ac"
-}*/
     
 final class TwentyFourHoursWeatherService: ITwentyFourHoursWeatherService {
     
@@ -33,7 +29,7 @@ final class TwentyFourHoursWeatherService: ITwentyFourHoursWeatherService {
     
     func getCitiesWeather(location: CLLocation?, completion: @escaping (Result<TwentyFourHoursCitiesWeather, Error>) -> Void) {
         
-        guard let location = LocationManager.shared.lastKnowLocation else {
+        guard let location = location ?? LocationManager.shared.lastKnowLocation else {
             completion(.failure(WeatherServiceError.lastKnownLocationIsEmpty))
             return
         }

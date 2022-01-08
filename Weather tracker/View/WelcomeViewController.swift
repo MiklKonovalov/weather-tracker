@@ -12,7 +12,7 @@ class WelcomeViewController: UIViewController {
     let viewModel = DayWeatherViewModel(weatherService: WeatherService())
     let twentyFourHoursViewModel = TwentyFourHoursViewModel(twentyFourHoursWeatherService: TwentyFourHoursWeatherService())
     let weekViewModel = WeekViewModel(weekWeatherService: WeekWeatherService())
-    let locationViewModel = LocationViewModel(locationService: LocationManager())
+    let locationViewModel = LocationViewModel(locationService: LocationManager(), locationGroup: LocationGroup())
     let locationGroup = LocationGroup()
     
     var onboardImage: UIImageView = {
@@ -143,7 +143,16 @@ class WelcomeViewController: UIViewController {
     
     @objc func agreeButtonPressed() {
         WelcomeCore.shared.setIsNotNewUser()
-        let mainScreenViewController = MainScrenenViewController(viewModel: viewModel, twentyFourHoursViewModel: twentyFourHoursViewModel, weekViewModel: weekViewModel, locationViewModel: locationViewModel, locationGroup: locationGroup)
+        let viewModel = GeneralViewModel(
+            locationGroup: locationGroup,
+            locationManager: LocationManager(),
+            weatherService: WeatherService(),
+            twentyFourHoursWeatherService: TwentyFourHoursWeatherService(),
+            weekWeatherService: WeekWeatherService(),
+            newWeatherService: NewCityWeatherService(),
+            newTFHWeatherService: NewCityTFHWeatherService(),
+            newCityWeekWeatherService: NewCityWeekWeatherService())
+        let mainScreenViewController = MainScrenenViewController(viewModel: viewModel, locationViewModel: locationViewModel)
         navigationController?.present(mainScreenViewController, animated: true, completion: nil)
     }
     

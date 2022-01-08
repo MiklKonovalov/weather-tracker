@@ -31,7 +31,7 @@ struct Coordinate: Decodable {
 struct Weather: Decodable {
     
     let id: Int?
-    let main: MainEnum?
+    let main: String?
     let description: String?
     let icon: String?
 }
@@ -58,9 +58,9 @@ struct Clouds: Decodable {
     let all: Int?
 }
 
-enum MainEnum: String, Decodable {
-    case clear = "Clear"
-    case clouds = "Clouds"
-    case rain = "Rain"
-    case snow = "Snow"
-}
+//enum MainEnum: String, Decodable {
+//    case clear = "Clear"
+//    case clouds = "Clouds"
+//    case rain = "Rain"
+//    case snow = "Snow"
+//}

@@ -1,27 +1,27 @@
 //
-//  NewCityWeatherService.swift
+//  NewCityTFHWeatherService.swift
 //  Weather tracker
 //
-//  Created by Misha on 27.12.2021.
+//  Created by Misha on 06.01.2022.
 //
 
 import Foundation
 import CoreLocation
 
-enum NewCityWeatherServiceError: Error {
+enum NewCityTFHWeatherServiceError: Error {
     case badUrl
     case lastKnownLocationIsEmpty
 }
 
-final class NewCityWeatherService {
+final class NewCityTFHWeatherService {
      
     var locationGroup: LocationGroup?
     
     func weatherURLString(coordinatesOne: Double, coordinatesTwo: Double) -> String {
-        return "https://api.openweathermap.org/data/2.5/weather?lat=\(coordinatesOne)&lon=\(coordinatesTwo)&units=metric&appid=b382e4a70dfb690b16b9381daac545ac&lang=ru"
+        return "https://api.openweathermap.org/data/2.5/forecast?lat=\(coordinatesOne)&lon=\(coordinatesTwo)&cnt=7&units=metric&appid=b382e4a70dfb690b16b9381daac545ac"
     }
     
-    func getNewCitiesWeather(location: CLLocation?, completion: @escaping (Result<CitiesWeather, Error>) -> Void) {
+    func getNewCitiesWeather(location: CLLocation?, completion: @escaping (Result<TwentyFourHoursCitiesWeather, Error>) -> Void) {
         
         guard let location = locationGroup?.fetchLocation() else {
             completion(.failure(WeatherServiceError.lastKnownLocationIsEmpty))
@@ -41,7 +41,7 @@ final class NewCityWeatherService {
             guard let data = data, error == nil else { return }
     
             do {
-                let result = try JSONDecoder().decode(CitiesWeather.self, from: data)
+                let result = try JSONDecoder().decode(TwentyFourHoursCitiesWeather.self, from: data)
                 completion(.success(result))
             }
             catch {

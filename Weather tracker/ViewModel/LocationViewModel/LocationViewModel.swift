@@ -12,19 +12,34 @@ class LocationViewModel {
     
     let locationService: ILocationService
     
+    var locationGroup: LocationGroup
+    
     var locationMainScreenViewModel: LocationMainScreenViewModel?
     
-    init(locationService: ILocationService) {
+    init(locationService: ILocationService, locationGroup: LocationGroup) {
         self.locationService = locationService
+        self.locationGroup = locationGroup
     }
     
     func locationDidLoad() {
         
+        //Получаем локацию из LocationManager
         locationService.getUserLocation {[weak self] location in
             guard let self = self else { return }
             self.addMapPin(with: location)
+            print("ПОЛУЧЕНА ЛОКАЦИЯ!!!")
             self.locationDidChange?()
         }
+    }
+    
+    func newLocationDidLoad() {
+    
+    func userDidSelectNewCity(name: String) {
+        locationGroup.addLocation(name) { [weak self] info in
+            guard let city = info.first else { return }
+            self?.newCityAdded?(city)
+        }
+    }
     }
     
     func addMapPin(with location: CLLocation) {
@@ -37,6 +52,7 @@ class LocationViewModel {
     }
     
     var locationDidChange: (() -> Void)?
+    var newCityAdded: ((LocationDatum) -> Void)?
 }
 
 

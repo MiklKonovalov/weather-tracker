@@ -11,19 +11,15 @@ import CoreLocation
 
 class MainScrenenViewController: UIViewController {
     
-    let viewModel: DayWeatherViewModel
-    
-    let twentyFourHoursViewModel: TwentyFourHoursViewModel
-    
-    let weekViewModel: WeekViewModel
+    let viewModel: GeneralViewModel
     
     let locationViewModel: LocationViewModel
     
-    var locationGroup: LocationGroup
-    
     var processJson: ((LocationData) -> Void)?
     
-    var cityArray = [(Any)?]()
+    var cityArray = [(LocationDatum)?]()
+    
+    var currentIndex = 0
     
     //MARK: - Views
     
@@ -141,12 +137,9 @@ class MainScrenenViewController: UIViewController {
     
     //MARK: - Initialization
     
-    init(viewModel: DayWeatherViewModel, twentyFourHoursViewModel: TwentyFourHoursViewModel, weekViewModel: WeekViewModel, locationViewModel: LocationViewModel, locationGroup: LocationGroup) {
+    init(viewModel: GeneralViewModel, locationViewModel: LocationViewModel) {
         self.viewModel = viewModel
-        self.twentyFourHoursViewModel = twentyFourHoursViewModel
-        self.weekViewModel = weekViewModel
         self.locationViewModel = locationViewModel
-        self.locationGroup = locationGroup
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -189,48 +182,47 @@ class MainScrenenViewController: UIViewController {
         
         setupConstraints()
         
-        
+        //Получил текущую локацию
+        viewModel.getCurrentLocation { location in
+            self.viewModel.fetchData(for: location)
+        }
         
         locationViewModel.locationDidChange = {
             DispatchQueue.main.async {
-                let mainCoord = LocationManager.shared.lastKnowLocation?.coordinate
-                guard let mainCoord = mainCoord else { return print("No coord") }
-                self.cityArray.append(mainCoord)
-                
-                print(self.locationGroup.fetchLocation())
-                
-                self.viewModel.viewDidLoad()
-                self.twentyFourHoursViewModel.twentyFourHoursViewDidLoad()
-                self.weekViewModel.weekViewDidLoad()
-                self.view.reloadInputViews()
-            }
-        }
-        
-        viewModel.weatherDidChange = {
-            DispatchQueue.main.async {
-                self.cityLabel.text = self.viewModel.currentWeather?.cityName
                 self.collectionView.reloadData()
-            }
-        }
-        
-        twentyFourHoursViewModel.twentyFourHoursWeatherDidChange = {
-            DispatchQueue.main.async {
                 self.todayCollectionView.reloadData()
-            }
-        }
-        
-        weekViewModel.weekWeatherDidChange = {
-            DispatchQueue.main.async {
                 self.weekCollectionView.reloadData()
             }
         }
         
+        viewModel.viewModelForNewCityDidChange = {
+            DispatchQueue.main.async {
+                self.collectionView.reloadData()
+                self.todayCollectionView.reloadData()
+                self.weekCollectionView.reloadData()
+                
+            }
+        }
+        
+        viewModel.viewModelDidChange = {
+            DispatchQueue.main.async {
+                self.collectionView.reloadData()
+                self.todayCollectionView.reloadData()
+                self.weekCollectionView.reloadData()
+                self.cityLabel.text = self.viewModel.weather[self.currentIndex].now.name
+            }
+        }
+        
+        locationViewModel.newCityAdded = { city in
+            self.viewModel.userDidSelectNewCity(name: city.name)
+        }
+        
+        //Получено текущее местоположение
         locationViewModel.locationDidLoad()
+        locationViewModel.newLocationDidLoad()
         
-        //self.cityArray.append((locationGroup.coord))
         
-        //print(cityArray)
-        
+    
     }
     
     //MARK: -Functions
@@ -289,17 +281,33 @@ class MainScrenenViewController: UIViewController {
     }
 
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return cityArray.count
+        return 1
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let offSet = scrollView.contentOffset.x
         let width = scrollView.frame.width
         let horizontalCenter = width / 2
-            
+        scrollView.isPagingEnabled = true
+        scrollView.showsHorizontalScrollIndicator = false
+        
         pageControl.currentPage = Int(offSet + horizontalCenter) / Int(width)
+        
+        currentIndex += 1
+
+        if currentIndex == viewModel.weather.count {
+                currentIndex = 0
+        }
+        
+        self.cityLabel.text = self.viewModel.weather[currentIndex].now.name //Почему города постоянно меняются?
+        
     }
     
+    func updateLabels() {
+        for (index, city) in self.viewModel.weather.enumerated(){
+            print(index, city)
+        }
+    }
     
     //MARK: - Selectors
     
@@ -316,11 +324,11 @@ class MainScrenenViewController: UIViewController {
             let textField = alert.textFields?.first
             
             if textField?.text != "" {
-                print("Text field: \(textField?.text)")
+
                 //Передаю значение textField в функцию в качестве параметра
-                self.locationGroup.addLocation(textField?.text ?? "No City") { info in
-                    self.processJson?(info)
-                }
+                guard let text = textField?.text else { return }
+                self.viewModel.userDidSelectNewCity(name: text) //Передали название города
+                print(self.viewModel.weather.count)
             }
             
         })
@@ -357,65 +365,55 @@ extension MainScrenenViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if collectionView == self.collectionView {
-            return 1
+            return viewModel.weather.count
         } else if collectionView == self.todayCollectionView {
-            return twentyFourHoursViewModel.twentyFourHoursWeather?.twentyFourHoursTime?.count ?? 7
+            return viewModel.twentyFourHoursWeather?.twentyFourHoursTime?.count ?? 7
         } else {
-            return weekViewModel.weekMainScreenViewModel?.weekDate.count ?? 7
+            return viewModel.weekWeather?.weekDate.count ?? 7
         
         }
     }
+
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         //MARK: -Now Cell
         if collectionView == self.collectionView {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "sliderCell", for: indexPath) as! DayWeatherCell
              
-            if let main: String? = String(format: "%.0f", viewModel.currentWeather?.main ?? 1.1) {
+            if let main: String? = String(format: "%.0f",viewModel.weather[indexPath.item].now.main?.temp ?? 1.1) {
                 cell.mainTemperatureLabel.text = "\(main ?? "No data") °"
             }
             
-            if let minTemp: String? = String(format: "%.0f", viewModel.currentWeather?.minTemp ?? 1.1) {
+            if let minTemp: String? = String(format: "%.0f", viewModel.weather[indexPath.item].now.main?.temp_min ?? 1.1) {
                 cell.minTemperatureLabel.text = "\(minTemp ?? "No data") °"
             }
             
-            if let maxTemp: String? = String(format: "%.0f", viewModel.currentWeather?.maxTemp ?? 1.1) {
+            if let maxTemp: String? = String(format: "%.0f", viewModel.weather[indexPath.item].now.main?.temp_max ?? 1.1) {
                 cell.maxTemperatureLabel.text = "\(maxTemp ?? "No data") °"
             }
             
-            if let description = viewModel.currentWeather?.weatherDescription {
-                switch (description) {
-                case .clear:
-                    cell.weatherDescriptionLabel.text = description.rawValue
-                case .clouds:
-                    cell.weatherDescriptionLabel.text = description.rawValue
-                case .rain:
-                    cell.weatherDescriptionLabel.text = description.rawValue
-                default:
-                    cell.weatherDescriptionLabel.text = "No data"
-                }
+            if let description = viewModel.weather[indexPath.item].now.weather?[0].main {
+                cell.weatherDescriptionLabel.text = description
             }
             
-            if let windSpeed: String? = String(format: "%.0f", viewModel.currentWeather?.windSpeed ?? 1.1) {
+            if let windSpeed: String? = String(format: "%.0f", viewModel.weather[indexPath.item].now.wind?.speed ?? 1.1) {
                 cell.windSpeedLabel.text = "\(windSpeed ?? "No data") м/с"
             }
             
-            if let clouds: String? = String(viewModel.currentWeather?.clouds ?? 1) {
+            if let clouds: String? = String(viewModel.weather[indexPath.item].now.clouds?.all ?? 1) {
                 cell.cloudsLabel.text = clouds
             }
             
-            if let humidity: String? = String(viewModel.currentWeather?.humidity ?? 1) {
+            if let humidity: String? = String(viewModel.weather[indexPath.item].now.main?.humidity ?? 1) {
                 cell.humidityLabel.text = "\(humidity ?? "No data") %"
             }
             
-            let dateSunrise = viewModel.currentWeather?.sunrise
+            let dateSunrise = viewModel.weather[indexPath.item].now.sys?.sunrise
             let formateSunrise = dateSunrise?.getFormattedDate(format: "HH:mm")
-            
             cell.sunrise.text = formateSunrise
             
-            let dateSunset = viewModel.currentWeather?.sunset
+            let dateSunset = viewModel.weather[indexPath.item].now.sys?.sunset
             let formateSunset = dateSunset?.getFormattedDate(format: "HH:mm")
-            
             cell.sunset.text = formateSunset
             
             let date = Date()
@@ -433,39 +431,40 @@ extension MainScrenenViewController: UICollectionViewDataSource {
             let cellTwo = collectionView.dequeueReusableCell(withReuseIdentifier: "todayCell", for: indexPath) as! TwentyFourHoursCollectionViewCell
             
             //MARK: -Temp
-            if let arrayTemp = twentyFourHoursViewModel.twentyFourHoursWeather?.twentyFourHoursTemp {
-                let stringArray = arrayTemp.map({String(format: "%.0f", $0)})
-                cellTwo.mainTemperatureLabel.text = "\(stringArray[indexPath.item])" + " " + "°"
+            
+            if let arrayTemp: String? = String(format: "%.0f",viewModel.weather[indexPath.item].day.list[indexPath.item].main.temp ?? 1.1) {
+                cellTwo.mainTemperatureLabel.text = "\(arrayTemp ?? "No data")" + " " + "°"
             }
             
+            
             //MARK: -Time
-            let time = self.twentyFourHoursViewModel.twentyFourHoursWeather?.twentyFourHoursTime
+            
             
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
             dateFormatter.locale = Locale(identifier: "ru_RU")
             
             //Array of Dates
-            let dateDate = time?.map({ dateFormatter.date(from: $0) })
-            
-            let dateFormatter2 = DateFormatter()
-            dateFormatter2.dateFormat = "HH:mm"
-            dateFormatter2.locale = Locale(identifier: "ru_RU")
-            
-            let dateString = dateDate?.map({ dateFormatter2.string(from: $0 ?? Date()) })
+            if let time = self.viewModel.weather.first?.day.list[indexPath.item].dtTxt {
+                
+                let dateDate = dateFormatter.date(from: time)
         
-            cellTwo.timeLabel.text = dateString?[indexPath.item]
+                let dateFormatter2 = DateFormatter()
+                dateFormatter2.dateFormat = "HH:mm"
+                dateFormatter2.locale = Locale(identifier: "ru_RU")
             
+                let dateString = dateFormatter2.string(from: dateDate ?? Date())
+        
+                cellTwo.timeLabel.text = dateString
+            
+            }
             //MARK: -Icon
-            if let icon = twentyFourHoursViewModel.twentyFourHoursWeather?.twentyFourHoursIcon {
-                for _ in icon {
-                    let iconArray = icon.map({$0})
-                    let urlStr = "http://openweathermap.org/img/w/" + (iconArray[indexPath.item]) + ".png"
-                    let url = URL(string: urlStr)
-                    cellTwo.imageView.kf.setImage(with: url) { result in
-                        print(result)
-                        cellTwo.setNeedsLayout()
-                    }
+            if let icon = viewModel.weather[indexPath.item].day.list[indexPath.item].weather[0].icon {
+                let urlStr = "http://openweathermap.org/img/w/" + (icon) + ".png"
+                let url = URL(string: urlStr)
+                cellTwo.imageView.kf.setImage(with: url) { result in
+                    print(result)
+                    cellTwo.setNeedsLayout()
                 }
             }
             
@@ -478,61 +477,54 @@ extension MainScrenenViewController: UICollectionViewDataSource {
             
             //MARK: -Date
             
-            if let dateInt = weekViewModel.weekMainScreenViewModel?.weekDate { //[Int]
-
-                for _ in dateInt {
-                    let dateIntArray = dateInt.map({$0})
-                    let timeInterval = TimeInterval(dateIntArray[indexPath.item])
-                    let myNSDate = Date(timeIntervalSince1970: timeInterval)
+            if let dateInt = viewModel.weather.first?.week.daily[indexPath.item].dt {
+                let timeInterval = TimeInterval(dateInt)
+                let myNSDate = Date(timeIntervalSince1970: timeInterval)
                     
-                    let dateFormatter2 = DateFormatter()
-                    dateFormatter2.dateFormat = "dd/MM"
-                    dateFormatter2.locale = Locale(identifier: "ru_RU")
-                    let dateString = dateFormatter2.string(from: myNSDate)
-                    
-                    cellThree.dateTemperatureLabel.text = dateString
-                }
+                let dateFormatter2 = DateFormatter()
+                dateFormatter2.dateFormat = "dd/MM"
+                dateFormatter2.locale = Locale(identifier: "ru_RU")
+                let dateString = dateFormatter2.string(from: myNSDate)
+                
+                cellThree.dateTemperatureLabel.text = dateString
             
-            }
+            } 
           
             //MARK: -Icon
             
-            if let icon = weekViewModel.weekMainScreenViewModel?.weekIcon {
-                for _ in icon {
-                    let iconArray = icon.map({$0})
-                    let urlStr = "http://openweathermap.org/img/w/" + (iconArray[indexPath.item] ?? "00") + ".png"
+            if let icon = viewModel.weather.first?.week.daily[indexPath.item].weather[0].icon {
+                let urlStr = "http://openweathermap.org/img/w/" + (icon) + ".png"
                     let url = URL(string: urlStr)
                     cellThree.weatherImageView.kf.setImage(with: url) { result in
                         print(result)
                         cellThree.setNeedsLayout()
                     }
                 }
-            }
             
             //MARK: -Rain
             
-            /*if let arrayRain = weekViewModel.weekMainScreenViewModel?.weekRain {
-                let arrayRainString = String(format: "%.0f", arrayRain[indexPath.item]!)
+            if let arrayRain = viewModel.weather.first?.week.daily[indexPath.item].rain {
+                let arrayRainString = String(format: "%.0f", arrayRain)
                 cellThree.rainLabel.text = arrayRainString
-            }*/
+            }
             
             //MARK: -Description
             
-            let weatherDescription = weekViewModel.weekMainScreenViewModel?.weekDescription
-            cellThree.weatherDescriptionLabel.text = weatherDescription?[indexPath.item]
+            let weatherDescription = viewModel.weather.first?.week.daily[indexPath.item].weather[0].description
+            cellThree.weatherDescriptionLabel.text = weatherDescription
             
             //MARK: -minTemp
         
-            if let minTemp = weekViewModel.weekMainScreenViewModel?.weekMinTemp {
-                let minTempString = String(format: "%.0f", minTemp[indexPath.item])
+            if let minTemp = viewModel.weather.first?.week.daily[indexPath.row].temp.min {
+                let minTempString = String(format: "%.0f", minTemp)
                 
                 cellThree.minTemperatureLabel.text = "\(minTempString)" + "°" + "..."
             }
             
             //MARK: -maxTemp
         
-            if let maxTemp = weekViewModel.weekMainScreenViewModel?.weekMaxTemp {
-                let maxTempString = String(format: "%.0f", maxTemp[indexPath.item])
+            if let maxTemp = viewModel.weather.first?.week.daily[indexPath.row].temp.max {
+                let maxTempString = String(format: "%.0f", maxTemp)
                 
                 cellThree.maxTemperatureLabel.text = "\(maxTempString)" + "°"
             }

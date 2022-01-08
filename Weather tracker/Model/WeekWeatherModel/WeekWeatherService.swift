@@ -20,19 +20,16 @@ enum WeekWeatherServiceError: Error {
     case badUrl
 }
 
-/*private extension String {
-    static let url = "https://api.openweathermap.org/data/2.5/onecall?lat=51.30&lon=00.07&exclude=hourly&units=metric&appid=b382e4a70dfb690b16b9381daac545ac&lang=ru"
-}*/
-
 final class WeekWeatherService: IWeekWeatherService {
     
     func weatherURLString(forCoordinates coordinates: CLLocationCoordinate2D) -> String {
        return "https://api.openweathermap.org/data/2.5/onecall?lat=\(coordinates.latitude)&lon=\(coordinates.longitude)&exclude=hourly&units=metric&appid=b382e4a70dfb690b16b9381daac545ac&lang=ru"
     }
     
-    func getCitiesWeather(location: CLLocation?, completion: @escaping (Result<WeekWeather, Error>) -> Void) {
+    func getCitiesWeather(location: CLLocation? = nil,
+                          completion: @escaping (Result<WeekWeather, Error>) -> Void) {
         
-        guard let location = LocationManager.shared.lastKnowLocation else {
+        guard let location = location ?? LocationManager.shared.lastKnowLocation else {
             completion(.failure(WeatherServiceError.lastKnownLocationIsEmpty))
             return
         }

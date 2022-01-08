@@ -19,19 +19,21 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         let window = UIWindow(windowScene: windowScene)
         
-        let weatherService = WeatherService()
-        let twentyFourHoursWeatherService = TwentyFourHoursWeatherService()
-        let weekWeatherService = WeekWeatherService()
-        let locationService = LocationManager()
-        
-        let viewModel = DayWeatherViewModel(weatherService: weatherService)
-        let twentyFourHoursViewModel = TwentyFourHoursViewModel(twentyFourHoursWeatherService: twentyFourHoursWeatherService)
-        let weekViewModel = WeekViewModel(weekWeatherService: weekWeatherService)
-        let locationViewModel = LocationViewModel(locationService: locationService)
         let locationGroup = LocationGroup()
         
+        let viewModel = GeneralViewModel(locationGroup: locationGroup,
+                                         locationManager: LocationManager(),
+                                         weatherService: WeatherService(),
+                                         twentyFourHoursWeatherService: TwentyFourHoursWeatherService(),
+                                         weekWeatherService: WeekWeatherService(),
+                                         newWeatherService: NewCityWeatherService(),
+                                         newTFHWeatherService: NewCityTFHWeatherService(),
+                                         newCityWeekWeatherService: NewCityWeekWeatherService())
+        
+        let locationViewModel = LocationViewModel(locationService: LocationManager(), locationGroup: LocationGroup())
+        
         let welcomeViewController = WelcomeViewController()
-        let mainScreenViewController = MainScrenenViewController(viewModel: viewModel, twentyFourHoursViewModel: twentyFourHoursViewModel, weekViewModel: weekViewModel, locationViewModel: locationViewModel, locationGroup: locationGroup)
+        let mainScreenViewController = MainScrenenViewController(viewModel: viewModel, locationViewModel: locationViewModel)
         
         if WelcomeCore.shared.isNewUser() {
             window.rootViewController = welcomeViewController

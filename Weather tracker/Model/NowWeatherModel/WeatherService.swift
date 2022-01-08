@@ -29,7 +29,7 @@ final class WeatherService: IWeatherService {
     
     func getCitiesWeather(location: CLLocation?, completion: @escaping (Result<CitiesWeather, Error>) -> Void) {
         
-        guard let location = LocationManager.shared.lastKnowLocation else {
+        guard let location = location ?? LocationManager.shared.lastKnowLocation else {
             completion(.failure(WeatherServiceError.lastKnownLocationIsEmpty))
             return
         }

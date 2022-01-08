@@ -11,5 +11,5 @@ struct TwentyFourHoursMainScreenWeatherModel {
     
     let twentyFourHoursTime: [String]?
     let twentyFourHoursIcon: [String]?
-    var twentyFourHoursTemp: [Double]? 
+    var twentyFourHoursTemp: [Double]?
 }
