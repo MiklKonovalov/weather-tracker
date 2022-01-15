@@ -95,7 +95,7 @@ struct FeelsLike: Decodable {
 
 // MARK: - Temp
 struct Temp: Decodable {
-    let day, min, max, night: Double
+    let day, min, max, night: Double?
     let eve, morn: Double
 }
 

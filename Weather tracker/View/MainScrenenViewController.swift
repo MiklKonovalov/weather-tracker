@@ -15,9 +15,9 @@ class MainScrenenViewController: UIViewController {
     
     let locationViewModel: LocationViewModel
     
-    var processJson: ((LocationData) -> Void)?
+    //var processJson: ((LocationData) -> Void)?
     
-    var cityArray = [(LocationDatum)?]()
+    //var cityArray = [(LocationDatum)?]()
     
     var currentIndex = 0
     
@@ -221,8 +221,6 @@ class MainScrenenViewController: UIViewController {
         locationViewModel.locationDidLoad()
         locationViewModel.newLocationDidLoad()
         
-        
-    
     }
     
     //MARK: -Functions
@@ -293,20 +291,35 @@ class MainScrenenViewController: UIViewController {
         
         pageControl.currentPage = Int(offSet + horizontalCenter) / Int(width)
         
+        
+    }
+    
+    func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
+        updateLabels()
+    }
+
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        updateLabels()
+    }
+
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        if !decelerate {
+            updateLabels()
+        }
+    }
+    
+    func updateLabels() {
+        
         currentIndex += 1
 
         if currentIndex == viewModel.weather.count {
                 currentIndex = 0
         }
         
-        self.cityLabel.text = self.viewModel.weather[currentIndex].now.name //Почему города постоянно меняются?
+        self.cityLabel.text = self.viewModel.weather[currentIndex].now.name
         
-    }
-    
-    func updateLabels() {
-        for (index, city) in self.viewModel.weather.enumerated(){
-            print(index, city)
-        }
+        self.todayCollectionView.reloadData()
+        self.weekCollectionView.reloadData()
     }
     
     //MARK: - Selectors
@@ -350,11 +363,12 @@ class MainScrenenViewController: UIViewController {
     }
     
     @objc func details24ButtonPressed() {
-        print("123")
+        let dayCityWeatherViewController = DayCityWeatherViewController(viewModel: viewModel, currentIndex: currentIndex)
+        present(dayCityWeatherViewController, animated: true, completion: nil)
     }
     
     @objc func twentyFiveDayButtonPressed() {
-        print("123")
+        
     }
     
 }
@@ -367,10 +381,15 @@ extension MainScrenenViewController: UICollectionViewDataSource {
         if collectionView == self.collectionView {
             return viewModel.weather.count
         } else if collectionView == self.todayCollectionView {
-            return viewModel.twentyFourHoursWeather?.twentyFourHoursTime?.count ?? 7
+            //currentIndex - это количество имеющихся городов. При загрузке приложения этот индекс = 0, так как у нас есть 1 город. Если при загрузке информация ещё не загрузилась, то мы покажем 7 ячеек
+            if currentIndex != 0 {
+                //Я хочу показать количество ячеек равное 7 и в list их 7
+                return viewModel.weather[currentIndex].day.list.count
+            } else {
+                return 7
+            }
         } else {
             return viewModel.weekWeather?.weekDate.count ?? 7
-        
         }
     }
 
@@ -432,10 +451,17 @@ extension MainScrenenViewController: UICollectionViewDataSource {
             
             //MARK: -Temp
             
-            if let arrayTemp: String? = String(format: "%.0f",viewModel.weather[indexPath.item].day.list[indexPath.item].main.temp ?? 1.1) {
-                cellTwo.mainTemperatureLabel.text = "\(arrayTemp ?? "No data")" + " " + "°"
+            //Проверим, есть ли в viewModel.weather значения. Если значений нет, то покажем первый элемент массива?
+            if currentIndex > viewModel.weather.startIndex && currentIndex < viewModel.weather.endIndex {
+                if let arrayTemp: String? = String(format: "%.0f",viewModel.weather[currentIndex].day.list[indexPath.item].main.temp ?? 1.1) {
+                    cellTwo.mainTemperatureLabel.text = "\(arrayTemp ?? "No data")" + " " + "°"
+                }
+            } else {
+                if let arrayTemp: String? = String(format: "%.0f",viewModel.weather.first?.day.list[indexPath.item].main.temp ?? 1.1) {
+                    cellTwo.mainTemperatureLabel.text = "\(arrayTemp ?? "No data")" + " " + "°"
+                    }
+                
             }
-            
             
             //MARK: -Time
             
@@ -459,12 +485,25 @@ extension MainScrenenViewController: UICollectionViewDataSource {
             
             }
             //MARK: -Icon
-            if let icon = viewModel.weather[indexPath.item].day.list[indexPath.item].weather[0].icon {
-                let urlStr = "http://openweathermap.org/img/w/" + (icon) + ".png"
-                let url = URL(string: urlStr)
-                cellTwo.imageView.kf.setImage(with: url) { result in
-                    print(result)
-                    cellTwo.setNeedsLayout()
+            if currentIndex > viewModel.weather.startIndex && currentIndex < viewModel.weather.endIndex {
+                if let icon = viewModel.weather[currentIndex].week.daily[indexPath.item].weather[0].icon {
+                    let urlStr = "http://openweathermap.org/img/w/" + (icon) + ".png"
+                        let url = URL(string: urlStr)
+                        cellTwo.imageView.kf.setImage(with: url) { result in
+                            print(result)
+                            cellTwo.setNeedsLayout()
+                        }
+                    }
+            } else {
+                if currentIndex > viewModel.weather.startIndex && currentIndex < viewModel.weather.endIndex {
+                    if let icon = viewModel.weather.first?.week.daily[indexPath.item].weather[0].icon {
+                        let urlStr = "http://openweathermap.org/img/w/" + (icon) + ".png"
+                            let url = URL(string: urlStr)
+                            cellTwo.imageView.kf.setImage(with: url) { result in
+                                print(result)
+                                cellTwo.setNeedsLayout()
+                            }
+                        }
                 }
             }
             
@@ -491,15 +530,27 @@ extension MainScrenenViewController: UICollectionViewDataSource {
             } 
           
             //MARK: -Icon
-            
-            if let icon = viewModel.weather.first?.week.daily[indexPath.item].weather[0].icon {
-                let urlStr = "http://openweathermap.org/img/w/" + (icon) + ".png"
-                    let url = URL(string: urlStr)
-                    cellThree.weatherImageView.kf.setImage(with: url) { result in
-                        print(result)
-                        cellThree.setNeedsLayout()
+            if currentIndex > viewModel.weather.startIndex && currentIndex < viewModel.weather.endIndex {
+                if let icon = viewModel.weather[currentIndex].week.daily[indexPath.item].weather[0].icon {
+                    let urlStr = "http://openweathermap.org/img/w/" + (icon) + ".png"
+                        let url = URL(string: urlStr)
+                        cellThree.weatherImageView.kf.setImage(with: url) { result in
+                            print(result)
+                            cellThree.setNeedsLayout()
+                        }
                     }
+            } else {
+                if currentIndex > viewModel.weather.startIndex && currentIndex < viewModel.weather.endIndex {
+                    if let icon = viewModel.weather.first?.week.daily[indexPath.item].weather[0].icon {
+                        let urlStr = "http://openweathermap.org/img/w/" + (icon) + ".png"
+                            let url = URL(string: urlStr)
+                            cellThree.weatherImageView.kf.setImage(with: url) { result in
+                                print(result)
+                                cellThree.setNeedsLayout()
+                            }
+                        }
                 }
+            }
             
             //MARK: -Rain
             
@@ -509,24 +560,46 @@ extension MainScrenenViewController: UICollectionViewDataSource {
             }
             
             //MARK: -Description
-            
-            let weatherDescription = viewModel.weather.first?.week.daily[indexPath.item].weather[0].description
-            cellThree.weatherDescriptionLabel.text = weatherDescription
+            if currentIndex > viewModel.weather.startIndex && currentIndex < viewModel.weather.endIndex {
+                let weatherDescription = viewModel.weather[currentIndex].week.daily[indexPath.item].weather[0].description
+                cellThree.weatherDescriptionLabel.text = weatherDescription
+            } else {
+                let weatherDescription = viewModel.weather.first?.week.daily[indexPath.item].weather[0].description
+                cellThree.weatherDescriptionLabel.text = weatherDescription
+            }
             
             //MARK: -minTemp
-        
-            if let minTemp = viewModel.weather.first?.week.daily[indexPath.row].temp.min {
+            if currentIndex > viewModel.weather.startIndex && currentIndex < viewModel.weather.endIndex {
+            
+                if let minTemp = viewModel.weather[currentIndex].week.daily[indexPath.row].temp.min {
                 let minTempString = String(format: "%.0f", minTemp)
                 
                 cellThree.minTemperatureLabel.text = "\(minTempString)" + "°" + "..."
+                }
+            } else {
+                
+                if let minTemp = viewModel.weather.first?.week.daily[indexPath.row].temp.min {
+                let minTempString = String(format: "%.0f", minTemp)
+                
+                cellThree.minTemperatureLabel.text = "\(minTempString)" + "°" + "..."
+                }
             }
             
             //MARK: -maxTemp
-        
-            if let maxTemp = viewModel.weather.first?.week.daily[indexPath.row].temp.max {
-                let maxTempString = String(format: "%.0f", maxTemp)
+            if currentIndex > viewModel.weather.startIndex && currentIndex < viewModel.weather.endIndex {
+            
+                if let maxTemp = viewModel.weather[currentIndex].week.daily[indexPath.row].temp.max {
+                    let maxTempString = String(format: "%.0f", maxTemp)
                 
-                cellThree.maxTemperatureLabel.text = "\(maxTempString)" + "°"
+                    cellThree.maxTemperatureLabel.text = "\(maxTempString)" + "°"
+                }
+            } else {
+                
+                if let maxTemp = viewModel.weather.first?.week.daily[indexPath.row].temp.max {
+                    let maxTempString = String(format: "%.0f", maxTemp)
+                
+                    cellThree.maxTemperatureLabel.text = "\(maxTempString)" + "°"
+                }
             }
             
         return cellThree
@@ -539,12 +612,9 @@ extension MainScrenenViewController: UICollectionViewDataSource {
 extension MainScrenenViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if collectionView == self.collectionView {
-            print("User tapped on item \(indexPath.row)")
-        } else if collectionView == self.todayCollectionView {
-        print("User tapped on item \(indexPath.row)")
-        } else {
-        print("User tapped on item \(indexPath.row) in bottom collection")
+        if collectionView == self.weekCollectionView {
+            let weekCityWeatherViewController = WeekCityWeatherViewController()
+            navigationController?.present(weekCityWeatherViewController, animated: true, completion: nil)
         }
     }
 }

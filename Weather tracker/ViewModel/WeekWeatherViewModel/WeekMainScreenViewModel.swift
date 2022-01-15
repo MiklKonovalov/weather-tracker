@@ -13,6 +13,6 @@ struct WeekMainScreenViewModel {
     let weekIcon: [String?]
     let weekRain: [Double?]
     let weekDescription: [String?]
-    let weekMinTemp: [Double]
-    let weekMaxTemp: [Double]
+    let weekMinTemp: [Double?]
+    let weekMaxTemp: [Double?]
 }
