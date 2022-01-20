@@ -364,7 +364,9 @@ class MainScrenenViewController: UIViewController {
     
     @objc func details24ButtonPressed() {
         let dayCityWeatherViewController = DayCityWeatherViewController(viewModel: viewModel, currentIndex: currentIndex)
-        present(dayCityWeatherViewController, animated: true, completion: nil)
+        let navigationController = UINavigationController(rootViewController: dayCityWeatherViewController)
+        navigationController.modalPresentationStyle = .fullScreen
+        present(navigationController, animated: true, completion: nil)
     }
     
     @objc func twentyFiveDayButtonPressed() {
