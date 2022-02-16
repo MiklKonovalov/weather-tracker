@@ -26,7 +26,7 @@ class LocationViewModel {
         //Получаем локацию из LocationManager
         locationService.getUserLocation {[weak self] location in
             guard let self = self else { return }
-            self.addMapPin(with: location)
+            //self.addMapPin(with: location)
             print("ПОЛУЧЕНА ЛОКАЦИЯ!!!")
             self.locationDidChange?()
         }
@@ -36,7 +36,7 @@ class LocationViewModel {
     
     func userDidSelectNewCity(name: String) {
         locationGroup.addLocation(name) { [weak self] info in
-            guard let city = info.first else { return }
+            guard let city = info.response.geoObjectCollection.featureMember.first else { return }
             self?.newCityAdded?(city)
         }
     }
@@ -45,14 +45,14 @@ class LocationViewModel {
     func addMapPin(with location: CLLocation) {
         LocationManager.shared.resolveLocationName(with: location) { [weak self] locationName in
             guard let self = self else { return }
-            
+
             self.locationMainScreenViewModel = .init(cityName: locationName ?? "No City")
         }
         locationDidChange?()
     }
     
     var locationDidChange: (() -> Void)?
-    var newCityAdded: ((LocationDatum) -> Void)?
+    var newCityAdded: ((FeatureMember) -> Void)?
 }
 
 

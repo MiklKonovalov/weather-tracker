@@ -18,7 +18,7 @@ final class NewCityTFHWeatherService {
     var locationGroup: LocationGroup?
     
     func weatherURLString(coordinatesOne: Double, coordinatesTwo: Double) -> String {
-        return "https://api.openweathermap.org/data/2.5/forecast?lat=\(coordinatesOne)&lon=\(coordinatesTwo)&cnt=7&units=metric&appid=b382e4a70dfb690b16b9381daac545ac"
+        return "https://api.openweathermap.org/data/2.5/forecast?lat=\(coordinatesOne)&lon=\(coordinatesTwo)&cnt=7&units=metric&appid=b382e4a70dfb690b16b9381daac545ac&lang=ru"
     }
     
     func getNewCitiesWeather(location: CLLocation?, completion: @escaping (Result<TwentyFourHoursCitiesWeather, Error>) -> Void) {

@@ -54,20 +54,15 @@ class LocationManager: NSObject, ILocationService, CLLocationManagerDelegate {
     
     //Получение координат
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        guard let location = locations.first else { return }
+        
+        guard let location = locations.first, LocationManager.shared.lastKnowLocation == nil else { return }
         
         LocationManager.shared.lastKnowLocation = location
+        
         completion?(location)
         
-        //Эти значения надо передать в WeatherService
-        print("Долгота: \(location.coordinate.latitude)")
-        print("Широта: \(location.coordinate.longitude)")
-        
-        //Если я тут вызову функцию, то она должна передать координаты в массив cityArray
-        
-        
         manager.stopUpdatingLocation()
-        
+   
     }
     
     var completion: ((CLLocation) -> Void)?

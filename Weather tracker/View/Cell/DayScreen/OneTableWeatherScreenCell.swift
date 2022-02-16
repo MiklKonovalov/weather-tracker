@@ -158,7 +158,7 @@ class OneTableWeatherScreenCell: UITableViewCell {
             tempLabel.topAnchor.constraint(equalTo: timeLabel.bottomAnchor, constant: 5),
             tempLabel.leadingAnchor.constraint(equalTo: timeLabel.leadingAnchor, constant: 5),
             tempLabel.heightAnchor.constraint(equalToConstant: 30),
-            tempLabel.widthAnchor.constraint(equalToConstant: 20),
+            tempLabel.widthAnchor.constraint(equalToConstant: 30),
             
             windImageView.topAnchor.constraint(equalTo: dateLabel.bottomAnchor, constant: 10),
             windImageView.leadingAnchor.constraint(equalTo: timeLabel.trailingAnchor, constant: 10),

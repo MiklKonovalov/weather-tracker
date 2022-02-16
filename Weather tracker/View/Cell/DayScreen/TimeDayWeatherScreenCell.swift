@@ -15,6 +15,7 @@ class TimeDayWeatherScreenCell: UICollectionViewCell {
         label.font = UIFont(name: "Rubik-Regular", size: 12)
         label.textColor = UIColor.black
         label.textAlignment = .center
+        label.adjustsFontSizeToFitWidth = true
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()

@@ -8,6 +8,15 @@
 import UIKit
 import Kingfisher
 import CoreLocation
+import CoreData
+import Locksmith
+import RealmSwift
+ 
+//MARK: -Realm
+
+class Cities: Object {
+    @objc dynamic var city = ""
+}
 
 class MainScrenenViewController: UIViewController {
     
@@ -15,11 +24,24 @@ class MainScrenenViewController: UIViewController {
     
     let locationViewModel: LocationViewModel
     
-    //var processJson: ((LocationData) -> Void)?
-    
-    //var cityArray = [(LocationDatum)?]()
-    
     var currentIndex = 0
+    
+    //MARK: -Realm
+    let realm = try! Realm()
+ 
+    //MARK: -CoreData
+    
+    var cities = [CitiesMemory?]() {
+        didSet {
+            DispatchQueue.main.async {
+                self.collectionView.reloadData()
+                self.todayCollectionView.reloadData()
+                self.weekCollectionView.reloadData()
+            }
+        }
+    }
+    
+    var cityNames = [String]()
     
     //MARK: - Views
     
@@ -71,6 +93,10 @@ class MainScrenenViewController: UIViewController {
         collectionView.layer.cornerRadius = 15
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.backgroundColor = UIColor(red: 0.125, green: 0.306, blue: 0.78, alpha: 1)
+        
+        collectionView.showsHorizontalScrollIndicator = false
+        collectionView.isPagingEnabled = true
+        
         return collectionView
     }()
     
@@ -116,7 +142,6 @@ class MainScrenenViewController: UIViewController {
     //UIButton 25 day
     var twentyFiveDayButton: UIButton = {
         let twentyFiveDayButton = UIButton()
-        twentyFiveDayButton.addTarget(self, action: #selector(twentyFiveDayButtonPressed), for: .touchUpInside)
         //twentyFiveDayButton.setTitle("25 дней", for: .normal)
         twentyFiveDayButton.titleLabel?.font = UIFont(name: "Rubik-Regular", size: 16)
         twentyFiveDayButton.setTitleColor(.black, for: .normal)
@@ -135,6 +160,8 @@ class MainScrenenViewController: UIViewController {
         return bottomCollectionView
     }()
     
+    let gradientLayer = CAGradientLayer()
+    
     //MARK: - Initialization
     
     init(viewModel: GeneralViewModel, locationViewModel: LocationViewModel) {
@@ -148,6 +175,57 @@ class MainScrenenViewController: UIViewController {
     }
     
     //MARK: - Lifecycle
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        let realmCities = realm.objects(Cities.self)
+        
+        for city in realmCities {
+            self.viewModel.userDidSelectNewCity(name: city.city)
+        }
+        
+        
+//        let dictionary = UserDefaults.standard.object(forKey: "Cities") as! [String]
+//        print(dictionary)
+//
+//        if dictionary != nil {
+//            for (value) in dictionary {
+//                self.viewModel.userDidSelectNewCity(name: value)
+//            }
+//        }
+        
+//        let dictionary = Locksmith.loadDataForUserAccount(userAccount: "Weather")
+//
+//        print(dictionary)
+//
+//        if dictionary != nil {
+//            for (_, value) in dictionary ?? [:] {
+//                self.viewModel.userDidSelectNewCity(name: value as! String)
+//            }
+//        }
+    
+        
+        //Загружаем дату из Keychain
+        
+//        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+//
+//        let context = appDelegate.persistentContainer.viewContext
+//
+//        let fetchRequest: NSFetchRequest<CitiesMemory> = CitiesMemory.fetchRequest()
+//
+//        do {
+//            self.cities = try context.fetch(fetchRequest)
+//                DispatchQueue.main.async {
+//                    self.collectionView.reloadData()
+//                    self.todayCollectionView.reloadData()
+//                    self.weekCollectionView.reloadData()
+//                }
+//        } catch let error as NSError {
+//            print(error.localizedDescription)
+//        }
+        
+    }
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -214,7 +292,7 @@ class MainScrenenViewController: UIViewController {
         }
         
         locationViewModel.newCityAdded = { city in
-            self.viewModel.userDidSelectNewCity(name: city.name)
+            self.viewModel.userDidSelectNewCity(name: city.geoObject.name)
         }
         
         //Получено текущее местоположение
@@ -282,46 +360,95 @@ class MainScrenenViewController: UIViewController {
         return 1
     }
     
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        
         let offSet = scrollView.contentOffset.x
         let width = scrollView.frame.width
         let horizontalCenter = width / 2
-        scrollView.isPagingEnabled = true
-        scrollView.showsHorizontalScrollIndicator = false
         
-        pageControl.currentPage = Int(offSet + horizontalCenter) / Int(width)
+        let currentPage = Int(offSet + horizontalCenter) / Int(width)
         
-        
-    }
-    
-    func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
-        updateLabels()
-    }
-
-    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        updateLabels()
-    }
-
-    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         if !decelerate {
-            updateLabels()
+            updateLabels(with: currentPage)
         }
     }
     
-    func updateLabels() {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
         
-        currentIndex += 1
+        let offSet = scrollView.contentOffset.x
+        let width = scrollView.frame.width
+        let horizontalCenter = width / 2
+        
+        let currentPage = Int(offSet + horizontalCenter) / Int(width)
+        
+        if currentPage != currentIndex {
+            updateLabels(with: currentPage)
+        }
+        
+    }
+    
+    func updateLabels(with index: Int) {
+        
+        currentIndex = index
 
         if currentIndex == viewModel.weather.count {
                 currentIndex = 0
         }
         
-        self.cityLabel.text = self.viewModel.weather[currentIndex].now.name
+        self.cityLabel.text = self.viewModel.weather[self.currentIndex].now.name
         
         self.todayCollectionView.reloadData()
         self.weekCollectionView.reloadData()
     }
     
+    //MARK: -CoreData
+    func saveCities(title: String) {
+        
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+        
+        let persistanceConteiner = appDelegate.persistentContainer
+        
+        func newBackgroundContext() -> NSManagedObjectContext {
+            return persistanceConteiner.newBackgroundContext()
+        }
+        
+        //Переносим в фоновый поток
+        let context = newBackgroundContext()
+        
+        //Создаём объект
+        context.perform {
+            let citiesMemory = CitiesMemory(context: context)
+            citiesMemory.title = title
+            //Сохраняем данные
+            do {
+                try context.save()
+                self.cityNames.append(title)
+            } catch let error as NSError {
+                print(error.localizedDescription)
+            }
+        }
+    }
+    
+    func fetchCities() {
+
+        let fetchRequest: NSFetchRequest<CitiesMemory> = CitiesMemory.fetchRequest()
+        let city = title
+        let predicate = NSPredicate(format: "%K = %@", #keyPath(CitiesMemory.title))
+        fetchRequest.predicate = predicate
+        
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        let context = appDelegate.persistentContainer.viewContext
+
+        context.perform {
+            do {
+                let result = try context.fetch(fetchRequest)
+                self.cities = result
+            } catch let error as NSError {
+                print(error.localizedDescription)
+            }
+        }
+    }
+            
     //MARK: - Selectors
     
     //MARK: - UIAlertController
@@ -340,8 +467,34 @@ class MainScrenenViewController: UIViewController {
 
                 //Передаю значение textField в функцию в качестве параметра
                 guard let text = textField?.text else { return }
-                self.viewModel.userDidSelectNewCity(name: text) //Передали название города
-                print(self.viewModel.weather.count)
+                
+                self.viewModel.userDidSelectNewCity(name: text)
+            
+                //Сохраняем данные в Realm
+                let city = Cities()
+                city.city = text
+                
+                try! self.realm.write {
+                    self.realm.add([city])
+                }
+                
+    
+                
+                //Сохраняем данные в Keychain
+                //self.cityNames.append(text)
+                
+                //print(self.cityNames)
+                
+                //Сохраняем данные в UserDefaults
+                //UserDefaults.standard.set(self.cityNames, forKey: "Cities")
+//                do {
+//                    try Locksmith.saveData(data: ["City" : text], forUserAccount: "Weather")
+//                } catch {
+//                    print("Не получается сохранить город")
+//                }
+                
+                //self.saveCities(title: text)
+                
             }
             
         })
@@ -354,7 +507,11 @@ class MainScrenenViewController: UIViewController {
     
     //ShowSettingsController
     @objc func settingsButtonTap() {
-        print("123")
+        
+        let settingsViewController = SettingsViewController()
+        let navigationController2 = UINavigationController(rootViewController: settingsViewController)
+        navigationController2.modalPresentationStyle = .fullScreen
+        present(navigationController2, animated: true, completion: nil)
     }
     
     //Selector for UIPage Controller
@@ -367,10 +524,6 @@ class MainScrenenViewController: UIViewController {
         let navigationController = UINavigationController(rootViewController: dayCityWeatherViewController)
         navigationController.modalPresentationStyle = .fullScreen
         present(navigationController, animated: true, completion: nil)
-    }
-    
-    @objc func twentyFiveDayButtonPressed() {
-        
     }
     
 }
@@ -413,7 +566,7 @@ extension MainScrenenViewController: UICollectionViewDataSource {
                 cell.maxTemperatureLabel.text = "\(maxTemp ?? "No data") °"
             }
             
-            if let description = viewModel.weather[indexPath.item].now.weather?[0].main {
+            if let description = viewModel.weather[indexPath.item].now.weather?[0].description {
                 cell.weatherDescriptionLabel.text = description
             }
             
@@ -446,10 +599,13 @@ extension MainScrenenViewController: UICollectionViewDataSource {
             cell.dateLabel.text = dateString
             
             return cell
+        
         // MARK: -TodayCell
         } else if collectionView == self.todayCollectionView {
         
             let cellTwo = collectionView.dequeueReusableCell(withReuseIdentifier: "todayCell", for: indexPath) as! TwentyFourHoursCollectionViewCell
+            
+            cellTwo.layer.cornerRadius = 22
             
             //MARK: -Temp
             
@@ -467,11 +623,10 @@ extension MainScrenenViewController: UICollectionViewDataSource {
             
             //MARK: -Time
             
-            
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
             dateFormatter.locale = Locale(identifier: "ru_RU")
-            
+
             //Array of Dates
             if let time = self.viewModel.weather.first?.day.list[indexPath.item].dtTxt {
                 
@@ -484,10 +639,27 @@ extension MainScrenenViewController: UICollectionViewDataSource {
                 let dateString = dateFormatter2.string(from: dateDate ?? Date())
         
                 cellTwo.timeLabel.text = dateString
+                
+                //Текущая дата
+                let date = Date()
+                let dateFormatter = DateFormatter()
+                dateFormatter.locale = Locale(identifier: "ru_RU")
+                dateFormatter.dateFormat = "HH:mm"
+                let dateStringForBlueColor = dateFormatter.string(from: date)
+                
+                if dateStringForBlueColor < dateString {
+                    cellTwo.backgroundColor = UIColor.blue
+                    cellTwo.timeLabel.textColor = UIColor.white
+                    cellTwo.mainTemperatureLabel.textColor = UIColor.white
+                    
+                    gradientLayer.frame = cellTwo.bounds
+                    gradientLayer.colors = [UIColor.white, UIColor.blue]
+                    cellTwo.layer.insertSublayer(gradientLayer, at: 0)
+                }
             
             }
             //MARK: -Icon
-            if currentIndex > viewModel.weather.startIndex && currentIndex < viewModel.weather.endIndex {
+            if currentIndex > viewModel.weather.startIndex || currentIndex < viewModel.weather.endIndex {
                 if let icon = viewModel.weather[currentIndex].week.daily[indexPath.item].weather[0].icon {
                     let urlStr = "http://openweathermap.org/img/w/" + (icon) + ".png"
                         let url = URL(string: urlStr)
@@ -497,7 +669,7 @@ extension MainScrenenViewController: UICollectionViewDataSource {
                         }
                     }
             } else {
-                if currentIndex > viewModel.weather.startIndex && currentIndex < viewModel.weather.endIndex {
+                if currentIndex > viewModel.weather.startIndex || currentIndex < viewModel.weather.endIndex {
                     if let icon = viewModel.weather.first?.week.daily[indexPath.item].weather[0].icon {
                         let urlStr = "http://openweathermap.org/img/w/" + (icon) + ".png"
                             let url = URL(string: urlStr)
@@ -532,7 +704,7 @@ extension MainScrenenViewController: UICollectionViewDataSource {
             } 
           
             //MARK: -Icon
-            if currentIndex > viewModel.weather.startIndex && currentIndex < viewModel.weather.endIndex {
+            if currentIndex > viewModel.weather.startIndex || currentIndex < viewModel.weather.endIndex {
                 if let icon = viewModel.weather[currentIndex].week.daily[indexPath.item].weather[0].icon {
                     let urlStr = "http://openweathermap.org/img/w/" + (icon) + ".png"
                         let url = URL(string: urlStr)
@@ -542,7 +714,7 @@ extension MainScrenenViewController: UICollectionViewDataSource {
                         }
                     }
             } else {
-                if currentIndex > viewModel.weather.startIndex && currentIndex < viewModel.weather.endIndex {
+                if currentIndex > viewModel.weather.startIndex || currentIndex < viewModel.weather.endIndex {
                     if let icon = viewModel.weather.first?.week.daily[indexPath.item].weather[0].icon {
                         let urlStr = "http://openweathermap.org/img/w/" + (icon) + ".png"
                             let url = URL(string: urlStr)
@@ -555,14 +727,18 @@ extension MainScrenenViewController: UICollectionViewDataSource {
             }
             
             //MARK: -Rain
-            
-            if let arrayRain = viewModel.weather.first?.week.daily[indexPath.item].rain {
-                let arrayRainString = String(format: "%.0f", arrayRain)
-                cellThree.rainLabel.text = arrayRainString
+            if currentIndex > 0 {
+                if let arrayRain = viewModel.weather[currentIndex].week.daily[indexPath.item].rain {
+                    cellThree.rainLabel.text = String(format: "%.0f", arrayRain)
+                }
+            } else {
+                if let arrayRain = viewModel.weather.first?.week.daily[indexPath.item].rain {
+                cellThree.rainLabel.text = String(format: "%.0f", arrayRain)
+                }
             }
             
             //MARK: -Description
-            if currentIndex > viewModel.weather.startIndex && currentIndex < viewModel.weather.endIndex {
+            if currentIndex > viewModel.weather.startIndex || currentIndex < viewModel.weather.endIndex {
                 let weatherDescription = viewModel.weather[currentIndex].week.daily[indexPath.item].weather[0].description
                 cellThree.weatherDescriptionLabel.text = weatherDescription
             } else {
@@ -615,8 +791,11 @@ extension MainScrenenViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if collectionView == self.weekCollectionView {
-            let weekCityWeatherViewController = WeekCityWeatherViewController()
-            navigationController?.present(weekCityWeatherViewController, animated: true, completion: nil)
+            let weekCityWeatherViewController = WeekCityWeatherViewController(viewModel: viewModel, currentIndex: currentIndex)
+            
+            let navigationController3 = UINavigationController(rootViewController: weekCityWeatherViewController)
+            navigationController3.modalPresentationStyle = .fullScreen
+            present(navigationController3, animated: true)
         }
     }
 }

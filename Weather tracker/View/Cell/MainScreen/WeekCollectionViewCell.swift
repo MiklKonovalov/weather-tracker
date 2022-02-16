@@ -30,7 +30,8 @@ class WeekCollectionViewCell: UICollectionViewCell {
         let label = UILabel()
         label.font = UIFont(name: "Rubik-Medium", size: 12)
         label.textColor = UIColor(red: 0.125, green: 0.306, blue: 0.78, alpha: 1)
-        label.textAlignment = .center
+        label.textAlignment = .left
+        label.adjustsFontSizeToFitWidth = true
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -40,6 +41,7 @@ class WeekCollectionViewCell: UICollectionViewCell {
         label.font = UIFont(name: "Rubik-Medium", size: 16)
         label.textColor = .black
         label.textAlignment = .center
+        label.adjustsFontSizeToFitWidth = true
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -85,10 +87,7 @@ class WeekCollectionViewCell: UICollectionViewCell {
         contentView.addSubview(minTemperatureLabel)
         contentView.addSubview(maxTemperatureLabel)
         contentView.addSubview(arrowImageView)
-        
-        
-        
-        
+              
         let constraints = [
         
             dateTemperatureLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
@@ -99,23 +98,28 @@ class WeekCollectionViewCell: UICollectionViewCell {
             weatherImageView.heightAnchor.constraint(equalToConstant: 20),
             weatherImageView.widthAnchor.constraint(equalToConstant: 20),
             
-            rainLabel.topAnchor.constraint(equalTo: dateTemperatureLabel.bottomAnchor, constant: 1),
+            rainLabel.topAnchor.constraint(equalTo: weatherImageView.topAnchor),
             rainLabel.leadingAnchor.constraint(equalTo: weatherImageView.trailingAnchor, constant: 1),
-            //rainLabel.widthAnchor.constraint(equalToConstant: 5),
-            //rainLabel.heightAnchor.constraint(equalToConstant: 5),
+            rainLabel.trailingAnchor.constraint(equalTo: weatherDescriptionLabel.leadingAnchor),
+            rainLabel.heightAnchor.constraint(equalToConstant: 20),
             
             weatherDescriptionLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             weatherDescriptionLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            weatherDescriptionLabel.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.6),
+            //weatherDescriptionLabel.trailingAnchor.constraint(equalTo: minTemperatureLabel.leadingAnchor),
             
             minTemperatureLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            minTemperatureLabel.leadingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -90),
+            minTemperatureLabel.leadingAnchor.constraint(equalTo: weatherDescriptionLabel.trailingAnchor),
             
             maxTemperatureLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            maxTemperatureLabel.leadingAnchor.constraint(equalTo: minTemperatureLabel.trailingAnchor, constant: 0),
+            maxTemperatureLabel.leadingAnchor.constraint(equalTo: minTemperatureLabel.trailingAnchor),
+            maxTemperatureLabel.trailingAnchor.constraint(equalTo: arrowImageView.leadingAnchor),
             
             arrowImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            arrowImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -1),
-            
+            //arrowImageView.leadingAnchor.constraint(equalTo: maxTemperatureLabel.trailingAnchor, constant: 1),
+            arrowImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            arrowImageView.widthAnchor.constraint(equalToConstant: 10)
+
         ]
         NSLayoutConstraint.activate(constraints)
     }

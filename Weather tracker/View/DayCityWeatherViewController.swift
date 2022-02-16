@@ -119,13 +119,15 @@ class DayCityWeatherViewController: UIViewController {
         return collectionView
     }()
     
+    
+    
     //MARK: -Selectors
     
     @objc func arrowButtonTap() {
         navigationController?.dismiss(animated: true, completion: nil)
     }
     
-    //MARK: -Inizializations
+    //MARK: -Initializations
     init(viewModel: GeneralViewModel, currentIndex: Int) {
         self.viewModel = viewModel
         self.currentIndex = currentIndex
@@ -183,10 +185,7 @@ class DayCityWeatherViewController: UIViewController {
         self.view.addSubview(diagonalView)
         diagonalView.backgroundColor = UIColor(red: 0.914, green: 0.933, blue: 0.98, alpha: 1)
         
-        let blurEffect = UIBlurEffect(style: .extraLight)
-        blurView.effect = blurEffect
-
-        let lineView = LineView(frame: CGRect(x: 30, y: 260, width: view.frame.width - 60, height: 10)) //Можно ли это разместить констрейнтом?
+        let lineView = LineView(frame: CGRect(x: 30, y: 310 + 10, width: view.frame.width - 60, height: 10)) //Можно ли это разместить констрейнтом?
         self.view.addSubview(lineView)
         lineView.backgroundColor = UIColor(red: 0.914, green: 0.933, blue: 0.98, alpha: 1)
         
@@ -255,9 +254,12 @@ class DayCityWeatherViewController: UIViewController {
     }
 }
 
-//MARK: -Triangle with dashed
+//MARK: -Треугольник
 
 class DiagonalView : UIView {
+    
+    let gradientLayer = CAGradientLayer()
+    
     override func draw(_ rect: CGRect) {
         //Линия
         UIColor(red: 103/255, green: 146/255, blue: 195/255, alpha: 1).set()
@@ -311,21 +313,25 @@ class DiagonalView : UIView {
         path.stroke()
         
         //Треугольник
-        let trianglePath = UIBezierPath()
-        trianglePath.move(to: CGPoint(x: 0, y: 200))
-        trianglePath.addLine(to: CGPoint(x: 100, y: 0))
-        trianglePath.addLine(to: CGPoint(x: 200, y: 200))
-        trianglePath.addLine(to: CGPoint(x: 0, y: 200))
+        let aPath = UIBezierPath()
+            aPath.move(to: CGPoint(x: 15, y: 5))
+            aPath.addLine(to: CGPoint(x: 15 , y: 30))
+            aPath.addLine(to: CGPoint(x: 305, y: 30))
+            aPath.close()
         
-        let shapeLayer = CAShapeLayer()
-        shapeLayer.path = path.cgPath
-        shapeLayer.strokeColor = UIColor.red.cgColor
-        shapeLayer.fillColor = UIColor.green.cgColor
-        shapeLayer.lineWidth = 3
+            UIColor.blue.set()
+            self.backgroundColor = .clear
+            aPath.fill()
+        
+            gradientLayer.frame = aPath.bounds
+            gradientLayer.colors = [UIColor(red: 0.914, green: 0.933, blue: 0.98, alpha: 1).cgColor, UIColor.blue.cgColor, UIColor(red: 0.914, green: 0.933, blue: 0.98, alpha: 1).cgColor]
+            layer.insertSublayer(gradientLayer, at: 0)
+        
     }
+    
 }
 
-//MARK: -Line
+//MARK: -Линия
 
 class LineView : UIView {
     override func draw(_ rect: CGRect) {
@@ -383,7 +389,7 @@ extension DayCityWeatherViewController: UICollectionViewDataSource {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "iconAndHumidityCell", for: indexPath) as! IconDayWeatherScreenCell
             
             //MARK: -Icon
-            if currentIndex > viewModel.weather.startIndex && currentIndex < viewModel.weather.endIndex {
+            if currentIndex > viewModel.weather.startIndex || currentIndex < viewModel.weather.endIndex {
                 if let icon = viewModel.weather[currentIndex].week.daily[indexPath.item].weather[0].icon {
                     let urlStr = "http://openweathermap.org/img/w/" + (icon) + ".png"
                         let url = URL(string: urlStr)
@@ -392,7 +398,7 @@ extension DayCityWeatherViewController: UICollectionViewDataSource {
                         }
                     }
             } else {
-                if currentIndex > viewModel.weather.startIndex && currentIndex < viewModel.weather.endIndex {
+                if currentIndex > viewModel.weather.startIndex || currentIndex < viewModel.weather.endIndex {
                     if let icon = viewModel.weather.first?.week.daily[indexPath.item].weather[0].icon {
                         let urlStr = "http://openweathermap.org/img/w/" + (icon) + ".png"
                             let url = URL(string: urlStr)
@@ -405,20 +411,10 @@ extension DayCityWeatherViewController: UICollectionViewDataSource {
         }
         
         //MARK: -Humidity
-        
-        if currentIndex > viewModel.weather.startIndex && currentIndex < viewModel.weather.endIndex {
-            if let humidity: String? = String(format: "%.0f",viewModel.weather[currentIndex].day.list[indexPath.item].main.humidity ?? 1.1) {
-                cell.humidityLabel.text = "\(humidity ?? "No data")" + " " + "%"
-            }
-        } else {
-            if let humidity: String? = String(format: "%.0f",viewModel.weather.first?.day.list[indexPath.item].main.humidity ?? 1.1) {
-                cell.humidityLabel.text = "\(humidity ?? "No data")" + " " + "%"
-                print(humidity)
-                }
+        let humidity = viewModel.weather[currentIndex].day.list[indexPath.item].main.humidity
+        cell.humidityLabel.text = "\(humidity) %"
             
-        }
-        
-            return cell
+        return cell
             
         } else {
             

@@ -11,7 +11,7 @@ import CoreLocation
 //Создаём протокол делегата
 protocol ILocationGroup {
     //Надо принять название города
-    func addLocation(_ name: String, completion: @escaping ((LocationData) -> Void))
+    func addLocation(_ name: String, completion: @escaping ((NewCityData) -> Void))
     
     func fetchLocation() -> CLLocationCoordinate2D?
     
@@ -21,10 +21,11 @@ protocol ILocationGroup {
 class LocationGroup: ILocationGroup {
     
     //1.Принимаем название города из UIAlert в MainScreenViewController
-    func addLocation(_ name: String, completion: @escaping ((LocationData) -> Void)) {
+    func addLocation(_ name: String, completion: @escaping ((NewCityData) -> Void)) {
         
         //2.Подставляем полученное в MainScreenViewController name в геокодинг
-        let url = "http://api.openweathermap.org/geo/1.0/direct?q=\(name)&limit=5&appid=b382e4a70dfb690b16b9381daac545ac"
+        //let url = "http://api.openweathermap.org/geo/1.0/direct?q=\(name)&limit=5&appid=b382e4a70dfb690b16b9381daac545ac&lang=ru"
+        let url = "https://geocode-maps.yandex.ru/1.x/?format=json&apikey=eb4f47dd-5f32-454e-b59c-4685eb278597&geocode=\(name)"
         
         //3. Парсим JSON
         guard let url = URL(string: url) else { return }
@@ -33,12 +34,9 @@ class LocationGroup: ILocationGroup {
             guard let data = data, error == nil else { return }
     
             do {
-                let result = try JSONDecoder().decode(LocationData.self, from: data)
+                let result = try JSONDecoder().decode(NewCityData.self, from: data)
                 completion(result)
-                
-                /*let coordinates: [CLLocationCoordinate2D] = result.map {
-                    return .init(latitude: $0.lat, longitude: $0.lon)
-                }*/
+                print(result.response.geoObjectCollection.metaDataProperty.geocoderResponseMetaData.boundedBy.envelope.lowerCorner)
                 //3.Сохраняем массив (координаты) в UserDefaults
                 UserDefaults.standard.set(data, forKey: "Coord")
             }
@@ -52,12 +50,22 @@ class LocationGroup: ILocationGroup {
     
     func fetchLocation() -> CLLocationCoordinate2D? {
         let decoder = JSONDecoder()
-        guard let data = UserDefaults.standard.object(forKey: "Coord") as? Data, let coordinates = try? decoder.decode(LocationData.self, from: data).first
+        guard let data = UserDefaults.standard.object(forKey: "Coord") as? Data, let coordinates = try? decoder.decode(NewCityData.self, from: data).response
         else {
             return nil
         }
+
+        let latAndLon = coordinates.geoObjectCollection.featureMember.first?.geoObject.point.pos
         
-        return .init(latitude: coordinates.lat, longitude: coordinates.lon)
+        let splits = latAndLon?.split(separator: " ").map(String.init)
+        
+        let lat = ((splits?[0] ?? "0") as NSString).doubleValue
+        let lon = ((splits?[1] ?? "1") as NSString).doubleValue
+        
+        print(lat)
+        print(lon)
+        
+        return .init(latitude: lat, longitude: lon)
     }
 }
 

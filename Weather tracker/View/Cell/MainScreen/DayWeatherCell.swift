@@ -12,8 +12,7 @@ class DayWeatherCell: UICollectionViewCell, UIScrollViewDelegate {
     
     lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
-        scrollView.showsHorizontalScrollIndicator = false
-        scrollView.isPagingEnabled = true
+        scrollView.keyboardDismissMode = UIScrollView.KeyboardDismissMode.onDrag
         scrollView.delegate = self
         return scrollView
     }()

@@ -63,25 +63,17 @@ class WelcomeViewController: UIViewController {
         agreeButton.layer.cornerRadius = 10
         agreeButton.clipsToBounds = true
         agreeButton.layer.backgroundColor = UIColor(red: 0.949, green: 0.431, blue: 0.067, alpha: 1).cgColor
+        agreeButton.setTitle("ИСПОЛЬЗОВАТЬ МЕСТОПОЛОЖЕНИЕ УСТРОЙСТВА", for: .normal)
+        agreeButton.titleLabel?.font = agreeButton.titleLabel?.font.withSize(12)
         agreeButton.addTarget(self, action: #selector(agreeButtonPressed), for: .touchUpInside)
         agreeButton.translatesAutoresizingMaskIntoConstraints = false
         return agreeButton
     }()
     
-    var agreeButtonLabel: UILabel = {
-        let agreeButtonLabel = UILabel()
-        agreeButtonLabel.font = UIFont(name: "Rubik-Regular", size: 12)
-        agreeButtonLabel.text = "ИСПОЛЬЗОВАТЬ МЕСТОПОЛОЖЕНИЕ УСТРОЙСТВА"
-        agreeButtonLabel.textColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1)
-        agreeButtonLabel.textAlignment = .center
-        agreeButtonLabel.adjustsFontSizeToFitWidth = true
-        agreeButtonLabel.translatesAutoresizingMaskIntoConstraints = false
-        return agreeButtonLabel
-        }()
-    
     var disagreeButton: UIButton = {
         let disagreeButton = UIButton()
         disagreeButton.setTitle("НЕТ, Я БУДУ ДОБАВЛЯТЬ ЛОКАЦИИ", for: .normal)
+        disagreeButton.titleLabel?.font = disagreeButton.titleLabel?.font.withSize(12)
         disagreeButton.addTarget(self, action: #selector(disagreeButtonPressed), for: .touchUpInside)
         disagreeButton.translatesAutoresizingMaskIntoConstraints = false
         return disagreeButton
@@ -97,7 +89,6 @@ class WelcomeViewController: UIViewController {
         view.addSubview(getLabel)
         view.addSubview(changeLabel)
         view.addSubview(agreeButton)
-        view.addSubview(agreeButtonLabel)
         view.addSubview(disagreeButton)
         
         
@@ -106,42 +97,39 @@ class WelcomeViewController: UIViewController {
             onboardImage.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0),
             onboardImage.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 0),
             onboardImage.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: 0),
+            onboardImage.heightAnchor.constraint(equalToConstant: view.frame.height / 3),
             
-            permitLabel.widthAnchor.constraint(equalToConstant: 322),
+            permitLabel.topAnchor.constraint(equalTo: onboardImage.bottomAnchor, constant: 30),
+            permitLabel.widthAnchor.constraint(equalToConstant: view.frame.width - 20 * 2),
             permitLabel.heightAnchor.constraint(equalToConstant: 63),
             permitLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 19),
-            permitLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 426),
             
-            getLabel.widthAnchor.constraint(equalToConstant: 314),
+            getLabel.topAnchor.constraint(equalTo: permitLabel.bottomAnchor, constant: 30),
+            getLabel.widthAnchor.constraint(equalToConstant: view.frame.width - 20 * 2),
             getLabel.heightAnchor.constraint(equalToConstant: 60),
             getLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 19),
-            getLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 519),
             
-            changeLabel.widthAnchor.constraint(equalToConstant: 322),
+            changeLabel.topAnchor.constraint(equalTo: getLabel.bottomAnchor, constant: 10),
+            changeLabel.widthAnchor.constraint(equalToConstant: view.frame.width - 20 * 2),
             changeLabel.heightAnchor.constraint(equalToConstant: 50),
             changeLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 19),
-            changeLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 569),
-            
-            agreeButton.widthAnchor.constraint(equalToConstant: 340),
+             
+            agreeButton.topAnchor.constraint(equalTo: changeLabel.bottomAnchor, constant: 30),
+            agreeButton.widthAnchor.constraint(equalToConstant: view.frame.width - 20 * 2),
             agreeButton.heightAnchor.constraint(equalToConstant: 40),
-            agreeButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 18),
-            agreeButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 649),
-            
-            agreeButtonLabel.widthAnchor.constraint(equalToConstant: 296),
-            agreeButtonLabel.heightAnchor.constraint(equalToConstant: 15),
-            agreeButtonLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 40),
-            agreeButtonLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 662),
+            agreeButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
 
-            disagreeButton.widthAnchor.constraint(equalToConstant: 322),
+            disagreeButton.topAnchor.constraint(equalTo: agreeButton.bottomAnchor, constant: 30),
+            disagreeButton.widthAnchor.constraint(equalToConstant: view.frame.width - 40 * 2),
             disagreeButton.heightAnchor.constraint(equalToConstant: 21),
-            disagreeButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 36),
-            disagreeButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 714)
+            disagreeButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 60),
             
         ]
         NSLayoutConstraint.activate(constraints)
     }
     
     @objc func agreeButtonPressed() {
+        print("press")
         WelcomeCore.shared.setIsNotNewUser()
         let viewModel = GeneralViewModel(
             locationGroup: locationGroup,
@@ -157,7 +145,20 @@ class WelcomeViewController: UIViewController {
     }
     
     @objc func disagreeButtonPressed() {
-        print("456")
+        let noCityWeatherViewController = NoCityWeatherViewController(viewModel: GeneralViewModel(
+                        locationGroup: locationGroup,
+                        locationManager: LocationManager(),
+                        weatherService: WeatherService(),
+                        twentyFourHoursWeatherService: TwentyFourHoursWeatherService(),
+                        weekWeatherService: WeekWeatherService(),
+                        newWeatherService: NewCityWeatherService(),
+                        newTFHWeatherService: NewCityTFHWeatherService(),
+                        newCityWeekWeatherService: NewCityWeekWeatherService()))
+        let navigationController = UINavigationController(rootViewController: noCityWeatherViewController)
+        navigationController.modalPresentationStyle = .fullScreen
+        present(navigationController, animated: true, completion: nil)
     }
     
 }
+
+

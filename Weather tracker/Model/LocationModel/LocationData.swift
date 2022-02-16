@@ -8,29 +8,29 @@
 import Foundation
 
 // MARK: - LocationDatum
-struct LocationDatum: Decodable {
+struct LocationDatum: Codable {
     let name: String
-    //let localNames: LocalNames
+    let localNames: LocalNames?
     let lat, lon: Double
     let country: String
     let state: String?
 
     enum CodingKeys: String, CodingKey {
         case name
-        //case localNames = "local_names"
+        case localNames = "local_names"
         case lat, lon, country, state
     }
 }
 
 // MARK: - LocalNames
-struct LocalNames: Decodable {
+struct LocalNames: Codable {
     let af, ar: String?
-    let ascii: String
+    let ascii: String?
     let az, bg, ca, da: String?
     let de, el: String?
-    let en: String
+    let en: String?
     let eu, fa: String?
-    let featureName: String
+    let featureName: String?
     let fi, fr, gl, he: String?
     let hi, hr, hu, id: String?
     let it, ja, la, lt: String?

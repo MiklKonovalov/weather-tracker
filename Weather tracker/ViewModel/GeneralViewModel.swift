@@ -48,12 +48,8 @@ class GeneralViewModel {
     var viewModelForNewCityDidChange: (() -> Void)?
     
     func viewDidLoad() {
-    
-        /*getCurrentLocation { location in
-            self.fetchData(for: location)
-        }*/
         
-        
+ 
     }
     
     //MARK:-Functions
@@ -61,9 +57,15 @@ class GeneralViewModel {
     //Вызывается только при добавлении нового города!
     func userDidSelectNewCity(name: String) {
         locationGroup.addLocation(name) { [weak self] info in //Передаём название города в декодер
-            guard let city = info.first else { return }
-            let location = CLLocation(latitude: city.lat, longitude: city.lon)
-            self?.fetchData(for: location) //Как fetchData мог дать инфо о новом городе, если он использует первичную локацию?
+            guard let city = info.response.geoObjectCollection.featureMember.first?.geoObject.point.pos else { return }
+            
+            let splits = city.split(separator: " ").map(String.init)
+            
+            let lat = ((splits[0]) as NSString).doubleValue
+            let lon = ((splits[1]) as NSString).doubleValue
+            
+            let location = CLLocation(latitude: lat, longitude: lon)
+            self?.fetchData(for: location)
         }
     }
     
@@ -113,7 +115,6 @@ class GeneralViewModel {
         dispatchGroup.notify(queue: DispatchQueue.main) {
             guard let now = now, let day = day, let week = week else { return }
             self.weather.append((now: now, day: day, week: week))
-            print(self.weather.count)
             self.viewModelForNewCityDidChange?()
         }
         
