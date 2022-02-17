@@ -1,0 +1,16 @@
+PODS:
+  - Locksmith (4.0.0)
+
+DEPENDENCIES:
+  - Locksmith
+
+SPEC REPOS:
+  trunk:
+    - Locksmith
+
+SPEC CHECKSUMS:
+  Locksmith: e9bebbaaa4cee3c511bc358a44f843c3fe00e21f
+
+PODFILE CHECKSUM: 3d153dac24519c3292526cd80059c40eb3c48a30
+
+COCOAPODS: 1.11.2
