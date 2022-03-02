@@ -8,12 +8,12 @@
 import Foundation
 
 // MARK: - NewCityData
-struct NewCityData: Codable {
+struct NewCityData: Decodable {
     let response: Response
 }
 
 // MARK: - Response
-struct Response: Codable {
+struct Response: Decodable {
     let geoObjectCollection: GeoObjectCollection
 
     enum CodingKeys: String, CodingKey {
@@ -22,13 +22,13 @@ struct Response: Codable {
 }
 
 // MARK: - GeoObjectCollection
-struct GeoObjectCollection: Codable {
+struct GeoObjectCollection: Decodable {
     let metaDataProperty: GeoObjectCollectionMetaDataProperty
     let featureMember: [FeatureMember]
 }
 
 // MARK: - FeatureMember
-struct FeatureMember: Codable {
+struct FeatureMember: Decodable {
     let geoObject: GeoObject
 
     enum CodingKeys: String, CodingKey {
@@ -37,10 +37,10 @@ struct FeatureMember: Codable {
 }
 
 // MARK: - GeoObject
-struct GeoObject: Codable {
+struct GeoObject: Decodable {
     let metaDataProperty: GeoObjectMetaDataProperty
     let name, geoObjectDescription: String
-    let boundedBy: BoundedBy
+    let boundedBy: BoundedBy?
     let point: Point
 
     enum CodingKeys: String, CodingKey {
@@ -52,7 +52,7 @@ struct GeoObject: Codable {
 }
 
 // MARK: - BoundedBy
-struct BoundedBy: Codable {
+struct BoundedBy: Decodable {
     let envelope: Envelope
 
     enum CodingKeys: String, CodingKey {
@@ -61,12 +61,12 @@ struct BoundedBy: Codable {
 }
 
 // MARK: - Envelope
-struct Envelope: Codable {
+struct Envelope: Decodable {
     let lowerCorner, upperCorner: String
 }
 
 // MARK: - GeoObjectMetaDataProperty
-struct GeoObjectMetaDataProperty: Codable {
+struct GeoObjectMetaDataProperty: Decodable {
     let geocoderMetaData: GeocoderMetaData
 
     enum CodingKeys: String, CodingKey {
@@ -75,7 +75,7 @@ struct GeoObjectMetaDataProperty: Codable {
 }
 
 // MARK: - GeocoderMetaData
-struct GeocoderMetaData: Codable {
+struct GeocoderMetaData: Decodable {
     let precision, text, kind: String
     let address: Address
     let addressDetails: AddressDetails
@@ -88,7 +88,7 @@ struct GeocoderMetaData: Codable {
 }
 
 // MARK: - Address
-struct Address: Codable {
+struct Address: Decodable {
     let countryCode, formatted: String
     let components: [Component]
 
@@ -100,12 +100,12 @@ struct Address: Codable {
 }
 
 // MARK: - Component
-struct Component: Codable {
+struct Component: Decodable {
     let kind, name: String
 }
 
 // MARK: - AddressDetails
-struct AddressDetails: Codable {
+struct AddressDetails: Decodable {
     let country: Country
 
     enum CodingKeys: String, CodingKey {
@@ -114,9 +114,9 @@ struct AddressDetails: Codable {
 }
 
 // MARK: - Country
-struct Country: Codable {
+struct Country: Decodable {
     let addressLine, countryNameCode, countryName: String
-    let administrativeArea: AdministrativeArea
+    let administrativeArea: AdministrativeArea?
 
     enum CodingKeys: String, CodingKey {
         case addressLine = "AddressLine"
@@ -127,7 +127,7 @@ struct Country: Codable {
 }
 
 // MARK: - AdministrativeArea
-struct AdministrativeArea: Codable {
+struct AdministrativeArea: Decodable {
     let administrativeAreaName: String
 
     enum CodingKeys: String, CodingKey {
@@ -136,12 +136,12 @@ struct AdministrativeArea: Codable {
 }
 
 // MARK: - Point
-struct Point: Codable {
+struct Point: Decodable {
     let pos: String
 }
 
 // MARK: - GeoObjectCollectionMetaDataProperty
-struct GeoObjectCollectionMetaDataProperty: Codable {
+struct GeoObjectCollectionMetaDataProperty: Decodable {
     let geocoderResponseMetaData: GeocoderResponseMetaData
 
     enum CodingKeys: String, CodingKey {
@@ -150,9 +150,8 @@ struct GeoObjectCollectionMetaDataProperty: Codable {
 }
 
 // MARK: - GeocoderResponseMetaData
-struct GeocoderResponseMetaData: Codable {
-    let boundedBy: BoundedBy
+struct GeocoderResponseMetaData: Decodable {
+    let boundedBy: BoundedBy?
     let request, results, found: String
 }
 
-typealias FeatureMemberCity = [FeatureMember]

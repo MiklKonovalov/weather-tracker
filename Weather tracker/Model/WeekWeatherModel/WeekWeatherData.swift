@@ -12,7 +12,7 @@ struct WeekWeather: Decodable {
     let timezone: String
     let timezoneOffset: Double
     let current: Current
-    let minutely: [Minutely]
+    let minutely: [Minutely]?
     let daily: [Daily]
 
     enum CodingKeys: String, CodingKey {

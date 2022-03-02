@@ -51,6 +51,7 @@ class WeekCollectionViewCell: UICollectionViewCell {
         label.font = UIFont(name: "Rubik-Medium", size: 18)
         label.textColor = .black
         label.textAlignment = .center
+        label.adjustsFontSizeToFitWidth = true
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -60,7 +61,9 @@ class WeekCollectionViewCell: UICollectionViewCell {
         label.font = UIFont(name: "Rubik-Medium", size: 18)
         label.textColor = .black
         label.textAlignment = .center
+        label.adjustsFontSizeToFitWidth = true
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.adjustsFontSizeToFitWidth = true
         return label
     }()
     
@@ -69,6 +72,7 @@ class WeekCollectionViewCell: UICollectionViewCell {
         image.image = UIImage(named: "arrow")
         image.isUserInteractionEnabled = true
         image.clipsToBounds = true
+        image.adjustsImageSizeForAccessibilityContentSizeCategory = true
         image.translatesAutoresizingMaskIntoConstraints = false
         return image
     }()
@@ -110,6 +114,7 @@ class WeekCollectionViewCell: UICollectionViewCell {
             
             minTemperatureLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             minTemperatureLabel.leadingAnchor.constraint(equalTo: weatherDescriptionLabel.trailingAnchor),
+            minTemperatureLabel.trailingAnchor.constraint(equalTo: maxTemperatureLabel.leadingAnchor),
             
             maxTemperatureLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             maxTemperatureLabel.leadingAnchor.constraint(equalTo: minTemperatureLabel.trailingAnchor),

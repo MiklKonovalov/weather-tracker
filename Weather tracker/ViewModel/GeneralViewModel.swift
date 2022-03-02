@@ -61,8 +61,8 @@ class GeneralViewModel {
             
             let splits = city.split(separator: " ").map(String.init)
             
-            let lat = ((splits[0]) as NSString).doubleValue
-            let lon = ((splits[1]) as NSString).doubleValue
+            let lat = ((splits[1]) as NSString).doubleValue
+            let lon = ((splits[0]) as NSString).doubleValue
             
             let location = CLLocation(latitude: lat, longitude: lon)
             self?.fetchData(for: location)

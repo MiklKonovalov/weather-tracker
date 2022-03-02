@@ -95,9 +95,9 @@ class WelcomeViewController: UIViewController {
         let constraints = [
         
             onboardImage.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0),
-            onboardImage.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 0),
-            onboardImage.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: 0),
             onboardImage.heightAnchor.constraint(equalToConstant: view.frame.height / 3),
+            onboardImage.widthAnchor.constraint(equalToConstant: view.frame.height / 2),
+            onboardImage.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             
             permitLabel.topAnchor.constraint(equalTo: onboardImage.bottomAnchor, constant: 30),
             permitLabel.widthAnchor.constraint(equalToConstant: view.frame.width - 20 * 2),
@@ -129,8 +129,6 @@ class WelcomeViewController: UIViewController {
     }
     
     @objc func agreeButtonPressed() {
-        print("press")
-        WelcomeCore.shared.setIsNotNewUser()
         let viewModel = GeneralViewModel(
             locationGroup: locationGroup,
             locationManager: LocationManager(),
@@ -140,8 +138,15 @@ class WelcomeViewController: UIViewController {
             newWeatherService: NewCityWeatherService(),
             newTFHWeatherService: NewCityTFHWeatherService(),
             newCityWeekWeatherService: NewCityWeekWeatherService())
+        
+        WelcomeCore.shared.setIsNotNewUser()
+        
         let mainScreenViewController = MainScrenenViewController(viewModel: viewModel, locationViewModel: locationViewModel)
-        navigationController?.present(mainScreenViewController, animated: true, completion: nil)
+        
+        let navigationControllerForAgree = UINavigationController(rootViewController: mainScreenViewController)
+        navigationControllerForAgree.modalPresentationStyle = .fullScreen
+        present(navigationControllerForAgree, animated: true, completion: nil)
+        
     }
     
     @objc func disagreeButtonPressed() {

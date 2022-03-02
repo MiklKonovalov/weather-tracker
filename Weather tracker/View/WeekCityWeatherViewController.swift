@@ -546,6 +546,15 @@ class WeekCityWeatherViewController: UIViewController {
         return image
     }()
     
+    var moonImageView: UIImageView = {
+        let image = UIImageView()
+        image.isUserInteractionEnabled = true
+        image.image = UIImage(named: "moon")
+        image.clipsToBounds = true
+        image.translatesAutoresizingMaskIntoConstraints = false
+        return image
+    }()
+    
     var sunLabelValue: UIImageView = {
         let image = UIImageView()
         image.isUserInteractionEnabled = true
@@ -579,6 +588,30 @@ class WeekCityWeatherViewController: UIViewController {
         return label
     }()
     
+    var moonRiseLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont(name: "Rubik-Regular", size: 14)
+        label.textColor = .gray
+        label.text = "Восход"
+        label.lineBreakMode = .byWordWrapping
+        label.textAlignment = .left
+        label.font = UIFont.systemFont(ofSize: 14)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    var moonSetLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont(name: "Rubik-Regular", size: 14)
+        label.textColor = .gray
+        label.text = "Закат"
+        label.lineBreakMode = .byWordWrapping
+        label.textAlignment = .left
+        label.font = UIFont.systemFont(ofSize: 14)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
     var sunRiseValueLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont(name: "Rubik-Regular", size: 14)
@@ -600,6 +633,56 @@ class WeekCityWeatherViewController: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
+    
+    var moonRiseValueLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont(name: "Rubik-Regular", size: 14)
+        label.textColor = .black
+        label.lineBreakMode = .byWordWrapping
+        label.textAlignment = .left
+        label.font = UIFont.systemFont(ofSize: 14)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    var moonSetValueLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont(name: "Rubik-Regular", size: 14)
+        label.textColor = .black
+        label.lineBreakMode = .byWordWrapping
+        label.textAlignment = .left
+        label.font = UIFont.systemFont(ofSize: 14)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    var sunSetAndSunRiseLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont(name: "Rubik-Regular", size: 16)
+        label.textColor = .black
+        label.lineBreakMode = .byWordWrapping
+        label.textAlignment = .left
+        label.font = UIFont.systemFont(ofSize: 16)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    var moonSetAndSunRiseLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont(name: "Rubik-Regular", size: 16)
+        label.textColor = .black
+        label.lineBreakMode = .byWordWrapping
+        label.textAlignment = .left
+        label.font = UIFont.systemFont(ofSize: 16)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    let lineOneView = LineOneView()
+    
+    let lineBottomView = LineBottomView()
+    
+    let dottedLineView = DottedLineView()
      
     //MARK: -Initializations
     init(viewModel: GeneralViewModel, currentIndex: Int) {
@@ -665,13 +748,24 @@ class WeekCityWeatherViewController: UIViewController {
         containerView.addSubview(ufIndexValueLabelBottom)
         containerView.addSubview(rainValueLabelBottom)
         containerView.addSubview(cloudsValueLabelBottom)
+        containerView.addSubview(lineOneView)
+        containerView.addSubview(lineBottomView)
+        containerView.addSubview(dottedLineView)
         sunAndMoonView.addSubview(sunAndMoonLabel)
         sunAndMoonView.addSubview(moonPhaseLabel)
         sunAndMoonView.addSubview(sunImageView)
+        sunAndMoonView.addSubview(moonImageView)
         sunAndMoonView.addSubview(sunRiseLabel)
         sunAndMoonView.addSubview(sunSetLabel)
+        sunAndMoonView.addSubview(moonRiseLabel)
+        sunAndMoonView.addSubview(moonSetLabel)
         sunAndMoonView.addSubview(sunRiseValueLabel)
         sunAndMoonView.addSubview(sunSetValueLabel)
+        sunAndMoonView.addSubview(sunSetAndSunRiseLabel)
+        sunAndMoonView.addSubview(moonSetAndSunRiseLabel)
+        sunAndMoonView.addSubview(moonSetValueLabel)
+        sunAndMoonView.addSubview(moonRiseValueLabel)
+        //sunAndMoonView.addSubview(airQualityLabel)
         
         dateCollectionView.dataSource = self
         dateCollectionView.delegate = self
@@ -680,14 +774,14 @@ class WeekCityWeatherViewController: UIViewController {
         cityLabelTextSetup()
         setupNavBar()
         
-        let lineOneView = LineOneView(frame: CGRect(x: 0, y: 0, width: 300, height: 400))
-        topView.addSubview(lineOneView)
         lineOneView.backgroundColor = UIColor.white.withAlphaComponent(0)
         lineOneView.translatesAutoresizingMaskIntoConstraints = false
         
-        let dottedLineView = DottedLineView(frame: CGRect(x: 0, y: 0, width: 300, height: 400))
-        sunAndMoonView.addSubview(dottedLineView)
+        lineBottomView.backgroundColor = UIColor.white.withAlphaComponent(0)
+        lineBottomView.translatesAutoresizingMaskIntoConstraints = false
+        
         dottedLineView.backgroundColor = UIColor.white.withAlphaComponent(0)
+        dottedLineView.translatesAutoresizingMaskIntoConstraints = false
         
     //MARK: -TopView
         
@@ -723,14 +817,12 @@ class WeekCityWeatherViewController: UIViewController {
         }
         
         //MARK: -Day feels like
-        if let dayFeelsLike: String? = String(format: "%.0f", viewModel.weather[currentIndex].week.daily[selectedIndex].feelsLike.day) + " " + "°" {
-            feelsLikeValueLabel.text = dayFeelsLike
-        }
+        let dayFeelsLike = viewModel.weather[currentIndex].week.daily[selectedIndex].feelsLike.day
+            feelsLikeValueLabel.text = "\(dayFeelsLike) °"
         
         //MARK: -Wind
-        if let wind: String? = String(format: "%.0f", viewModel.weather[currentIndex].week.daily[selectedIndex].windSpeed) + " " + "м/с" {
-            windValueLabel.text = wind
-        }
+        let wind = viewModel.weather[currentIndex].week.daily[selectedIndex].windSpeed
+            windValueLabel.text = "\(wind) м/с"
         
         let ufIndex = viewModel.weather[currentIndex].week.daily[selectedIndex].uvi
             ufIndexValueLabel.text = "\(ufIndex)"
@@ -777,25 +869,23 @@ class WeekCityWeatherViewController: UIViewController {
             }
             
             //MARK: -Day feels like
-        if let dayFeelsLike: String? = String(format: "%.0f", viewModel.weather[currentIndex].week.daily[selectedIndex].feelsLike.night) + " " + "°" {
-                feelsLikeValueLabelBottom.text = dayFeelsLike
-            }
+            let dayFeelsLikeBottom = viewModel.weather[currentIndex].week.daily[selectedIndex].feelsLike.night
+                feelsLikeValueLabelBottom.text = "\(dayFeelsLikeBottom) °"
             
             //MARK: -Wind
-            if let wind: String? = String(format: "%.0f", viewModel.weather[currentIndex].week.daily[selectedIndex].windSpeed) + " " + "м/с" {
-                windValueLabelBottom.text = wind
-            }
+            let windBottom = viewModel.weather[currentIndex].week.daily[selectedIndex].windSpeed
+                windValueLabelBottom.text = "\(windBottom) м/с"
             
             let ufIndexBottom = viewModel.weather[currentIndex].week.daily[selectedIndex].uvi
                 ufIndexValueLabelBottom.text = "\(ufIndexBottom)"
             
             //MARK: -Rain
             let rainBottom = viewModel.weather[currentIndex].week.daily[selectedIndex].rain
-            rainValueLabel.text = "\(rainBottom ?? 0) %"
+            rainValueLabelBottom.text = "\(rainBottom ?? 0) %"
             
             //MARK: -Clouds
             let cloudBottom = viewModel.weather[currentIndex].week.daily[selectedIndex].clouds
-            cloudsValueLabel.text = "\(cloudBottom) %"
+            cloudsValueLabelBottom.text = "\(cloudBottom) %"
         
         //MARK: -Moon phase
         
@@ -805,28 +895,86 @@ class WeekCityWeatherViewController: UIViewController {
         
         //MARK: -Sunrise
         
-//        let dateFormatter = DateFormatter()
-//        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-//        dateFormatter.locale = Locale(identifier: "ru_RU")
-//        
-//        let sunRise = viewModel.weather[currentIndex].week.daily[selectedIndex].sunrise
-//        let dateDate = dateFormatter.string(from: sunRise)
-//
-//        let dateFormatter2 = DateFormatter()
-//        dateFormatter2.dateFormat = "HH:mm"
-//        dateFormatter2.locale = Locale(identifier: "ru_RU")
-//    
-//        let dateString = dateFormatter2.string(from: dateDate ?? Date())
-//        cellTwo.timeLabel.text = dateString
-//        
-//        
-//        sunRiseValueLabel.text = "\(sunRise)"
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        dateFormatter.locale = Locale(identifier: "ru_RU")
+        
+        let sunRise = viewModel.weather[currentIndex].week.daily[selectedIndex].sunrise
+        
+        let dateDateSunRise = Date(miliseconds: Int64(sunRise))
+        
+        let dateFormatter2 = DateFormatter()
+        dateFormatter2.dateFormat = "HH:mm"
+        dateFormatter2.locale = Locale(identifier: "ru_RU")
+    
+        let dateSunRiseString = dateFormatter2.string(from: dateDateSunRise)
+        
+        sunRiseValueLabel.text = "\(dateSunRiseString)"
         
         //MARK: -Sunset
         
         let sunSet = viewModel.weather[currentIndex].week.daily[selectedIndex].sunset
-        sunSetValueLabel.text = "\(sunSet)"
+        print(sunSet)
+
+        let dateDateSunSet = Date(miliseconds: Int64(sunSet))
         
+        let dateFormatter3 = DateFormatter()
+        dateFormatter3.dateFormat = "HH:mm"
+        dateFormatter3.locale = Locale(identifier: "ru_RU")
+        
+        let dateSunSetString = dateFormatter2.string(from: dateDateSunSet)
+            
+        sunSetValueLabel.text = "\(dateSunSetString)"
+        
+        //MARK: -Difference between sunrise and sunset
+        
+        let splitsSunRise = dateSunRiseString.split(separator: ":").map(String.init)
+        let hourSunRise = ((splitsSunRise[0]) as NSString).intValue
+        let minutesSunRise = ((splitsSunRise[1]) as NSString).intValue
+        
+        let splitsSunSet = dateSunSetString.split(separator: ":").map(String.init)
+        let hourSunSet = ((splitsSunSet[0]) as NSString).intValue
+        let minutesSunSet = ((splitsSunSet[1]) as NSString).intValue
+        
+        let hourDifference = hourSunSet - hourSunRise
+        let minutesDifference = minutesSunSet - minutesSunRise
+        
+        sunSetAndSunRiseLabel.text = "\(hourDifference) ч" + "\(minutesDifference) мин"
+        
+        //MARK: -Moonrise
+        
+        let moonRise = viewModel.weather[currentIndex].week.daily[selectedIndex].moonset
+        
+        let dateDateMoonRise = Date(miliseconds: Int64(moonRise))
+    
+        let dateMoonRiseString = dateFormatter2.string(from: dateDateMoonRise)
+        
+        moonRiseValueLabel.text = "\(dateMoonRiseString)"
+        
+        //MARK: -Moonset
+        
+        let moonSet = viewModel.weather[currentIndex].week.daily[selectedIndex].moonrise
+
+        let dateDateMoonSet = Date(miliseconds: Int64(moonSet))
+        
+        let dateMoonSetString = dateFormatter2.string(from: dateDateMoonSet)
+            
+        moonSetValueLabel.text = "\(dateMoonSetString)"
+        
+        //MARK: -Difference between sunrise and sunset
+        
+        let splitsMoonRise = dateMoonRiseString.split(separator: ":").map(String.init)
+        let hourMoonRise = ((splitsMoonRise[0]) as NSString).intValue
+        let minutesMoonRise = ((splitsMoonRise[1]) as NSString).intValue
+        
+        let splitsMoonSet = dateMoonSetString.split(separator: ":").map(String.init)
+        let hourMoonSet = ((splitsMoonSet[0]) as NSString).intValue
+        let minutesMoonSet = ((splitsMoonSet[1]) as NSString).intValue
+        
+        let hourMoonDifference = hourMoonRise - hourMoonSet
+        let minutesMoonDifference = minutesMoonRise - minutesMoonSet
+        
+        moonSetAndSunRiseLabel.text = "\(hourMoonDifference) ч" + "\(minutesMoonDifference) мин"
     }
     
     //MARK: -Selectors
@@ -909,52 +1057,52 @@ class WeekCityWeatherViewController: UIViewController {
             weatherDescriptionLabel.heightAnchor.constraint(equalToConstant: 30),
             
             feelsImageView.topAnchor.constraint(equalTo: weatherDescriptionLabel.bottomAnchor, constant: 15),
-            feelsImageView.leadingAnchor.constraint(equalTo: topView.leadingAnchor, constant: 10),
+            feelsImageView.trailingAnchor.constraint(equalTo: feelsLikeLabel.leadingAnchor, constant: -30),
             feelsImageView.widthAnchor.constraint(equalToConstant: 30),
             feelsImageView.heightAnchor.constraint(equalToConstant: 30),
             
             windImageView.topAnchor.constraint(equalTo: feelsImageView.bottomAnchor, constant: 15),
-            windImageView.leadingAnchor.constraint(equalTo: topView.leadingAnchor, constant: 10),
+            windImageView.trailingAnchor.constraint(equalTo: windLabel.leadingAnchor, constant: -30),
             windImageView.widthAnchor.constraint(equalToConstant: 30),
             windImageView.heightAnchor.constraint(equalToConstant: 30),
             
             ufIndexImageView.topAnchor.constraint(equalTo: windImageView.bottomAnchor, constant: 15),
-            ufIndexImageView.leadingAnchor.constraint(equalTo: topView.leadingAnchor, constant: 10),
+            ufIndexImageView.trailingAnchor.constraint(equalTo: ufIndexLabel.leadingAnchor, constant: -30),
             ufIndexImageView.widthAnchor.constraint(equalToConstant: 30),
             ufIndexImageView.heightAnchor.constraint(equalToConstant: 30),
             
             rainImageView.topAnchor.constraint(equalTo: ufIndexImageView.bottomAnchor, constant: 15),
-            rainImageView.leadingAnchor.constraint(equalTo: topView.leadingAnchor, constant: 10),
+            rainImageView.trailingAnchor.constraint(equalTo: rainLabel.leadingAnchor, constant: -30),
             rainImageView.widthAnchor.constraint(equalToConstant: 30),
             rainImageView.heightAnchor.constraint(equalToConstant: 30),
             
             cloudsImageView.topAnchor.constraint(equalTo: rainImageView.bottomAnchor, constant: 15),
-            cloudsImageView.leadingAnchor.constraint(equalTo: topView.leadingAnchor, constant: 10),
+            cloudsImageView.trailingAnchor.constraint(equalTo: cloudsLabel.leadingAnchor, constant: -30),
             cloudsImageView.widthAnchor.constraint(equalToConstant: 30),
             cloudsImageView.heightAnchor.constraint(equalToConstant: 30),
             
             feelsLikeLabel.topAnchor.constraint(equalTo: feelsImageView.topAnchor),
-            feelsLikeLabel.leadingAnchor.constraint(equalTo: feelsImageView.trailingAnchor, constant: 30),
+            feelsLikeLabel.centerXAnchor.constraint(equalTo: topView.centerXAnchor),
             feelsLikeLabel.widthAnchor.constraint(equalToConstant: 150),
             feelsLikeLabel.heightAnchor.constraint(equalToConstant: 30),
             
             windLabel.topAnchor.constraint(equalTo: windImageView.topAnchor),
-            windLabel.leadingAnchor.constraint(equalTo: windImageView.trailingAnchor, constant: 30),
+            windLabel.centerXAnchor.constraint(equalTo: topView.centerXAnchor),
             windLabel.widthAnchor.constraint(equalToConstant: 150),
             windLabel.heightAnchor.constraint(equalToConstant: 30),
             
             ufIndexLabel.topAnchor.constraint(equalTo: ufIndexImageView.topAnchor),
-            ufIndexLabel.leadingAnchor.constraint(equalTo: ufIndexImageView.trailingAnchor, constant: 30),
+            ufIndexLabel.centerXAnchor.constraint(equalTo: topView.centerXAnchor),
             ufIndexLabel.widthAnchor.constraint(equalToConstant: 150),
             ufIndexLabel.heightAnchor.constraint(equalToConstant: 30),
             
             rainLabel.topAnchor.constraint(equalTo: rainImageView.topAnchor),
-            rainLabel.leadingAnchor.constraint(equalTo: rainImageView.trailingAnchor, constant: 30),
+            rainLabel.centerXAnchor.constraint(equalTo: topView.centerXAnchor),
             rainLabel.widthAnchor.constraint(equalToConstant: 150),
             rainLabel.heightAnchor.constraint(equalToConstant: 30),
             
             cloudsLabel.topAnchor.constraint(equalTo: cloudsImageView.topAnchor),
-            cloudsLabel.leadingAnchor.constraint(equalTo: cloudsImageView.trailingAnchor, constant: 30),
+            cloudsLabel.centerXAnchor.constraint(equalTo: topView.centerXAnchor),
             cloudsLabel.widthAnchor.constraint(equalToConstant: 150),
             cloudsLabel.heightAnchor.constraint(equalToConstant: 30),
             
@@ -1004,52 +1152,52 @@ class WeekCityWeatherViewController: UIViewController {
             weatherDescriptionLabelBottom.heightAnchor.constraint(equalToConstant: 30),
             
             feelsImageViewBottom.topAnchor.constraint(equalTo: weatherDescriptionLabelBottom.bottomAnchor, constant: 15),
-            feelsImageViewBottom.leadingAnchor.constraint(equalTo: bottomView.leadingAnchor, constant: 10),
+            feelsImageViewBottom.trailingAnchor.constraint(equalTo: feelsLikeLabelBottom.leadingAnchor, constant: -30),
             feelsImageViewBottom.widthAnchor.constraint(equalToConstant: 30),
             feelsImageViewBottom.heightAnchor.constraint(equalToConstant: 30),
             
             windImageViewBottom.topAnchor.constraint(equalTo: feelsImageViewBottom.bottomAnchor, constant: 15),
-            windImageViewBottom.leadingAnchor.constraint(equalTo: bottomView.leadingAnchor, constant: 10),
+            windImageViewBottom.trailingAnchor.constraint(equalTo: windLabelBottom.leadingAnchor, constant: -30),
             windImageViewBottom.widthAnchor.constraint(equalToConstant: 30),
             windImageViewBottom.heightAnchor.constraint(equalToConstant: 30),
             
             ufIndexImageViewBottom.topAnchor.constraint(equalTo: windImageViewBottom.bottomAnchor, constant: 15),
-            ufIndexImageViewBottom.leadingAnchor.constraint(equalTo: bottomView.leadingAnchor, constant: 10),
+            ufIndexImageViewBottom.trailingAnchor.constraint(equalTo: ufIndexLabelBottom.leadingAnchor, constant: -30),
             ufIndexImageViewBottom.widthAnchor.constraint(equalToConstant: 30),
             ufIndexImageViewBottom.heightAnchor.constraint(equalToConstant: 30),
             
             rainImageViewBottom.topAnchor.constraint(equalTo: ufIndexImageViewBottom.bottomAnchor, constant: 15),
-            rainImageViewBottom.leadingAnchor.constraint(equalTo: bottomView.leadingAnchor, constant: 10),
+            rainImageViewBottom.trailingAnchor.constraint(equalTo: rainLabelBottom.leadingAnchor, constant: -30),
             rainImageViewBottom.widthAnchor.constraint(equalToConstant: 30),
             rainImageViewBottom.heightAnchor.constraint(equalToConstant: 30),
             
             cloudsImageViewBottom.topAnchor.constraint(equalTo: rainImageViewBottom.bottomAnchor, constant: 15),
-            cloudsImageViewBottom.leadingAnchor.constraint(equalTo: bottomView.leadingAnchor, constant: 10),
+            cloudsImageViewBottom.trailingAnchor.constraint(equalTo: cloudsLabelBottom.leadingAnchor, constant: -30),
             cloudsImageViewBottom.widthAnchor.constraint(equalToConstant: 30),
             cloudsImageViewBottom.heightAnchor.constraint(equalToConstant: 30),
             
             feelsLikeLabelBottom.topAnchor.constraint(equalTo: feelsImageViewBottom.topAnchor),
-            feelsLikeLabelBottom.leadingAnchor.constraint(equalTo: feelsImageViewBottom.trailingAnchor, constant: 30),
+            feelsLikeLabelBottom.centerXAnchor.constraint(equalTo: bottomView.centerXAnchor),
             feelsLikeLabelBottom.widthAnchor.constraint(equalToConstant: 150),
             feelsLikeLabelBottom.heightAnchor.constraint(equalToConstant: 30),
             
             windLabelBottom.topAnchor.constraint(equalTo: windImageViewBottom.topAnchor),
-            windLabelBottom.leadingAnchor.constraint(equalTo: windImageViewBottom.trailingAnchor, constant: 30),
+            windLabelBottom.centerXAnchor.constraint(equalTo: bottomView.centerXAnchor),
             windLabelBottom.widthAnchor.constraint(equalToConstant: 150),
             windLabelBottom.heightAnchor.constraint(equalToConstant: 30),
             
             ufIndexLabelBottom.topAnchor.constraint(equalTo: ufIndexImageViewBottom.topAnchor),
-            ufIndexLabelBottom.leadingAnchor.constraint(equalTo: ufIndexImageViewBottom.trailingAnchor, constant: 30),
+            ufIndexLabelBottom.centerXAnchor.constraint(equalTo: bottomView.centerXAnchor),
             ufIndexLabelBottom.widthAnchor.constraint(equalToConstant: 150),
             ufIndexLabelBottom.heightAnchor.constraint(equalToConstant: 30),
             
             rainLabelBottom.topAnchor.constraint(equalTo: rainImageViewBottom.topAnchor),
-            rainLabelBottom.leadingAnchor.constraint(equalTo: rainImageViewBottom.trailingAnchor, constant: 30),
+            rainLabelBottom.centerXAnchor.constraint(equalTo: bottomView.centerXAnchor),
             rainLabelBottom.widthAnchor.constraint(equalToConstant: 150),
             rainLabelBottom.heightAnchor.constraint(equalToConstant: 30),
             
             cloudsLabelBottom.topAnchor.constraint(equalTo: cloudsImageViewBottom.topAnchor),
-            cloudsLabelBottom.leadingAnchor.constraint(equalTo: cloudsImageViewBottom.trailingAnchor, constant: 30),
+            cloudsLabelBottom.centerXAnchor.constraint(equalTo: bottomView.centerXAnchor),
             cloudsLabelBottom.widthAnchor.constraint(equalToConstant: 150),
             cloudsLabelBottom.heightAnchor.constraint(equalToConstant: 30),
             
@@ -1079,9 +1227,9 @@ class WeekCityWeatherViewController: UIViewController {
             cloudsValueLabelBottom.heightAnchor.constraint(equalToConstant: 30),
             
             sunAndMoonView.topAnchor.constraint(equalTo: bottomView.bottomAnchor, constant: 20),
-            sunAndMoonView.leadingAnchor.constraint(equalTo: bottomView.leadingAnchor),
-            sunAndMoonView.trailingAnchor.constraint(equalTo: bottomView.trailingAnchor),
-            sunAndMoonView.heightAnchor.constraint(equalToConstant: 400),
+            sunAndMoonView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            sunAndMoonView.widthAnchor.constraint(equalTo: bottomView.widthAnchor),
+            sunAndMoonView.heightAnchor.constraint(equalToConstant: 300),
             sunAndMoonView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
             
             sunAndMoonLabel.topAnchor.constraint(equalTo: sunAndMoonView.topAnchor),
@@ -1093,9 +1241,40 @@ class WeekCityWeatherViewController: UIViewController {
             moonPhaseLabel.heightAnchor.constraint(equalToConstant: 30),
             
             sunImageView.topAnchor.constraint(equalTo: sunAndMoonLabel.bottomAnchor, constant: 20),
-            sunImageView.leadingAnchor.constraint(equalTo: sunAndMoonLabel.leadingAnchor, constant: 20),
+            sunImageView.leadingAnchor.constraint(equalTo: sunAndMoonView.leadingAnchor),
             sunImageView.heightAnchor.constraint(equalToConstant: 30),
             sunImageView.widthAnchor.constraint(equalToConstant: 30),
+            
+            sunSetAndSunRiseLabel.topAnchor.constraint(equalTo: sunImageView.topAnchor),
+            sunSetAndSunRiseLabel.leadingAnchor.constraint(equalTo: sunImageView.trailingAnchor, constant: 20),
+            sunSetAndSunRiseLabel.heightAnchor.constraint(equalToConstant: 30),
+            //sunSetAndSunRiseLabel.widthAnchor.constraint(equalTo: dottedLineView.widthAnchor),
+            
+            moonSetAndSunRiseLabel.topAnchor.constraint(equalTo: sunSetAndSunRiseLabel.topAnchor),
+            moonSetAndSunRiseLabel.leadingAnchor.constraint(equalTo: moonImageView.trailingAnchor, constant: 20),
+            moonSetAndSunRiseLabel.heightAnchor.constraint(equalToConstant: 30),
+            //moonSetAndSunRiseLabel.widthAnchor.constraint(equalTo: dottedLineView.widthAnchor),
+            
+            moonImageView.topAnchor.constraint(equalTo: sunImageView.topAnchor),
+            moonImageView.leadingAnchor.constraint(equalTo: sunAndMoonView.centerXAnchor, constant: 10),
+            moonImageView.heightAnchor.constraint(equalToConstant: 30),
+            moonImageView.widthAnchor.constraint(equalToConstant: 30),
+            
+            moonRiseLabel.topAnchor.constraint(equalTo: moonImageView.bottomAnchor, constant: 20),
+            moonRiseLabel.leadingAnchor.constraint(equalTo: moonImageView.leadingAnchor),
+            moonRiseLabel.heightAnchor.constraint(equalToConstant: 30),
+            
+            moonSetLabel.topAnchor.constraint(equalTo: moonRiseLabel.bottomAnchor, constant: 20),
+            moonSetLabel.leadingAnchor.constraint(equalTo: moonRiseLabel.leadingAnchor),
+            moonSetLabel.heightAnchor.constraint(equalToConstant: 30),
+            
+            moonRiseValueLabel.topAnchor.constraint(equalTo: moonRiseLabel.topAnchor),
+            moonRiseValueLabel.leadingAnchor.constraint(equalTo: moonRiseLabel.trailingAnchor, constant: 20),
+            moonRiseValueLabel.heightAnchor.constraint(equalToConstant: 30),
+            
+            moonSetValueLabel.topAnchor.constraint(equalTo: moonSetLabel.topAnchor),
+            moonSetValueLabel.leadingAnchor.constraint(equalTo: moonSetLabel.trailingAnchor, constant: 20),
+            moonSetValueLabel.heightAnchor.constraint(equalToConstant: 30),
             
             sunRiseLabel.topAnchor.constraint(equalTo: sunImageView.bottomAnchor, constant: 20),
             sunRiseLabel.leadingAnchor.constraint(equalTo: sunImageView.leadingAnchor),
@@ -1112,6 +1291,31 @@ class WeekCityWeatherViewController: UIViewController {
             sunSetValueLabel.topAnchor.constraint(equalTo: sunSetLabel.topAnchor),
             sunSetValueLabel.leadingAnchor.constraint(equalTo: sunSetLabel.trailingAnchor, constant: 10),
             sunSetValueLabel.heightAnchor.constraint(equalToConstant: 30),
+            
+//            airQualityLabel.topAnchor.constraint(equalTo: sunSetValueLabel.bottomAnchor, constant: 20),
+//            airQualityLabel.leadingAnchor.constraint(equalTo: sunAndMoonLabel.leadingAnchor),
+//            airQualityLabel.heightAnchor.constraint(equalToConstant: 30),
+//            airQualityLabel.widthAnchor.constraint(equalTo: sunAndMoonView.widthAnchor),
+            
+            lineOneView.topAnchor.constraint(equalTo: topView.topAnchor),
+            lineOneView.leadingAnchor.constraint(equalTo: topView.leadingAnchor),
+            lineOneView.trailingAnchor.constraint(equalTo: topView.trailingAnchor),
+            lineOneView.bottomAnchor.constraint(equalTo: topView.bottomAnchor),
+            lineOneView.heightAnchor.constraint(equalToConstant: 400),
+            lineOneView.widthAnchor.constraint(equalTo: topView.widthAnchor),
+            
+            lineBottomView.topAnchor.constraint(equalTo: bottomView.topAnchor),
+            lineBottomView.leadingAnchor.constraint(equalTo: bottomView.leadingAnchor),
+            lineBottomView.trailingAnchor.constraint(equalTo: bottomView.trailingAnchor),
+            lineBottomView.bottomAnchor.constraint(equalTo: bottomView.bottomAnchor),
+            lineBottomView.heightAnchor.constraint(equalToConstant: 400),
+            lineBottomView.widthAnchor.constraint(equalTo: bottomView.widthAnchor),
+            
+            dottedLineView.topAnchor.constraint(equalTo: sunAndMoonView.topAnchor),
+            dottedLineView.centerXAnchor.constraint(equalTo: bottomView.centerXAnchor),
+            //dottedLineView.trailingAnchor.constraint(equalTo: bottomView.trailingAnchor),
+            dottedLineView.heightAnchor.constraint(equalToConstant: 300),
+            dottedLineView.widthAnchor.constraint(equalTo: bottomView.widthAnchor)
                            
         ]
         NSLayoutConstraint.activate(constraints)
@@ -1243,24 +1447,20 @@ extension WeekCityWeatherViewController: UICollectionViewDelegate {
         }
         
         //MARK: -Day feels like
-        if let dayFeelsLike: String? = String(format: "%.0f", viewModel.weather[currentIndex].week.daily[selectedIndex].feelsLike.day) + " " + "°" {
-            feelsLikeValueLabel.text = dayFeelsLike
-        }
+        let dayFeelsLike = viewModel.weather[currentIndex].week.daily[selectedIndex].feelsLike.day
+            feelsLikeValueLabel.text = "\(dayFeelsLike) °"
         
         //MARK: -Wind
-        if let wind: String? = String(format: "%.0f", viewModel.weather[currentIndex].week.daily[selectedIndex].windSpeed) + " " + "м/с" {
-            windValueLabel.text = wind
-        }
+        let wind = viewModel.weather[currentIndex].week.daily[selectedIndex].windSpeed
+            windValueLabel.text = "\(wind) м/с"
         
         //MARK: -UF Index
-        if let ufIndex: String? = String(format: "%.0f", viewModel.weather[currentIndex].week.daily[selectedIndex].uvi) {
-            ufIndexValueLabel.text = ufIndex
-        }
+        let ufIndex = viewModel.weather[currentIndex].week.daily[selectedIndex].uvi
+            ufIndexValueLabel.text = "\(ufIndex)"
         
         //MARK: -Rain
-//        if let rain: String? = String(format: "%.0f", viewModel.weather[currentIndex].week.daily[selectedIndex].rain) {
-//            rainValueLabel.text = rain
-//        }
+        let rainTop = viewModel.weather[currentIndex].week.daily[selectedIndex].rain
+        rainValueLabelBottom.text = "\(rainTop ?? 0) %"
         
         //MARK: -Clouds
         let cloud = viewModel.weather[currentIndex].week.daily[selectedIndex].clouds
@@ -1300,23 +1500,21 @@ extension WeekCityWeatherViewController: UICollectionViewDelegate {
         }
         
         //MARK: -Day feels like
-        if let dayFeelsLike: String? = String(format: "%.0f", viewModel.weather[currentIndex].week.daily[selectedIndex].feelsLike.night) + " " + "°" {
-            feelsLikeValueLabelBottom.text = dayFeelsLike
-        }
+        let dayFeelsLikeBottom = viewModel.weather[currentIndex].week.daily[selectedIndex].feelsLike.night
+            feelsLikeValueLabelBottom.text = "\(dayFeelsLikeBottom) °"
         
         //MARK: -Wind
-        if let wind: String? = String(format: "%.0f", viewModel.weather[currentIndex].week.daily[selectedIndex].windSpeed) + " " + "м/с" {
-            windValueLabelBottom.text = wind
-        }
+        let windBottom = viewModel.weather[currentIndex].week.daily[selectedIndex].windSpeed
+            windValueLabelBottom.text = "\(windBottom) м/с"
         
         //MARK: -UF Index
-        if let ufIndex: String? = String(format: "%.0f", viewModel.weather[currentIndex].week.daily[selectedIndex].uvi) {
-            ufIndexValueLabelBottom.text = ufIndex
-        }
+        let ufIndexBottom = viewModel.weather[currentIndex].week.daily[selectedIndex].uvi
+            ufIndexValueLabelBottom.text = "\(ufIndexBottom) %"
+
         
         //MARK: -Rain
         let rainBottom = viewModel.weather[currentIndex].week.daily[selectedIndex].rain
-        rainValueLabelBottom.text = "\(rainBottom ?? 00) %"
+        rainValueLabelBottom.text = "\(rainBottom ?? 0) %"
         
         //MARK: -Clouds
         let cloudBottom = viewModel.weather[currentIndex].week.daily[selectedIndex].clouds
@@ -1330,56 +1528,169 @@ extension WeekCityWeatherViewController: UICollectionViewDelegate {
         
         moonPhaseLabel.text = getMoonPhaseStatus(moonPhase: moonPhase)
         
+        //MARK: -Sunrise
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        dateFormatter.locale = Locale(identifier: "ru_RU")
+        
+        let sunRise = viewModel.weather[currentIndex].week.daily[selectedIndex].sunrise
+        
+        let dateDateSunRise = Date(miliseconds: Int64(sunRise))
+        
+        let dateFormatter2 = DateFormatter()
+        dateFormatter2.dateFormat = "HH:mm"
+        dateFormatter2.locale = Locale(identifier: "ru_RU")
+    
+        let dateSunRiseString = dateFormatter2.string(from: dateDateSunRise)
+        
+        sunRiseValueLabel.text = "\(dateSunRiseString)"
+        
+        //MARK: -Sunset
+        
+        let sunSet = viewModel.weather[currentIndex].week.daily[selectedIndex].sunset
+        print(sunSet)
+
+        let dateDateSunSet = Date(miliseconds: Int64(sunSet))
+        
+        let dateFormatter3 = DateFormatter()
+        dateFormatter3.dateFormat = "HH:mm"
+        dateFormatter3.locale = Locale(identifier: "ru_RU")
+        
+        let dateSunSetString = dateFormatter2.string(from: dateDateSunSet)
+            
+        sunSetValueLabel.text = "\(dateSunSetString)"
+        
+        //MARK: -Moonrise
+        
+        let moonRise = viewModel.weather[currentIndex].week.daily[selectedIndex].moonset
+        
+        let dateDateMoonRise = Date(miliseconds: Int64(moonRise))
+    
+        let dateMoonRiseString = dateFormatter2.string(from: dateDateMoonRise)
+        
+        moonRiseValueLabel.text = "\(dateMoonRiseString)"
+        
+        //MARK: -Moonset
+        
+        let moonSet = viewModel.weather[currentIndex].week.daily[selectedIndex].moonrise
+
+        let dateDateMoonSet = Date(miliseconds: Int64(moonSet))
+        
+        let dateMoonSetString = dateFormatter2.string(from: dateDateMoonSet)
+            
+        moonSetValueLabel.text = "\(dateMoonSetString)"
+        
+        //MARK: -Difference between sunrise and sunset
+        
+        let splitsMoonRise = dateMoonRiseString.split(separator: ":").map(String.init)
+        let hourMoonRise = ((splitsMoonRise[0]) as NSString).intValue
+        let minutesMoonRise = ((splitsMoonRise[1]) as NSString).intValue
+        
+        let splitsMoonSet = dateMoonSetString.split(separator: ":").map(String.init)
+        let hourMoonSet = ((splitsMoonSet[0]) as NSString).intValue
+        let minutesMoonSet = ((splitsMoonSet[1]) as NSString).intValue
+        
+        let hourMoonDifference = hourMoonSet - hourMoonRise
+        let minutesMoonDifference = minutesMoonSet - minutesMoonRise
+        
+        moonSetAndSunRiseLabel.text = "\(hourMoonDifference) ч" + "\(minutesMoonDifference) мин"
     }
 }
     
-//MARK: -Линии
+//MARK: -Линии во дневном и ночном вью
 
-class LineOneView : UIView {
+class LineOneView: UIView {
     
     override func draw(_ rect: CGRect) {
 
         let aPath = UIBezierPath()
-        aPath.move(to: CGPoint(x: 0, y: 200))
-        aPath.addLine(to: CGPoint(x: 300, y: 200))
+        aPath.move(to: CGPoint(x: 0, y: 170))
+        aPath.addLine(to: CGPoint(x: frame.width, y: 170))
         aPath.close()
         UIColor.blue.set()
         aPath.lineWidth = 1
         aPath.stroke()
         
         let bPath = UIBezierPath()
-        bPath.move(to: CGPoint(x: 0, y: 250))
-        bPath.addLine(to: CGPoint(x: 300, y: 250))
+        bPath.move(to: CGPoint(x: 0, y: 215))
+        bPath.addLine(to: CGPoint(x: frame.width, y: 215))
         bPath.close()
         UIColor.blue.set()
         bPath.lineWidth = 1
         bPath.stroke()
         
         let cPath = UIBezierPath()
-        cPath.move(to: CGPoint(x: 0, y: 300))
-        cPath.addLine(to: CGPoint(x: 300, y: 300))
+        cPath.move(to: CGPoint(x: 0, y: 260))
+        cPath.addLine(to: CGPoint(x: frame.width, y: 260))
         cPath.close()
         UIColor.blue.set()
         cPath.lineWidth = 1
         cPath.stroke()
         
         let dPath = UIBezierPath()
-        dPath.move(to: CGPoint(x: 0, y: 350))
-        dPath.addLine(to: CGPoint(x: 300, y: 350))
+        dPath.move(to: CGPoint(x: 0, y: 305))
+        dPath.addLine(to: CGPoint(x: frame.width, y: 305))
         dPath.close()
         UIColor.blue.set()
         dPath.lineWidth = 1
         dPath.stroke()
         
         let ePath = UIBezierPath()
-        ePath.move(to: CGPoint(x: 0, y: 400))
-        ePath.addLine(to: CGPoint(x: 300, y: 400))
+        ePath.move(to: CGPoint(x: 0, y: 350))
+        ePath.addLine(to: CGPoint(x: frame.width, y: 350))
         ePath.close()
         UIColor.blue.set()
         ePath.lineWidth = 1
         ePath.stroke()
         
+    }
+}
 
+class LineBottomView: UIView {
+    
+    override func draw(_ rect: CGRect) {
+
+        let aPath = UIBezierPath()
+        aPath.move(to: CGPoint(x: 0, y: 170))
+        aPath.addLine(to: CGPoint(x: frame.width, y: 170))
+        aPath.close()
+        UIColor.blue.set()
+        aPath.lineWidth = 1
+        aPath.stroke()
+        
+        let bPath = UIBezierPath()
+        bPath.move(to: CGPoint(x: 0, y: 215))
+        bPath.addLine(to: CGPoint(x: frame.width, y: 215))
+        bPath.close()
+        UIColor.blue.set()
+        bPath.lineWidth = 1
+        bPath.stroke()
+        
+        let cPath = UIBezierPath()
+        cPath.move(to: CGPoint(x: 0, y: 260))
+        cPath.addLine(to: CGPoint(x: frame.width, y: 260))
+        cPath.close()
+        UIColor.blue.set()
+        cPath.lineWidth = 1
+        cPath.stroke()
+        
+        let dPath = UIBezierPath()
+        dPath.move(to: CGPoint(x: 0, y: 305))
+        dPath.addLine(to: CGPoint(x: frame.width, y: 305))
+        dPath.close()
+        UIColor.blue.set()
+        dPath.lineWidth = 1
+        dPath.stroke()
+        
+        let ePath = UIBezierPath()
+        ePath.move(to: CGPoint(x: 0, y: 350))
+        ePath.addLine(to: CGPoint(x: frame.width, y: 350))
+        ePath.close()
+        UIColor.blue.set()
+        ePath.lineWidth = 1
+        ePath.stroke()
+        
     }
 }
 
@@ -1388,39 +1699,73 @@ class LineOneView : UIView {
 class DottedLineView : UIView {
     
     override func draw(_ rect: CGRect) {
-        //Пунктирная линия
-        let  aPath = UIBezierPath()
-        let  p0 = CGPoint(x: 10, y: 100)
-        aPath.move(to: p0)
-        let  p1 = CGPoint(x: 150, y: 100)
-        aPath.addLine(to: p1)
-        let  dashes: [ CGFloat ] = [ 10.0, 10.0 ]
-        aPath.setLineDash(dashes, count: dashes.count, phase: 0.0)
-        aPath.lineWidth = 1.0
-        aPath.lineCapStyle = .butt
-        UIColor(red: 103/255, green: 146/255, blue: 195/255, alpha: 1).set()
-        aPath.stroke()
+        //Пунктирные линии слева
+//        let  aPath = UIBezierPath()
+//        let  p0 = CGPoint(x: 0, y: 100)
+//        aPath.move(to: p0)
+//        let  p1 = CGPoint(x: frame.width / 2, y: 100)
+//        aPath.addLine(to: p1)
+//        let  dashes: [ CGFloat ] = [ 10.0, 10.0 ]
+//        aPath.setLineDash(dashes, count: dashes.count, phase: 0.0)
+//        aPath.lineWidth = 1.0
+//        aPath.lineCapStyle = .butt
+//        UIColor(red: 103/255, green: 146/255, blue: 195/255, alpha: 1).set()
+//        aPath.stroke()
+//
+//        let  bPath = UIBezierPath()
+//        let  pb0 = CGPoint(x: 0, y: 140)
+//        bPath.move(to: pb0)
+//        let  pb1 = CGPoint(x: frame.width / 2, y: 140)
+//        bPath.addLine(to: pb1)
+//        let  dashesB: [ CGFloat ] = [ 10.0, 10.0 ]
+//        bPath.setLineDash(dashesB, count: dashesB.count, phase: 0.0)
+//        bPath.lineWidth = 1.0
+//        bPath.lineCapStyle = .butt
+//        UIColor(red: 103/255, green: 146/255, blue: 195/255, alpha: 1).set()
+//        bPath.stroke()
         
-        let  bPath = UIBezierPath()
-        let  pb0 = CGPoint(x: 10, y: 140)
-        bPath.move(to: pb0)
-        let  pb1 = CGPoint(x: 150, y: 140)
-        bPath.addLine(to: pb1)
-        let  dashesB: [ CGFloat ] = [ 10.0, 10.0 ]
-        bPath.setLineDash(dashesB, count: dashesB.count, phase: 0.0)
-        bPath.lineWidth = 1.0
-        bPath.lineCapStyle = .butt
-        UIColor(red: 103/255, green: 146/255, blue: 195/255, alpha: 1).set()
-        bPath.stroke()
-        
+        //Вертикальная линия
         let verticalLinePath = UIBezierPath()
-        verticalLinePath.move(to: CGPoint(x: 180, y: 50))
-        verticalLinePath.addLine(to: CGPoint(x: 180, y: 180))
+        verticalLinePath.move(to: CGPoint(x: frame.width / 2, y: 50))
+        verticalLinePath.addLine(to: CGPoint(x: frame.width / 2, y: 180))
         verticalLinePath.close()
         UIColor(red: 103/255, green: 146/255, blue: 195/255, alpha: 1).set()
         verticalLinePath.lineWidth = 1
         verticalLinePath.stroke()
         
+        //Пунктирные линии справа
+        let  сPath = UIBezierPath()
+        let  pс0 = CGPoint(x: 0, y: 100)
+        сPath.move(to: pс0)
+        let  pс1 = CGPoint(x: frame.width, y: 100)
+        сPath.addLine(to: pс1)
+        let  dashesС: [ CGFloat ] = [ 10.0, 10.0 ]
+        сPath.setLineDash(dashesС, count: dashesС.count, phase: 0.0)
+        сPath.lineWidth = 1.0
+        сPath.lineCapStyle = .butt
+        UIColor(red: 103/255, green: 146/255, blue: 195/255, alpha: 1).set()
+        сPath.stroke()
         
+        let  dPath = UIBezierPath()
+        let  pd0 = CGPoint(x: 0, y: 140)
+        dPath.move(to: pd0)
+        let  pd1 = CGPoint(x: frame.width, y: 140)
+        dPath.addLine(to: pd1)
+        let  dashesD: [ CGFloat ] = [ 10.0, 10.0 ]
+        dPath.setLineDash(dashesD, count: dashesD.count, phase: 0.0)
+        dPath.lineWidth = 1.0
+        dPath.lineCapStyle = .butt
+        UIColor(red: 103/255, green: 146/255, blue: 195/255, alpha: 1).set()
+        dPath.stroke()
+    }
+}
+
+extension Date {
+    var milisecondsSince1970: Int64 {
+        Int64((self.timeIntervalSince1970 * 1000.0).rounded())
+    }
+    
+    init(miliseconds: Int64) {
+        self = Date(timeIntervalSince1970: TimeInterval(miliseconds))
     }
 }

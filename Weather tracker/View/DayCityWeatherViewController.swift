@@ -119,7 +119,9 @@ class DayCityWeatherViewController: UIViewController {
         return collectionView
     }()
     
+    let gradientLayer = CAGradientLayer()
     
+    let mask = CAShapeLayer()
     
     //MARK: -Selectors
     
@@ -181,14 +183,31 @@ class DayCityWeatherViewController: UIViewController {
         
         cityLabel.text = viewModel.weather[currentIndex].now.name
         
-        let diagonalView = DiagonalView(frame: CGRect(x: 30, y: 200, width: 350, height: 50))
-        self.view.addSubview(diagonalView)
+        let diagonalView = DiagonalView(frame: CGRect(x: 0, y: 50, width: view.frame.width, height: 50))
+        blueView.addSubview(diagonalView)
         diagonalView.backgroundColor = UIColor(red: 0.914, green: 0.933, blue: 0.98, alpha: 1)
         
-        let lineView = LineView(frame: CGRect(x: 30, y: 310 + 10, width: view.frame.width - 60, height: 10)) //Можно ли это разместить констрейнтом?
-        self.view.addSubview(lineView)
+        let lineView = LineView(frame: CGRect(x: 0, y: 160, width: view.frame.width, height: 10)) //Можно ли это разместить констрейнтом?
+        blueView.addSubview(lineView)
         lineView.backgroundColor = UIColor(red: 0.914, green: 0.933, blue: 0.98, alpha: 1)
         
+        //Создаём простую прямоугольную вью с градиентом
+        let triangleView = TriangleView(frame: CGRect(x: 0, y: 200, width: view.frame.width, height: 50))
+        self.view.addSubview(triangleView)
+        //Устанавливаем градиент (и, соотетственно, цвет)
+        gradientLayer.frame = triangleView.bounds
+        gradientLayer.colors = [UIColor(red: 0.914, green: 0.933, blue: 0.98, alpha: 1).cgColor, UIColor.blue.cgColor, UIColor(red: 0.914, green: 0.933, blue: 0.98, alpha: 1).cgColor]
+        triangleView.layer.insertSublayer(gradientLayer, at: 0)
+        
+        //Создаём вью с треугольников (фон - прозрачный, треугольник - синий)
+        let maskTriangleView = MaskTriangleView(frame: CGRect(x: 0, y: 150, width: view.frame.width, height: 50))
+        self.view.addSubview(maskTriangleView)
+        //Устанавливаем маску. Ожидаю, что треугольник перетянет на себя градиент
+        gradientLayer.mask = maskTriangleView.layer
+        
+        let tempValuesView = TempValuesView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 100), viewModel: viewModel, currentIndex: currentIndex)
+        blueView.addSubview(tempValuesView)
+        tempValuesView.backgroundColor = UIColor.white.withAlphaComponent(0)
         
     }
     
@@ -216,26 +235,16 @@ class DayCityWeatherViewController: UIViewController {
             blueView.topAnchor.constraint(equalTo: cityLabel.bottomAnchor, constant: 20),
             blueView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 0),
             blueView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: 0),
-            blueView.heightAnchor.constraint(equalToConstant: 200),
+            blueView.heightAnchor.constraint(equalToConstant: 230),
             
-//            blurView.centerXAnchor.constraint(equalTo: blueView.centerXAnchor),
-//            blurView.centerYAnchor.constraint(equalTo: blueView.centerYAnchor),
-//            blurView.widthAnchor.constraint(equalToConstant: 300),
-//            blurView.heightAnchor.constraint(equalToConstant: 50),
-//            
-//            viewForBlur.centerXAnchor.constraint(equalTo: blueView.centerXAnchor),
-//            viewForBlur.centerYAnchor.constraint(equalTo: blueView.centerYAnchor),
-//            viewForBlur.widthAnchor.constraint(equalToConstant: 250),
-//            viewForBlur.heightAnchor.constraint(equalToConstant: 15),
-            
-            iconCollectionView.topAnchor.constraint(equalTo: blueView.topAnchor, constant: 80),
-            iconCollectionView.leadingAnchor.constraint(equalTo: blueView.leadingAnchor, constant: 25),
-            iconCollectionView.trailingAnchor.constraint(equalTo: blueView.trailingAnchor, constant: -25),
+            iconCollectionView.topAnchor.constraint(equalTo: blueView.topAnchor, constant: 100),
+            iconCollectionView.leadingAnchor.constraint(equalTo: blueView.leadingAnchor, constant: 10),
+            iconCollectionView.trailingAnchor.constraint(equalTo: blueView.trailingAnchor, constant: -10),
             iconCollectionView.heightAnchor.constraint(equalToConstant: 50),
             
-            timeCollectionView.topAnchor.constraint(equalTo: iconCollectionView.bottomAnchor, constant: 30),
-            timeCollectionView.leadingAnchor.constraint(equalTo: blueView.leadingAnchor, constant: 0),
-            timeCollectionView.trailingAnchor.constraint(equalTo: blueView.trailingAnchor, constant: 0),
+            timeCollectionView.topAnchor.constraint(equalTo: blueView.topAnchor, constant: 170),
+            timeCollectionView.leadingAnchor.constraint(equalTo: blueView.leadingAnchor, constant: 10),
+            timeCollectionView.trailingAnchor.constraint(equalTo: blueView.trailingAnchor, constant: -10),
             timeCollectionView.heightAnchor.constraint(equalToConstant: 30),
             
             tableview.topAnchor.constraint(equalTo: blueView.bottomAnchor, constant: 50),
@@ -249,28 +258,24 @@ class DayCityWeatherViewController: UIViewController {
     }
     
     func setupNavBar() {
-        
         self.navigationController!.navigationBar.isHidden = true
     }
 }
 
-//MARK: -Треугольник
+//MARK: -Пунктирный треугольник
 
 class DiagonalView : UIView {
-    
-    let gradientLayer = CAGradientLayer()
-    
     override func draw(_ rect: CGRect) {
-        //Линия
+        //Диагональная линия
         UIColor(red: 103/255, green: 146/255, blue: 195/255, alpha: 1).set()
         let line = UIBezierPath()
         line.move(to: CGPoint(x: 10, y:0))
-        line.addLine(to: CGPoint(x: 60, y:5))
-        line.addLine(to: CGPoint(x: 110, y:10))
-        line.addLine(to: CGPoint(x: 160, y:15))
-        line.addLine(to: CGPoint(x: 210, y:20))
-        line.addLine(to: CGPoint(x: 260, y:25))
-        line.addLine(to: CGPoint(x: 310, y:30))
+//        line.addLine(to: CGPoint(x: frame.width / 2, y:5))
+//        line.addLine(to: CGPoint(x: frame.width / 3, y:10))
+//        line.addLine(to: CGPoint(x: frame.width / 4, y:15))
+//        line.addLine(to: CGPoint(x: frame.width / 5, y:20))
+//        line.addLine(to: CGPoint(x: frame.width / 6, y:25))
+        line.addLine(to: CGPoint(x: frame.width - 10, y:30))
         line.lineWidth = 2
         line.stroke()
 
@@ -278,12 +283,12 @@ class DiagonalView : UIView {
         UIColor.white.setFill()
 
         let origins = [CGPoint(x: 10, y: 0),
-                       CGPoint(x: 60, y: 5),
-                       CGPoint(x: 110, y: 10),
-                       CGPoint(x: 160, y: 15),
-                       CGPoint(x: 210, y: 20),
-                       CGPoint(x: 260, y: 25),
-                       CGPoint(x: 310, y: 30),]
+                       CGPoint(x: frame.width / 6, y: 5),
+                       CGPoint(x: frame.width / 3, y: 10),
+                       CGPoint(x: frame.width / 2, y: 15),
+                       CGPoint(x: (frame.width / 3) * 2, y: 20),
+                       CGPoint(x: (frame.width / 6) * 5, y: 25),
+                       CGPoint(x: frame.width - 10, y: 30),]
 
         let size = CGSize(width: 8, height: 8)
 
@@ -301,7 +306,7 @@ class DiagonalView : UIView {
         let  p1 = CGPoint(x: 10, y: 35)
         path.addLine(to: p1)
         
-        let  p2 = CGPoint(x: 310, y: 35)
+        let  p2 = CGPoint(x: frame.width - 10, y: 35)
         path.addLine(to: p2)
 
         let  dashes: [ CGFloat ] = [ 10.0, 10.0 ]
@@ -312,20 +317,34 @@ class DiagonalView : UIView {
         UIColor(red: 103/255, green: 146/255, blue: 195/255, alpha: 1).set()
         path.stroke()
         
+    }
+    
+}
+
+//MARK: -Вью для треугольника с градиентом
+class TriangleView: UIView {
+    
+}
+
+//MARK: -Маска для треугольника с градиентом
+class MaskTriangleView: UIView {
+    override func draw(_ rect: CGRect) {
         //Треугольник
         let aPath = UIBezierPath()
             aPath.move(to: CGPoint(x: 15, y: 5))
             aPath.addLine(to: CGPoint(x: 15 , y: 30))
             aPath.addLine(to: CGPoint(x: 305, y: 30))
             aPath.close()
-        
-            UIColor.blue.set()
-            self.backgroundColor = .clear
+            
+            //Цвет треугольника - синий
+            UIColor.white.withAlphaComponent(0.2).set()
             aPath.fill()
         
-            gradientLayer.frame = aPath.bounds
-            gradientLayer.colors = [UIColor(red: 0.914, green: 0.933, blue: 0.98, alpha: 1).cgColor, UIColor.blue.cgColor, UIColor(red: 0.914, green: 0.933, blue: 0.98, alpha: 1).cgColor]
-            layer.insertSublayer(gradientLayer, at: 0)
+        let shapeLayer = CAShapeLayer()
+        shapeLayer.path = aPath.cgPath
+        shapeLayer.strokeColor = UIColor.red.cgColor
+        shapeLayer.fillColor = UIColor.clear.cgColor
+        layer.addSublayer(shapeLayer)
         
     }
     
@@ -339,12 +358,12 @@ class LineView : UIView {
         UIColor(red: 103/255, green: 146/255, blue: 195/255, alpha: 1).set()
         let line = UIBezierPath()
         line.move(to: CGPoint(x: 10, y:0))
-        line.addLine(to: CGPoint(x: 60, y:0))
-        line.addLine(to: CGPoint(x: 110, y:0))
-        line.addLine(to: CGPoint(x: 160, y:0))
-        line.addLine(to: CGPoint(x: 210, y:0))
-        line.addLine(to: CGPoint(x: 260, y:0))
-        line.addLine(to: CGPoint(x: 310, y:0))
+//        line.addLine(to: CGPoint(x: 60, y:0))
+//        line.addLine(to: CGPoint(x: 110, y:0))
+//        line.addLine(to: CGPoint(x: 170, y:0))
+//        line.addLine(to: CGPoint(x: 220, y:0))
+//        line.addLine(to: CGPoint(x: 270, y:0))
+        line.addLine(to: CGPoint(x: frame.width - 10, y:0))
         line.lineWidth = 2
         line.stroke()
 
@@ -352,12 +371,12 @@ class LineView : UIView {
         UIColor.white.setFill()
 
         let origins = [CGPoint(x: 10, y: 0),
-                       CGPoint(x: 60, y: 0),
-                       CGPoint(x: 110, y: 0),
-                       CGPoint(x: 160, y: 0),
-                       CGPoint(x: 210, y: 0),
-                       CGPoint(x: 260, y: 0),
-                       CGPoint(x: 310, y: 0),]
+                       CGPoint(x: frame.width / 6, y: 0),
+                       CGPoint(x: frame.width / 3, y: 0),
+                       CGPoint(x: frame.width / 2, y: 0),
+                       CGPoint(x: (frame.width / 3) * 2, y: 0),
+                       CGPoint(x: (frame.width / 6) * 5, y: 0),
+                       CGPoint(x: frame.width - 10, y: 0),]
 
         let size = CGSize(width: 8, height: 8)
 
@@ -367,6 +386,196 @@ class LineView : UIView {
             quad.stroke()
         }
     }
+}
+
+//MARK: -Треугольник с цифрами
+
+class TempValuesView: UIView {
+    
+    let viewModel: GeneralViewModel
+    
+    var currentIndex: Int
+    
+    var tempOneLabel: UILabel = {
+        let tempLabel = UILabel()
+        tempLabel.font = UIFont(name: "Rubik-Regular", size: 16)
+        tempLabel.textColor = .black
+        tempLabel.lineBreakMode = .byWordWrapping
+        tempLabel.textAlignment = .left
+        tempLabel.adjustsFontSizeToFitWidth = true
+        //tempLabel.translatesAutoresizingMaskIntoConstraints = false
+        return tempLabel
+    }()
+    
+    var tempTwoLabel: UILabel = {
+        let tempLabel = UILabel()
+        tempLabel.font = UIFont(name: "Rubik-Regular", size: 16)
+        tempLabel.textColor = .black
+        tempLabel.lineBreakMode = .byWordWrapping
+        tempLabel.textAlignment = .left
+        tempLabel.adjustsFontSizeToFitWidth = true
+        //tempLabel.translatesAutoresizingMaskIntoConstraints = false
+        return tempLabel
+    }()
+    
+    var tempThreeLabel: UILabel = {
+        let tempLabel = UILabel()
+        tempLabel.font = UIFont(name: "Rubik-Regular", size: 16)
+        tempLabel.textColor = .black
+        tempLabel.lineBreakMode = .byWordWrapping
+        tempLabel.textAlignment = .left
+        tempLabel.adjustsFontSizeToFitWidth = true
+        //tempLabel.translatesAutoresizingMaskIntoConstraints = false
+        return tempLabel
+    }()
+    
+    var tempFourLabel: UILabel = {
+        let tempLabel = UILabel()
+        tempLabel.font = UIFont(name: "Rubik-Regular", size: 16)
+        tempLabel.textColor = .black
+        tempLabel.lineBreakMode = .byWordWrapping
+        tempLabel.textAlignment = .left
+        tempLabel.adjustsFontSizeToFitWidth = true
+        //tempLabel.translatesAutoresizingMaskIntoConstraints = false
+        return tempLabel
+    }()
+    
+    var tempFiveLabel: UILabel = {
+        let tempLabel = UILabel()
+        tempLabel.font = UIFont(name: "Rubik-Regular", size: 16)
+        tempLabel.textColor = .black
+        tempLabel.lineBreakMode = .byWordWrapping
+        tempLabel.textAlignment = .left
+        tempLabel.adjustsFontSizeToFitWidth = true
+        //tempLabel.translatesAutoresizingMaskIntoConstraints = false
+        return tempLabel
+    }()
+    
+    var tempSixLabel: UILabel = {
+        let tempLabel = UILabel()
+        tempLabel.font = UIFont(name: "Rubik-Regular", size: 16)
+        tempLabel.textColor = .black
+        tempLabel.lineBreakMode = .byWordWrapping
+        tempLabel.textAlignment = .left
+        tempLabel.adjustsFontSizeToFitWidth = true
+        //tempLabel.translatesAutoresizingMaskIntoConstraints = false
+        return tempLabel
+    }()
+    
+    var tempSevenLabel: UILabel = {
+        let tempLabel = UILabel()
+        tempLabel.font = UIFont(name: "Rubik-Regular", size: 16)
+        tempLabel.textColor = .black
+        tempLabel.lineBreakMode = .byWordWrapping
+        tempLabel.textAlignment = .left
+        tempLabel.adjustsFontSizeToFitWidth = true
+        //tempLabel.translatesAutoresizingMaskIntoConstraints = false
+        return tempLabel
+    }()
+    
+    init(frame: CGRect, viewModel: GeneralViewModel, currentIndex: Int) {
+        self.viewModel = viewModel
+        self.currentIndex = currentIndex
+        super.init(frame: frame)
+        setupViews()
+        //setupConstraints()
+        setTemperatureValue()
+        
+        tempOneLabel.frame = CGRect(x: 10, y: 20, width: 30, height: 30)
+        tempTwoLabel.frame = CGRect(x: frame.width / 6, y: 25, width: 30, height: 30)
+        tempThreeLabel.frame = CGRect(x: frame.width / 3, y: 30, width: 30, height: 30)
+        tempFourLabel.frame = CGRect(x: frame.width / 2, y: 35, width: 30, height: 30)
+        tempFiveLabel.frame = CGRect(x: (frame.width / 3) * 2, y: 40, width: 30, height: 30)
+        tempSixLabel.frame = CGRect(x: (frame.width / 6) * 5, y: 45, width: 30, height: 30)
+        tempSevenLabel.frame = CGRect(x: frame.width, y: 50, width: 30, height: 30)
+        
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func setupViews() {
+        self.addSubview(tempOneLabel)
+        self.addSubview(tempTwoLabel)
+        self.addSubview(tempThreeLabel)
+        self.addSubview(tempFourLabel)
+        self.addSubview(tempFiveLabel)
+        self.addSubview(tempSixLabel)
+        self.addSubview(tempSevenLabel)
+    }
+    
+    func setupConstraints() {
+        
+        tempOneLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 20).isActive = true
+        tempOneLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 10).isActive = true
+        tempOneLabel.widthAnchor.constraint(equalToConstant: 30).isActive = true
+        tempOneLabel.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        
+        tempTwoLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 25).isActive = true
+        tempTwoLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 60).isActive = true
+        tempTwoLabel.widthAnchor.constraint(equalToConstant: 30).isActive = true
+        tempTwoLabel.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        
+        tempThreeLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 30).isActive = true
+        tempThreeLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 120).isActive = true
+        tempThreeLabel.widthAnchor.constraint(equalToConstant: 30).isActive = true
+        tempThreeLabel.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        
+        tempFourLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 35).isActive = true
+        tempFourLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 180).isActive = true
+        tempFourLabel.widthAnchor.constraint(equalToConstant: 30).isActive = true
+        tempFourLabel.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        
+        tempFiveLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 40).isActive = true
+        tempFiveLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 240).isActive = true
+        tempFiveLabel.widthAnchor.constraint(equalToConstant: 30).isActive = true
+        tempFiveLabel.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        
+        tempSixLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 45).isActive = true
+        tempSixLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 300).isActive = true
+        tempSixLabel.widthAnchor.constraint(equalToConstant: 30).isActive = true
+        tempSixLabel.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        
+        tempSevenLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 50).isActive = true
+        tempSevenLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: 0).isActive = true
+        tempSevenLabel.widthAnchor.constraint(equalToConstant: 30).isActive = true
+        tempSevenLabel.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        
+    }
+    
+    func setTemperatureValue() {
+        
+        if let tempOne = viewModel.weather[currentIndex].week.daily[0].temp.day {
+            tempOneLabel.text = String(format: "%.0f", tempOne) + "°"
+            
+        }
+        
+        if let tempTwo = viewModel.weather[currentIndex].week.daily[1].temp.day {
+            tempTwoLabel.text = String(format: "%.0f", tempTwo) + "°"
+        }
+        
+        if let tempThree = viewModel.weather[currentIndex].week.daily[2].temp.day {
+            tempThreeLabel.text = String(format: "%.0f", tempThree) + "°"
+        }
+        
+        if let tempFour = viewModel.weather[currentIndex].week.daily[3].temp.day {
+            tempFourLabel.text = String(format: "%.0f", tempFour) + "°"
+        }
+        
+        if let tempFive = viewModel.weather[currentIndex].week.daily[4].temp.day {
+            tempFiveLabel.text = String(format: "%.0f", tempFive) + "°"
+        }
+        
+        if let tempSix = viewModel.weather[currentIndex].week.daily[5].temp.day {
+            tempSixLabel.text = String(format: "%.0f", tempSix) + "°"
+        }
+        
+        if let tempSeven = viewModel.weather[currentIndex].week.daily[6].temp.day {
+            tempSevenLabel.text = String(format: "%.0f", tempSeven) + "°"
+        }
+    }
+    
 }
 
 //MARK: -Collection
@@ -445,9 +654,9 @@ extension DayCityWeatherViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         if collectionView == self.iconCollectionView {
-            return CGSize(width: collectionView.frame.width / 9, height: collectionView.frame.height)
+            return CGSize(width: collectionView.frame.width / 8, height: collectionView.frame.height)
         } else {
-            return CGSize(width: collectionView.frame.width / 9, height: collectionView.frame.height)
+            return CGSize(width: collectionView.frame.width / 8, height: collectionView.frame.height)
         }
     }
 }
@@ -497,16 +706,10 @@ extension DayCityWeatherViewController: UITableViewDataSource {
         
         //MARK: -Temp
 
-        if currentIndex > viewModel.weather.startIndex && currentIndex < viewModel.weather.endIndex {
-            if let arrayTemp: String? = String(format: "%.0f",viewModel.weather[currentIndex].day.list[indexPath.item].main.temp ?? 1.1) {
-                cell.tempLabel.text = "\(arrayTemp ?? "No data")" + " " + "°"
-            }
-        } else {
-            if let arrayTemp: String? = String(format: "%.0f",viewModel.weather.first?.day.list[indexPath.item].main.temp ?? 1.1) {
-                cell.tempLabel.text = "\(arrayTemp ?? "No data")" + " " + "°"
-                }
-            
-        }
+        
+        let arrayTemp = viewModel.weather[currentIndex].day.list[indexPath.item].main.temp
+        cell.tempLabel.text = String(format: "%.0f", arrayTemp) + "°"
+
         
         //MARK: -Descriptions
         cell.windDescriptionLabel.text = "Ветер"
@@ -514,41 +717,20 @@ extension DayCityWeatherViewController: UITableViewDataSource {
         cell.cloudsDescriptionLabel.text = "Облачность"
         
         //MARK: -Wind Value
-        if currentIndex > viewModel.weather.startIndex && currentIndex < viewModel.weather.endIndex {
-            if let wind: String? = String(format: "%.0f",viewModel.weather[currentIndex].day.list[indexPath.item].wind.speed ?? 1.1) {
-                cell.windValueLabel.text = "\(wind ?? "No data")" + " " + "m/s"
-            }
-        } else {
-            if let wind: String? = String(format: "%.0f",viewModel.weather.first?.day.list[indexPath.item].wind.speed ?? 1.1) {
-                cell.windValueLabel.text = "\(wind ?? "No data")" + " " + "m/s"
-            }
-            
-        }
+        let wind = viewModel.weather[currentIndex].day.list[indexPath.item].wind.speed
+        cell.windValueLabel.text = String(format: "%.0f", wind) + "m/s"
         
         //MARK: -Rain Value
-        if currentIndex > viewModel.weather.startIndex && currentIndex < viewModel.weather.endIndex {
-            if let rain: String? = String(format: "%.0f",viewModel.weather[currentIndex].day.list[indexPath.item].rain?.the3H ?? 1.1) {
-                cell.rainValueLabel.text = "\(rain ?? "No data")" + " " + "%"
-            }
+        let rain = viewModel.weather[currentIndex].day.list[indexPath.item].rain?.the3H
+        if rain != nil {
+            cell.rainValueLabel.text = String(format: "%.0f", rain!) + "%"
         } else {
-            if let rain: String? = String(format: "%.0f",viewModel.weather.first?.day.list[indexPath.item].rain?.the3H ?? 1.1) {
-                cell.rainValueLabel.text = "\(rain ?? "No data")" + " " + "%"
-            }
-            
+            cell.rainValueLabel.text = "?"
         }
-        
         //MARK: -Cloud Value
-        if currentIndex > viewModel.weather.startIndex && currentIndex < viewModel.weather.endIndex {
-            if let cloud: String? = String(format: "%.0f",viewModel.weather[currentIndex].day.list[indexPath.item].clouds.all ?? 1.1) {
-                cell.cloudsValueLabel.text = "\(cloud ?? "No data")" + " " + "%"
-            }
-        } else {
-            if let cloud: String? = String(format: "%.0f",viewModel.weather.first?.day.list[indexPath.item].clouds.all ?? 1.1) {
-                cell.cloudsValueLabel.text = "\(cloud ?? "No data")" + " " + "%"
-            }
-            
-        }
-        
+        let cloud = viewModel.weather[currentIndex].day.list[indexPath.item].clouds.all
+        cell.cloudsValueLabel.text = "\(cloud) %"
+ 
         return cell
     }
     

@@ -25,10 +25,20 @@ class LocationGroup: ILocationGroup {
         
         //2.Подставляем полученное в MainScreenViewController name в геокодинг
         //let url = "http://api.openweathermap.org/geo/1.0/direct?q=\(name)&limit=5&appid=b382e4a70dfb690b16b9381daac545ac&lang=ru"
-        let url = "https://geocode-maps.yandex.ru/1.x/?format=json&apikey=eb4f47dd-5f32-454e-b59c-4685eb278597&geocode=\(name)"
+        ///?format=json&apikey=eb4f47dd-5f32-454e-b59c-4685eb278597&geocode=\(name)
+        
+        var components = URLComponents(string: "https://geocode-maps.yandex.ru/1.x")
+        
+        let items: [URLQueryItem] = [
+            .init(name: "format", value: "json"),
+            .init(name: "apikey", value: "eb4f47dd-5f32-454e-b59c-4685eb278597"),
+            .init(name: "geocode", value: "\(name)"),
+        ]
         
         //3. Парсим JSON
-        guard let url = URL(string: url) else { return }
+        components?.queryItems = items
+        
+        guard let url = components?.url else { return }
         
         let task = URLSession.shared.dataTask(with: url) { data, response, error in
             guard let data = data, error == nil else { return }
@@ -36,7 +46,6 @@ class LocationGroup: ILocationGroup {
             do {
                 let result = try JSONDecoder().decode(NewCityData.self, from: data)
                 completion(result)
-                print(result.response.geoObjectCollection.metaDataProperty.geocoderResponseMetaData.boundedBy.envelope.lowerCorner)
                 //3.Сохраняем массив (координаты) в UserDefaults
                 UserDefaults.standard.set(data, forKey: "Coord")
             }

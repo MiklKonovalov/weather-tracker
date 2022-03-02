@@ -252,20 +252,20 @@ class DayWeatherCell: UICollectionViewCell, UIScrollViewDelegate {
             dateLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             
             sunriseImageView.topAnchor.constraint(equalTo: contentView.centerYAnchor, constant: 0),
-            sunriseImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            sunriseImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
             sunriseImageView.heightAnchor.constraint(equalToConstant: 30),
             sunriseImageView.widthAnchor.constraint(equalToConstant: 30),
             
             sunsetImageView.topAnchor.constraint(equalTo: contentView.centerYAnchor, constant: 0),
-            sunsetImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+            sunsetImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
             sunsetImageView.heightAnchor.constraint(equalToConstant: 30),
             sunsetImageView.widthAnchor.constraint(equalToConstant: 30),
             
             sunrise.topAnchor.constraint(equalTo: sunriseImageView.bottomAnchor, constant: 10),
-            sunrise.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
+            sunrise.centerXAnchor.constraint(equalTo: sunriseImageView.centerXAnchor),
             
             sunset.topAnchor.constraint(equalTo: sunsetImageView.bottomAnchor, constant: 10),
-            sunset.trailingAnchor.constraint(equalTo: sunsetImageView.trailingAnchor, constant: 0),
+            sunset.centerXAnchor.constraint(equalTo: sunsetImageView.centerXAnchor),
             
  
         ]
@@ -278,7 +278,7 @@ class DayWeatherCell: UICollectionViewCell, UIScrollViewDelegate {
     
     private func drawRectangle() {
             
-            let path = UIBezierPath(arcCenter: CGPoint(x: 100, y: 100), radius: 100, startAngle: 0, endAngle: .pi, clockwise: false)
+            let path = UIBezierPath(arcCenter: CGPoint(x: 100, y: 120), radius: 130, startAngle: 0, endAngle: .pi, clockwise: false)
             
             let shapeLayer = CAShapeLayer()
             shapeLayer.path = path.cgPath

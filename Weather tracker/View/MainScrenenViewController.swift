@@ -93,7 +93,6 @@ class MainScrenenViewController: UIViewController {
         collectionView.layer.cornerRadius = 15
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.backgroundColor = UIColor(red: 0.125, green: 0.306, blue: 0.78, alpha: 1)
-        
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.isPagingEnabled = true
         
@@ -124,6 +123,7 @@ class MainScrenenViewController: UIViewController {
         todayCollectionView.register(TwentyFourHoursCollectionViewCell.self, forCellWithReuseIdentifier: "todayCell")
         todayCollectionView.translatesAutoresizingMaskIntoConstraints = false
         todayCollectionView.backgroundColor = .white
+        todayCollectionView.showsHorizontalScrollIndicator = false
         return todayCollectionView
     }()
     
@@ -156,6 +156,7 @@ class MainScrenenViewController: UIViewController {
         let bottomCollectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         bottomCollectionView.register(WeekCollectionViewCell.self, forCellWithReuseIdentifier: "bottomCell")
         bottomCollectionView.translatesAutoresizingMaskIntoConstraints = false
+        bottomCollectionView.showsVerticalScrollIndicator = false
         bottomCollectionView.backgroundColor = .white
         return bottomCollectionView
     }()
@@ -554,32 +555,44 @@ extension MainScrenenViewController: UICollectionViewDataSource {
         if collectionView == self.collectionView {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "sliderCell", for: indexPath) as! DayWeatherCell
              
-            if let main: String? = String(format: "%.0f",viewModel.weather[indexPath.item].now.main?.temp ?? 1.1) {
-                cell.mainTemperatureLabel.text = "\(main ?? "No data") °"
+            if let main = viewModel.weather[indexPath.item].now.main?.temp {
+                cell.mainTemperatureLabel.text = String(format: "%.0f", main) + "°"
+            } else {
+                cell.mainTemperatureLabel.text = "?"
             }
             
-            if let minTemp: String? = String(format: "%.0f", viewModel.weather[indexPath.item].now.main?.temp_min ?? 1.1) {
-                cell.minTemperatureLabel.text = "\(minTemp ?? "No data") °"
+            if let minTemp = viewModel.weather[indexPath.item].now.main?.temp_min {
+                cell.minTemperatureLabel.text = String(format: "%.0f", minTemp) + "°"
+            } else {
+                cell.minTemperatureLabel.text = "?"
             }
             
-            if let maxTemp: String? = String(format: "%.0f", viewModel.weather[indexPath.item].now.main?.temp_max ?? 1.1) {
-                cell.maxTemperatureLabel.text = "\(maxTemp ?? "No data") °"
+            if let maxTemp = viewModel.weather[indexPath.item].now.main?.temp_max {
+                cell.maxTemperatureLabel.text = String(format: "%.0f", maxTemp) + "°"
+            } else {
+                cell.maxTemperatureLabel.text = "?"
             }
             
             if let description = viewModel.weather[indexPath.item].now.weather?[0].description {
                 cell.weatherDescriptionLabel.text = description
             }
             
-            if let windSpeed: String? = String(format: "%.0f", viewModel.weather[indexPath.item].now.wind?.speed ?? 1.1) {
-                cell.windSpeedLabel.text = "\(windSpeed ?? "No data") м/с"
+            if let windSpeed = viewModel.weather[indexPath.item].now.wind?.speed {
+                cell.windSpeedLabel.text = String(format: "%.0f", windSpeed) + "м/с"
+            } else {
+                cell.windSpeedLabel.text = "?"
             }
             
-            if let clouds: String? = String(viewModel.weather[indexPath.item].now.clouds?.all ?? 1) {
-                cell.cloudsLabel.text = clouds
+            if let clouds = viewModel.weather[indexPath.item].now.clouds?.all {
+                cell.cloudsLabel.text = String(format: "%.0f", clouds)
+            } else {
+                cell.cloudsLabel.text = "?"
             }
             
-            if let humidity: String? = String(viewModel.weather[indexPath.item].now.main?.humidity ?? 1) {
-                cell.humidityLabel.text = "\(humidity ?? "No data") %"
+            if let humidity = viewModel.weather[indexPath.item].now.main?.humidity {
+                cell.humidityLabel.text = String(format: "%.0f", humidity) + "%"
+            } else {
+                cell.humidityLabel.text = "?"
             }
             
             let dateSunrise = viewModel.weather[indexPath.item].now.sys?.sunrise
@@ -611,14 +624,11 @@ extension MainScrenenViewController: UICollectionViewDataSource {
             
             //Проверим, есть ли в viewModel.weather значения. Если значений нет, то покажем первый элемент массива?
             if currentIndex > viewModel.weather.startIndex && currentIndex < viewModel.weather.endIndex {
-                if let arrayTemp: String? = String(format: "%.0f",viewModel.weather[currentIndex].day.list[indexPath.item].main.temp ?? 1.1) {
-                    cellTwo.mainTemperatureLabel.text = "\(arrayTemp ?? "No data")" + " " + "°"
-                }
+                let arrayTemp = viewModel.weather[currentIndex].day.list[indexPath.item].main.temp
+                cellTwo.mainTemperatureLabel.text = String(format: "%.0f", arrayTemp) + "°"
             } else {
-                if let arrayTemp: String? = String(format: "%.0f",viewModel.weather.first?.day.list[indexPath.item].main.temp ?? 1.1) {
-                    cellTwo.mainTemperatureLabel.text = "\(arrayTemp ?? "No data")" + " " + "°"
-                    }
-                
+                let arrayTemp = viewModel.weather.first?.day.list[indexPath.item].main.temp
+                cellTwo.mainTemperatureLabel.text = String(format: "%.0f", arrayTemp!) + "°"
             }
             
             //MARK: -Time
@@ -629,32 +639,34 @@ extension MainScrenenViewController: UICollectionViewDataSource {
 
             //Array of Dates
             if let time = self.viewModel.weather.first?.day.list[indexPath.item].dtTxt {
-                
+            //12:00 , 15:00
                 let dateDate = dateFormatter.date(from: time)
-        
+                //09:00, 12:00
                 let dateFormatter2 = DateFormatter()
                 dateFormatter2.dateFormat = "HH:mm"
                 dateFormatter2.locale = Locale(identifier: "ru_RU")
             
                 let dateString = dateFormatter2.string(from: dateDate ?? Date())
-        
+                //12:00 , 15:00
                 cellTwo.timeLabel.text = dateString
                 
-                //Текущая дата
-                let date = Date()
-                let dateFormatter = DateFormatter()
-                dateFormatter.locale = Locale(identifier: "ru_RU")
-                dateFormatter.dateFormat = "HH:mm"
-                let dateStringForBlueColor = dateFormatter.string(from: date)
-                
-                if dateStringForBlueColor < dateString {
+//                //Текущая дата
+//                let date = Date()
+//                //10:00 (берётся среднеевропейское время)
+//                let dateFormatter = DateFormatter()
+//                dateFormatter.locale = Locale(identifier: "ru_RU")
+//                dateFormatter.dateFormat = "HH:mm"
+//                let dateStringForBlueColor = dateFormatter.string(from: date)
+//                //13:10
+//                let splits = dateString.split(separator: ":").map(String.init)
+//
+//                let hour = ((splits[0]) as NSString).intValue
+//
+//                let timeValue = hour / hour
+                if indexPath.item == 1 {
                     cellTwo.backgroundColor = UIColor.blue
                     cellTwo.timeLabel.textColor = UIColor.white
                     cellTwo.mainTemperatureLabel.textColor = UIColor.white
-                    
-                    gradientLayer.frame = cellTwo.bounds
-                    gradientLayer.colors = [UIColor.white, UIColor.blue]
-                    cellTwo.layer.insertSublayer(gradientLayer, at: 0)
                 }
             
             }
