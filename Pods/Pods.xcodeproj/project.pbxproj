@@ -80,13 +80,13 @@
 		8FE50CF407C73EC25DCF0A45DC163CB6 /* Pods-Weather tracker-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-Weather tracker-Info.plist"; sourceTree = "<group>"; };
 		952925E838A0DE4D7BDC4EE54022633D /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS14.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		9D3FCFB65DE4C03F28BEDC235CFAAC5A /* Locksmith.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = Locksmith.modulemap; sourceTree = "<group>"; };
-		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		A2E0D2DD441C31FE5AA5FB9994F7B0B9 /* Pods-Weather trackerTests-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-Weather trackerTests-Info.plist"; sourceTree = "<group>"; };
 		B337271CD3CCD24A8F2A0ADC0DC7E048 /* Pods-Weather trackerTests.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-Weather trackerTests.modulemap"; sourceTree = "<group>"; };
 		B4A19FE29DB63A5B714F93466B57DFC8 /* Pods-Weather tracker-Weather trackerUITests-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-Weather tracker-Weather trackerUITests-umbrella.h"; sourceTree = "<group>"; };
 		B4F737E935C39F3F6885F3DFB3C47B84 /* Pods-Weather tracker-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-Weather tracker-umbrella.h"; sourceTree = "<group>"; };
 		B5856678D8413553861524A9F1711546 /* Pods-Weather tracker-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-Weather tracker-acknowledgements.plist"; sourceTree = "<group>"; };
-		B620A995E24E645764FCDE7231CE9015 /* Locksmith */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Locksmith; path = Locksmith.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B620A995E24E645764FCDE7231CE9015 /* Locksmith.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Locksmith.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B92DBF3EA84130B243D48D3ED3A11CD4 /* Locksmith.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = Locksmith.debug.xcconfig; sourceTree = "<group>"; };
 		BEA7527E254CD878F909717DA44C4106 /* Pods-Weather tracker-Weather trackerUITests-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-Weather tracker-Weather trackerUITests-acknowledgements.markdown"; sourceTree = "<group>"; };
 		C39FBA5C2F5BCBB8FEB40404481AAFA4 /* Pods-Weather trackerTests */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = "Pods-Weather trackerTests"; path = Pods_Weather_trackerTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -229,7 +229,7 @@
 		8664505214916B961EF11128CC236AA2 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				B620A995E24E645764FCDE7231CE9015 /* Locksmith */,
+				B620A995E24E645764FCDE7231CE9015 /* Locksmith.framework */,
 				6FEB84B4FB6401161E4F93C9FB8E2691 /* Pods-Weather tracker */,
 				D697EC5E1A43AC180B921379E919BCC7 /* Pods-Weather tracker-Weather trackerUITests */,
 				C39FBA5C2F5BCBB8FEB40404481AAFA4 /* Pods-Weather trackerTests */,
@@ -250,7 +250,6 @@
 				EC34536217851CC364C44275B34947EF /* LocksmithSecurityClass.swift */,
 				7D049FA6DA5E0E481B0D891DFFAD2CC7 /* Support Files */,
 			);
-			name = Locksmith;
 			path = Locksmith;
 			sourceTree = "<group>";
 		};
@@ -392,7 +391,7 @@
 			);
 			name = Locksmith;
 			productName = Locksmith;
-			productReference = B620A995E24E645764FCDE7231CE9015 /* Locksmith */;
+			productReference = B620A995E24E645764FCDE7231CE9015 /* Locksmith.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
@@ -402,7 +401,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1240;
-				LastUpgradeCheck = 1240;
+				LastUpgradeCheck = 1250;
 			};
 			buildConfigurationList = 4821239608C13582E20E6DA73FD5F1F9 /* Build configuration list for PBXProject "Pods" */;
 			compatibilityVersion = "Xcode 11.0";
@@ -535,7 +534,7 @@
 				GCC_PREFIX_HEADER = "Target Support Files/Locksmith/Locksmith-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/Locksmith/Locksmith-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -570,7 +569,7 @@
 				GCC_PREFIX_HEADER = "Target Support Files/Locksmith/Locksmith-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/Locksmith/Locksmith-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

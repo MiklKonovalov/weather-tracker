@@ -142,7 +142,6 @@ class MainScrenenViewController: UIViewController {
     //UIButton 25 day
     var twentyFiveDayButton: UIButton = {
         let twentyFiveDayButton = UIButton()
-        //twentyFiveDayButton.setTitle("25 дней", for: .normal)
         twentyFiveDayButton.titleLabel?.font = UIFont(name: "Rubik-Regular", size: 16)
         twentyFiveDayButton.setTitleColor(.black, for: .normal)
         twentyFiveDayButton.translatesAutoresizingMaskIntoConstraints = false
@@ -184,46 +183,6 @@ class MainScrenenViewController: UIViewController {
         for city in realmCities {
             self.viewModel.userDidSelectNewCity(name: city.city)
         }
-        
-        
-//        let dictionary = UserDefaults.standard.object(forKey: "Cities") as! [String]
-//        print(dictionary)
-//
-//        if dictionary != nil {
-//            for (value) in dictionary {
-//                self.viewModel.userDidSelectNewCity(name: value)
-//            }
-//        }
-        
-//        let dictionary = Locksmith.loadDataForUserAccount(userAccount: "Weather")
-//
-//        print(dictionary)
-//
-//        if dictionary != nil {
-//            for (_, value) in dictionary ?? [:] {
-//                self.viewModel.userDidSelectNewCity(name: value as! String)
-//            }
-//        }
-    
-        
-        //Загружаем дату из Keychain
-        
-//        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
-//
-//        let context = appDelegate.persistentContainer.viewContext
-//
-//        let fetchRequest: NSFetchRequest<CitiesMemory> = CitiesMemory.fetchRequest()
-//
-//        do {
-//            self.cities = try context.fetch(fetchRequest)
-//                DispatchQueue.main.async {
-//                    self.collectionView.reloadData()
-//                    self.todayCollectionView.reloadData()
-//                    self.weekCollectionView.reloadData()
-//                }
-//        } catch let error as NSError {
-//            print(error.localizedDescription)
-//        }
         
     }
     
@@ -352,7 +311,6 @@ class MainScrenenViewController: UIViewController {
             weekCollectionView.trailingAnchor.constraint(equalTo: collectionView.trailingAnchor),
             weekCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             
-            
         ]
         NSLayoutConstraint.activate(constraints)
     }
@@ -433,7 +391,7 @@ class MainScrenenViewController: UIViewController {
     func fetchCities() {
 
         let fetchRequest: NSFetchRequest<CitiesMemory> = CitiesMemory.fetchRequest()
-        let city = title
+        _ = title
         let predicate = NSPredicate(format: "%K = %@", #keyPath(CitiesMemory.title))
         fetchRequest.predicate = predicate
         
@@ -478,23 +436,6 @@ class MainScrenenViewController: UIViewController {
                 try! self.realm.write {
                     self.realm.add([city])
                 }
-                
-    
-                
-                //Сохраняем данные в Keychain
-                //self.cityNames.append(text)
-                
-                //print(self.cityNames)
-                
-                //Сохраняем данные в UserDefaults
-                //UserDefaults.standard.set(self.cityNames, forKey: "Cities")
-//                do {
-//                    try Locksmith.saveData(data: ["City" : text], forUserAccount: "Weather")
-//                } catch {
-//                    print("Не получается сохранить город")
-//                }
-                
-                //self.saveCities(title: text)
                 
             }
             
@@ -627,8 +568,9 @@ extension MainScrenenViewController: UICollectionViewDataSource {
                 let arrayTemp = viewModel.weather[currentIndex].day.list[indexPath.item].main.temp
                 cellTwo.mainTemperatureLabel.text = String(format: "%.0f", arrayTemp) + "°"
             } else {
-                let arrayTemp = viewModel.weather.first?.day.list[indexPath.item].main.temp
-                cellTwo.mainTemperatureLabel.text = String(format: "%.0f", arrayTemp!) + "°"
+                if let arrayTemp = viewModel.weather.first?.day.list[indexPath.item].main.temp {
+                    cellTwo.mainTemperatureLabel.text = String(format: "%.0f", arrayTemp) + "°"
+                }
             }
             
             //MARK: -Time
@@ -639,30 +581,15 @@ extension MainScrenenViewController: UICollectionViewDataSource {
 
             //Array of Dates
             if let time = self.viewModel.weather.first?.day.list[indexPath.item].dtTxt {
-            //12:00 , 15:00
+
                 let dateDate = dateFormatter.date(from: time)
-                //09:00, 12:00
                 let dateFormatter2 = DateFormatter()
                 dateFormatter2.dateFormat = "HH:mm"
                 dateFormatter2.locale = Locale(identifier: "ru_RU")
             
                 let dateString = dateFormatter2.string(from: dateDate ?? Date())
-                //12:00 , 15:00
                 cellTwo.timeLabel.text = dateString
                 
-//                //Текущая дата
-//                let date = Date()
-//                //10:00 (берётся среднеевропейское время)
-//                let dateFormatter = DateFormatter()
-//                dateFormatter.locale = Locale(identifier: "ru_RU")
-//                dateFormatter.dateFormat = "HH:mm"
-//                let dateStringForBlueColor = dateFormatter.string(from: date)
-//                //13:10
-//                let splits = dateString.split(separator: ":").map(String.init)
-//
-//                let hour = ((splits[0]) as NSString).intValue
-//
-//                let timeValue = hour / hour
                 if indexPath.item == 1 {
                     cellTwo.backgroundColor = UIColor.blue
                     cellTwo.timeLabel.textColor = UIColor.white

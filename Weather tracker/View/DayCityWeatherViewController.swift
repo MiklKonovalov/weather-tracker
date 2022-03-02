@@ -238,13 +238,13 @@ class DayCityWeatherViewController: UIViewController {
             blueView.heightAnchor.constraint(equalToConstant: 230),
             
             iconCollectionView.topAnchor.constraint(equalTo: blueView.topAnchor, constant: 100),
-            iconCollectionView.leadingAnchor.constraint(equalTo: blueView.leadingAnchor, constant: 10),
-            iconCollectionView.trailingAnchor.constraint(equalTo: blueView.trailingAnchor, constant: -10),
+            iconCollectionView.leadingAnchor.constraint(equalTo: blueView.leadingAnchor, constant: 0),
+            iconCollectionView.trailingAnchor.constraint(equalTo: blueView.trailingAnchor, constant: 0),
             iconCollectionView.heightAnchor.constraint(equalToConstant: 50),
             
             timeCollectionView.topAnchor.constraint(equalTo: blueView.topAnchor, constant: 170),
-            timeCollectionView.leadingAnchor.constraint(equalTo: blueView.leadingAnchor, constant: 10),
-            timeCollectionView.trailingAnchor.constraint(equalTo: blueView.trailingAnchor, constant: -10),
+            timeCollectionView.leadingAnchor.constraint(equalTo: blueView.leadingAnchor, constant: 0),
+            timeCollectionView.trailingAnchor.constraint(equalTo: blueView.trailingAnchor, constant: 0),
             timeCollectionView.heightAnchor.constraint(equalToConstant: 30),
             
             tableview.topAnchor.constraint(equalTo: blueView.bottomAnchor, constant: 50),
@@ -487,7 +487,7 @@ class TempValuesView: UIView {
         tempFourLabel.frame = CGRect(x: frame.width / 2, y: 35, width: 30, height: 30)
         tempFiveLabel.frame = CGRect(x: (frame.width / 3) * 2, y: 40, width: 30, height: 30)
         tempSixLabel.frame = CGRect(x: (frame.width / 6) * 5, y: 45, width: 30, height: 30)
-        tempSevenLabel.frame = CGRect(x: frame.width, y: 50, width: 30, height: 30)
+        tempSevenLabel.frame = CGRect(x: frame.width - 30, y: 50, width: 30, height: 30)
         
     }
     
