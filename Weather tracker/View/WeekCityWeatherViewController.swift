@@ -765,7 +765,6 @@ class WeekCityWeatherViewController: UIViewController {
         sunAndMoonView.addSubview(moonSetAndSunRiseLabel)
         sunAndMoonView.addSubview(moonSetValueLabel)
         sunAndMoonView.addSubview(moonRiseValueLabel)
-        //sunAndMoonView.addSubview(airQualityLabel)
         
         dateCollectionView.dataSource = self
         dateCollectionView.delegate = self
@@ -1292,11 +1291,6 @@ class WeekCityWeatherViewController: UIViewController {
             sunSetValueLabel.leadingAnchor.constraint(equalTo: sunSetLabel.trailingAnchor, constant: 10),
             sunSetValueLabel.heightAnchor.constraint(equalToConstant: 30),
             
-//            airQualityLabel.topAnchor.constraint(equalTo: sunSetValueLabel.bottomAnchor, constant: 20),
-//            airQualityLabel.leadingAnchor.constraint(equalTo: sunAndMoonLabel.leadingAnchor),
-//            airQualityLabel.heightAnchor.constraint(equalToConstant: 30),
-//            airQualityLabel.widthAnchor.constraint(equalTo: sunAndMoonView.widthAnchor),
-            
             lineOneView.topAnchor.constraint(equalTo: topView.topAnchor),
             lineOneView.leadingAnchor.constraint(equalTo: topView.leadingAnchor),
             lineOneView.trailingAnchor.constraint(equalTo: topView.trailingAnchor),
@@ -1313,7 +1307,6 @@ class WeekCityWeatherViewController: UIViewController {
             
             dottedLineView.topAnchor.constraint(equalTo: sunAndMoonView.topAnchor),
             dottedLineView.centerXAnchor.constraint(equalTo: bottomView.centerXAnchor),
-            //dottedLineView.trailingAnchor.constraint(equalTo: bottomView.trailingAnchor),
             dottedLineView.heightAnchor.constraint(equalToConstant: 300),
             dottedLineView.widthAnchor.constraint(equalTo: bottomView.widthAnchor)
                            
@@ -1330,7 +1323,6 @@ class WeekCityWeatherViewController: UIViewController {
         let numbersOfButtons = 7
         for i in 1...numbersOfButtons {
             
-            //dayButton.setTitle("\(i)", for: .normal)
             if let dateInt = viewModel.weather.first?.week.daily[i].dt {
                 let timeInterval = TimeInterval(dateInt)
                 let myNSDate = Date(timeIntervalSince1970: timeInterval)
@@ -1699,31 +1691,6 @@ class LineBottomView: UIView {
 class DottedLineView : UIView {
     
     override func draw(_ rect: CGRect) {
-        //Пунктирные линии слева
-//        let  aPath = UIBezierPath()
-//        let  p0 = CGPoint(x: 0, y: 100)
-//        aPath.move(to: p0)
-//        let  p1 = CGPoint(x: frame.width / 2, y: 100)
-//        aPath.addLine(to: p1)
-//        let  dashes: [ CGFloat ] = [ 10.0, 10.0 ]
-//        aPath.setLineDash(dashes, count: dashes.count, phase: 0.0)
-//        aPath.lineWidth = 1.0
-//        aPath.lineCapStyle = .butt
-//        UIColor(red: 103/255, green: 146/255, blue: 195/255, alpha: 1).set()
-//        aPath.stroke()
-//
-//        let  bPath = UIBezierPath()
-//        let  pb0 = CGPoint(x: 0, y: 140)
-//        bPath.move(to: pb0)
-//        let  pb1 = CGPoint(x: frame.width / 2, y: 140)
-//        bPath.addLine(to: pb1)
-//        let  dashesB: [ CGFloat ] = [ 10.0, 10.0 ]
-//        bPath.setLineDash(dashesB, count: dashesB.count, phase: 0.0)
-//        bPath.lineWidth = 1.0
-//        bPath.lineCapStyle = .butt
-//        UIColor(red: 103/255, green: 146/255, blue: 195/255, alpha: 1).set()
-//        bPath.stroke()
-        
         //Вертикальная линия
         let verticalLinePath = UIBezierPath()
         verticalLinePath.move(to: CGPoint(x: frame.width / 2, y: 50))
@@ -1733,7 +1700,7 @@ class DottedLineView : UIView {
         verticalLinePath.lineWidth = 1
         verticalLinePath.stroke()
         
-        //Пунктирные линии справа
+        //Пунктирные линии
         let  сPath = UIBezierPath()
         let  pс0 = CGPoint(x: 0, y: 100)
         сPath.move(to: pс0)

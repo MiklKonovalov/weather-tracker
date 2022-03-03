@@ -110,7 +110,6 @@ class WeekCollectionViewCell: UICollectionViewCell {
             weatherDescriptionLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             weatherDescriptionLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             weatherDescriptionLabel.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.6),
-            //weatherDescriptionLabel.trailingAnchor.constraint(equalTo: minTemperatureLabel.leadingAnchor),
             
             minTemperatureLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             minTemperatureLabel.leadingAnchor.constraint(equalTo: weatherDescriptionLabel.trailingAnchor),
@@ -121,7 +120,6 @@ class WeekCollectionViewCell: UICollectionViewCell {
             maxTemperatureLabel.trailingAnchor.constraint(equalTo: arrowImageView.leadingAnchor),
             
             arrowImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            //arrowImageView.leadingAnchor.constraint(equalTo: maxTemperatureLabel.trailingAnchor, constant: 1),
             arrowImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             arrowImageView.widthAnchor.constraint(equalToConstant: 10)
 

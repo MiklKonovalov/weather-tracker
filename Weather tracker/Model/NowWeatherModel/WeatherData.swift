@@ -58,9 +58,3 @@ struct Clouds: Decodable {
     let all: Int?
 }
 
-//enum MainEnum: String, Decodable {
-//    case clear = "Clear"
-//    case clouds = "Clouds"
-//    case rain = "Rain"
-//    case snow = "Snow"
-//}

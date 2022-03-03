@@ -270,11 +270,6 @@ class DiagonalView : UIView {
         UIColor(red: 103/255, green: 146/255, blue: 195/255, alpha: 1).set()
         let line = UIBezierPath()
         line.move(to: CGPoint(x: 10, y:0))
-//        line.addLine(to: CGPoint(x: frame.width / 2, y:5))
-//        line.addLine(to: CGPoint(x: frame.width / 3, y:10))
-//        line.addLine(to: CGPoint(x: frame.width / 4, y:15))
-//        line.addLine(to: CGPoint(x: frame.width / 5, y:20))
-//        line.addLine(to: CGPoint(x: frame.width / 6, y:25))
         line.addLine(to: CGPoint(x: frame.width - 10, y:30))
         line.lineWidth = 2
         line.stroke()
@@ -358,11 +353,6 @@ class LineView : UIView {
         UIColor(red: 103/255, green: 146/255, blue: 195/255, alpha: 1).set()
         let line = UIBezierPath()
         line.move(to: CGPoint(x: 10, y:0))
-//        line.addLine(to: CGPoint(x: 60, y:0))
-//        line.addLine(to: CGPoint(x: 110, y:0))
-//        line.addLine(to: CGPoint(x: 170, y:0))
-//        line.addLine(to: CGPoint(x: 220, y:0))
-//        line.addLine(to: CGPoint(x: 270, y:0))
         line.addLine(to: CGPoint(x: frame.width - 10, y:0))
         line.lineWidth = 2
         line.stroke()
@@ -403,7 +393,6 @@ class TempValuesView: UIView {
         tempLabel.lineBreakMode = .byWordWrapping
         tempLabel.textAlignment = .left
         tempLabel.adjustsFontSizeToFitWidth = true
-        //tempLabel.translatesAutoresizingMaskIntoConstraints = false
         return tempLabel
     }()
     
@@ -414,7 +403,6 @@ class TempValuesView: UIView {
         tempLabel.lineBreakMode = .byWordWrapping
         tempLabel.textAlignment = .left
         tempLabel.adjustsFontSizeToFitWidth = true
-        //tempLabel.translatesAutoresizingMaskIntoConstraints = false
         return tempLabel
     }()
     
@@ -425,7 +413,6 @@ class TempValuesView: UIView {
         tempLabel.lineBreakMode = .byWordWrapping
         tempLabel.textAlignment = .left
         tempLabel.adjustsFontSizeToFitWidth = true
-        //tempLabel.translatesAutoresizingMaskIntoConstraints = false
         return tempLabel
     }()
     
@@ -436,7 +423,6 @@ class TempValuesView: UIView {
         tempLabel.lineBreakMode = .byWordWrapping
         tempLabel.textAlignment = .left
         tempLabel.adjustsFontSizeToFitWidth = true
-        //tempLabel.translatesAutoresizingMaskIntoConstraints = false
         return tempLabel
     }()
     
@@ -447,7 +433,6 @@ class TempValuesView: UIView {
         tempLabel.lineBreakMode = .byWordWrapping
         tempLabel.textAlignment = .left
         tempLabel.adjustsFontSizeToFitWidth = true
-        //tempLabel.translatesAutoresizingMaskIntoConstraints = false
         return tempLabel
     }()
     
@@ -458,7 +443,6 @@ class TempValuesView: UIView {
         tempLabel.lineBreakMode = .byWordWrapping
         tempLabel.textAlignment = .left
         tempLabel.adjustsFontSizeToFitWidth = true
-        //tempLabel.translatesAutoresizingMaskIntoConstraints = false
         return tempLabel
     }()
     
@@ -469,7 +453,6 @@ class TempValuesView: UIView {
         tempLabel.lineBreakMode = .byWordWrapping
         tempLabel.textAlignment = .left
         tempLabel.adjustsFontSizeToFitWidth = true
-        //tempLabel.translatesAutoresizingMaskIntoConstraints = false
         return tempLabel
     }()
     
@@ -478,7 +461,6 @@ class TempValuesView: UIView {
         self.currentIndex = currentIndex
         super.init(frame: frame)
         setupViews()
-        //setupConstraints()
         setTemperatureValue()
         
         tempOneLabel.frame = CGRect(x: 10, y: 20, width: 30, height: 30)
@@ -503,45 +485,6 @@ class TempValuesView: UIView {
         self.addSubview(tempFiveLabel)
         self.addSubview(tempSixLabel)
         self.addSubview(tempSevenLabel)
-    }
-    
-    func setupConstraints() {
-        
-        tempOneLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 20).isActive = true
-        tempOneLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 10).isActive = true
-        tempOneLabel.widthAnchor.constraint(equalToConstant: 30).isActive = true
-        tempOneLabel.heightAnchor.constraint(equalToConstant: 30).isActive = true
-        
-        tempTwoLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 25).isActive = true
-        tempTwoLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 60).isActive = true
-        tempTwoLabel.widthAnchor.constraint(equalToConstant: 30).isActive = true
-        tempTwoLabel.heightAnchor.constraint(equalToConstant: 30).isActive = true
-        
-        tempThreeLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 30).isActive = true
-        tempThreeLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 120).isActive = true
-        tempThreeLabel.widthAnchor.constraint(equalToConstant: 30).isActive = true
-        tempThreeLabel.heightAnchor.constraint(equalToConstant: 30).isActive = true
-        
-        tempFourLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 35).isActive = true
-        tempFourLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 180).isActive = true
-        tempFourLabel.widthAnchor.constraint(equalToConstant: 30).isActive = true
-        tempFourLabel.heightAnchor.constraint(equalToConstant: 30).isActive = true
-        
-        tempFiveLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 40).isActive = true
-        tempFiveLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 240).isActive = true
-        tempFiveLabel.widthAnchor.constraint(equalToConstant: 30).isActive = true
-        tempFiveLabel.heightAnchor.constraint(equalToConstant: 30).isActive = true
-        
-        tempSixLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 45).isActive = true
-        tempSixLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 300).isActive = true
-        tempSixLabel.widthAnchor.constraint(equalToConstant: 30).isActive = true
-        tempSixLabel.heightAnchor.constraint(equalToConstant: 30).isActive = true
-        
-        tempSevenLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 50).isActive = true
-        tempSevenLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: 0).isActive = true
-        tempSevenLabel.widthAnchor.constraint(equalToConstant: 30).isActive = true
-        tempSevenLabel.heightAnchor.constraint(equalToConstant: 30).isActive = true
-        
     }
     
     func setTemperatureValue() {
@@ -705,12 +648,9 @@ extension DayCityWeatherViewController: UITableViewDataSource {
         }
         
         //MARK: -Temp
-
-        
         let arrayTemp = viewModel.weather[currentIndex].day.list[indexPath.item].main.temp
         cell.tempLabel.text = String(format: "%.0f", arrayTemp) + "°"
 
-        
         //MARK: -Descriptions
         cell.windDescriptionLabel.text = "Ветер"
         cell.rainDescriptionLabel.text = "Атмосферные осадки"

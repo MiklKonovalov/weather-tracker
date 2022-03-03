@@ -24,9 +24,6 @@ class LocationGroup: ILocationGroup {
     func addLocation(_ name: String, completion: @escaping ((NewCityData) -> Void)) {
         
         //2.Подставляем полученное в MainScreenViewController name в геокодинг
-        //let url = "http://api.openweathermap.org/geo/1.0/direct?q=\(name)&limit=5&appid=b382e4a70dfb690b16b9381daac545ac&lang=ru"
-        ///?format=json&apikey=eb4f47dd-5f32-454e-b59c-4685eb278597&geocode=\(name)
-        
         var components = URLComponents(string: "https://geocode-maps.yandex.ru/1.x")
         
         let items: [URLQueryItem] = [
@@ -70,10 +67,7 @@ class LocationGroup: ILocationGroup {
         
         let lat = ((splits?[0] ?? "0") as NSString).doubleValue
         let lon = ((splits?[1] ?? "1") as NSString).doubleValue
-        
-        print(lat)
-        print(lon)
-        
+
         return .init(latitude: lat, longitude: lon)
     }
 }

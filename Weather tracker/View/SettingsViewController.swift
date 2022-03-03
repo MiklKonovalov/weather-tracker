@@ -190,13 +190,6 @@ class SettingsViewController: UIViewController {
     var notificationButtonPresser: Bool = false
     
     //MARK: -Lifecycle
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -275,9 +268,7 @@ class SettingsViewController: UIViewController {
         }
         
     }
-        
-    
-    
+
     //MARK: -Functions
     
     func setupNavBar() {
@@ -295,8 +286,6 @@ class SettingsViewController: UIViewController {
             
             settingsLabel.topAnchor.constraint(equalTo: greyView.topAnchor, constant: 50),
             settingsLabel.centerXAnchor.constraint(equalTo: greyView.centerXAnchor),
-            //settingsLabel.widthAnchor.constraint(equalToConstant: 80),
-            //settingsLabel.heightAnchor.constraint(equalToConstant: 30),
             
             temperatureLabel.topAnchor.constraint(equalTo: settingsLabel.bottomAnchor, constant: 10),
             temperatureLabel.leadingAnchor.constraint(equalTo: settingsLabel.leadingAnchor, constant: -90),
@@ -502,7 +491,6 @@ class SettingsViewController: UIViewController {
     @objc func doneButtonTap() {
         dismiss(animated: true, completion: nil)
     }
-    
 }
 
 extension UserDefaults {

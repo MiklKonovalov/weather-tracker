@@ -50,7 +50,6 @@ class DayWeatherViewModel {
     }
     
     var weatherDidChange: (() -> Void)?
-    
-    
+     
 }
 

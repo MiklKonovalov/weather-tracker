@@ -26,7 +26,6 @@ class LocationViewModel {
         //Получаем локацию из LocationManager
         locationService.getUserLocation {[weak self] location in
             guard let self = self else { return }
-            //self.addMapPin(with: location)
             print("ПОЛУЧЕНА ЛОКАЦИЯ!!!")
             self.locationDidChange?()
         }
