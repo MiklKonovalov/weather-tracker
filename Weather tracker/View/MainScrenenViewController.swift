@@ -34,7 +34,7 @@ class MainScrenenViewController: UIViewController {
     var cities = [CitiesMemory?]() {
         didSet {
             DispatchQueue.main.async {
-                self.collectionView.reloadData()
+                self.mainCollectionView.reloadData()
                 self.todayCollectionView.reloadData()
                 self.weekCollectionView.reloadData()
             }
@@ -44,6 +44,13 @@ class MainScrenenViewController: UIViewController {
     var cityNames = [String]()
     
     //MARK: - Views
+    
+    lazy var scrollView: UIScrollView = {
+        let scrollView = UIScrollView()
+        scrollView.keyboardDismissMode = UIScrollView.KeyboardDismissMode.onDrag
+        scrollView.delegate = self
+        return scrollView
+    }()
     
     //UILabel
     var cityLabel: UILabel = {
@@ -85,14 +92,14 @@ class MainScrenenViewController: UIViewController {
     }()
     
     //UIView slider and Scroll View
-    var collectionView: UICollectionView = {
+    var mainCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.register(DayWeatherCell.self, forCellWithReuseIdentifier: "sliderCell")
         collectionView.layer.cornerRadius = 15
         collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.backgroundColor = UIColor(red: 0.125, green: 0.306, blue: 0.78, alpha: 1)
+        collectionView.backgroundColor = .white
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.isPagingEnabled = true
         
@@ -185,18 +192,18 @@ class MainScrenenViewController: UIViewController {
         }
         
     }
-    
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
         view.backgroundColor = .white
         
+        view.addSubview(scrollView)
+        
         view.addSubview(settingsButton)
         view.addSubview(locationButton)
         view.addSubview(cityLabel)
-        
-        view.addSubview(collectionView)
+        view.addSubview(mainCollectionView)
         view.addSubview(pageControl)
         view.addSubview(detauls24Button)
         view.addSubview(todayCollectionView)
@@ -204,13 +211,15 @@ class MainScrenenViewController: UIViewController {
         view.addSubview(everydayLabel)
         view.addSubview(twentyFiveDayButton)
         
+        scrollView.backgroundColor = .red
+        
         let attributeString = NSMutableAttributedString(string: "Подробнее на 24 часа", attributes: yourAttributes)
         let twentyFiveDayButtonAttributeString = NSMutableAttributedString(string: "25 дней", attributes: yourAttributes)
         detauls24Button.setAttributedTitle(attributeString, for: .normal)
         twentyFiveDayButton.setAttributedTitle(twentyFiveDayButtonAttributeString, for: .normal)
     
-        collectionView.dataSource = self
-        collectionView.delegate = self
+        mainCollectionView.dataSource = self
+        mainCollectionView.delegate = self
         
         todayCollectionView.dataSource = self
         todayCollectionView.delegate = self
@@ -227,7 +236,7 @@ class MainScrenenViewController: UIViewController {
         
         locationViewModel.locationDidChange = {
             DispatchQueue.main.async {
-                self.collectionView.reloadData()
+                self.mainCollectionView.reloadData()
                 self.todayCollectionView.reloadData()
                 self.weekCollectionView.reloadData()
             }
@@ -235,7 +244,7 @@ class MainScrenenViewController: UIViewController {
         
         viewModel.viewModelForNewCityDidChange = {
             DispatchQueue.main.async {
-                self.collectionView.reloadData()
+                self.mainCollectionView.reloadData()
                 self.todayCollectionView.reloadData()
                 self.weekCollectionView.reloadData()
                 
@@ -244,7 +253,7 @@ class MainScrenenViewController: UIViewController {
         
         viewModel.viewModelDidChange = {
             DispatchQueue.main.async {
-                self.collectionView.reloadData()
+                self.mainCollectionView.reloadData()
                 self.todayCollectionView.reloadData()
                 self.weekCollectionView.reloadData()
                 self.cityLabel.text = self.viewModel.weather[self.currentIndex].now.name
@@ -267,48 +276,52 @@ class MainScrenenViewController: UIViewController {
         
         let constraints = [
         
-            settingsButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 41),
+            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            scrollView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor),
+            scrollView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            
+            settingsButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
             settingsButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10),
             settingsButton.heightAnchor.constraint(equalToConstant: 22),
             
-            locationButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 41),
+            locationButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
             locationButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10),
             locationButton.heightAnchor.constraint(equalToConstant: 22),
             
             cityLabel.heightAnchor.constraint(equalToConstant: 22),
             cityLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            cityLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 41),
+            cityLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
             
-            collectionView.widthAnchor.constraint(equalToConstant: 344),
-            collectionView.heightAnchor.constraint(equalToConstant: 212),
-            collectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
-            collectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
-            collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 112),
+            mainCollectionView.topAnchor.constraint(equalTo: cityLabel.bottomAnchor, constant: 5),
+            mainCollectionView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor),
+            mainCollectionView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor),
+            mainCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             
             pageControl.topAnchor.constraint(equalTo: cityLabel.bottomAnchor, constant: 10),
             pageControl.widthAnchor.constraint(equalToConstant: 100),
             pageControl.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             
             detauls24Button.heightAnchor.constraint(equalToConstant: 20),
-            detauls24Button.trailingAnchor.constraint(equalTo: collectionView.trailingAnchor),
+            detauls24Button.trailingAnchor.constraint(equalTo: mainCollectionView.trailingAnchor, constant: -2),
             detauls24Button.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 357),
             
             todayCollectionView.topAnchor.constraint(equalTo: detauls24Button.bottomAnchor, constant: 10),
-            todayCollectionView.leadingAnchor.constraint(equalTo: collectionView.leadingAnchor),
-            todayCollectionView.trailingAnchor.constraint(equalTo: collectionView.trailingAnchor),
+            todayCollectionView.leadingAnchor.constraint(equalTo: mainCollectionView.leadingAnchor, constant: 2),
+            todayCollectionView.trailingAnchor.constraint(equalTo: mainCollectionView.trailingAnchor, constant: -2),
             todayCollectionView.heightAnchor.constraint(equalToConstant: 83),
             
             everydayLabel.topAnchor.constraint(equalTo: todayCollectionView.bottomAnchor, constant: 10),
-            everydayLabel.leadingAnchor.constraint(equalTo: todayCollectionView.leadingAnchor),
+            everydayLabel.leadingAnchor.constraint(equalTo: todayCollectionView.leadingAnchor, constant: 2),
             everydayLabel.heightAnchor.constraint(equalToConstant: 30),
             
             twentyFiveDayButton.topAnchor.constraint(equalTo: todayCollectionView.bottomAnchor, constant: 10),
-            twentyFiveDayButton.trailingAnchor.constraint(equalTo: todayCollectionView.trailingAnchor),
+            twentyFiveDayButton.trailingAnchor.constraint(equalTo: todayCollectionView.trailingAnchor, constant: -2),
             twentyFiveDayButton.heightAnchor.constraint(equalToConstant: 30),
             
             weekCollectionView.topAnchor.constraint(equalTo: everydayLabel.bottomAnchor, constant: 10),
-            weekCollectionView.leadingAnchor.constraint(equalTo: collectionView.leadingAnchor),
-            weekCollectionView.trailingAnchor.constraint(equalTo: collectionView.trailingAnchor),
+            weekCollectionView.leadingAnchor.constraint(equalTo: mainCollectionView.leadingAnchor, constant: 2),
+            weekCollectionView.trailingAnchor.constraint(equalTo: mainCollectionView.trailingAnchor, constant: -2),
             weekCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             
         ]
@@ -475,7 +488,7 @@ class MainScrenenViewController: UIViewController {
 extension MainScrenenViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if collectionView == self.collectionView {
+        if collectionView == self.mainCollectionView {
             return viewModel.weather.count
         } else if collectionView == self.todayCollectionView {
             //currentIndex - это количество имеющихся городов. При загрузке приложения этот индекс = 0, так как у нас есть 1 город. Если при загрузке информация ещё не загрузилась, то мы покажем 7 ячеек
@@ -493,7 +506,7 @@ extension MainScrenenViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         //MARK: -Now Cell
-        if collectionView == self.collectionView {
+        if collectionView == self.mainCollectionView {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "sliderCell", for: indexPath) as! DayWeatherCell
              
             if let main = viewModel.weather[indexPath.item].now.main?.temp {
@@ -742,12 +755,22 @@ extension MainScrenenViewController: UICollectionViewDelegate {
 extension MainScrenenViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        if collectionView == self.collectionView {
-            return CGSize(width: collectionView.frame.width, height: collectionView.frame.height)
+        if collectionView == self.mainCollectionView {
+            return CGSize(width: view.frame.width, height: view.frame.height)
         } else if collectionView == self.todayCollectionView {
             return CGSize(width: collectionView.frame.width / 7, height: collectionView.frame.height)
         } else {
             return CGSize(width: collectionView.frame.width, height: 56)
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        if collectionView == self.mainCollectionView {
+            return 0
+        } else if collectionView == self.todayCollectionView {
+            return 3
+        } else {
+            return 4
         }
     }
 }

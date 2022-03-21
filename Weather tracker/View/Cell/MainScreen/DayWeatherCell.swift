@@ -10,14 +10,22 @@ import UIKit
 
 class DayWeatherCell: UICollectionViewCell, UIScrollViewDelegate {
     
-    lazy var scrollView: UIScrollView = {
-        let scrollView = UIScrollView()
-        scrollView.keyboardDismissMode = UIScrollView.KeyboardDismissMode.onDrag
-        scrollView.delegate = self
-        return scrollView
-    }()
+//    lazy var scrollView: UIScrollView = {
+//        let scrollView = UIScrollView()
+//        scrollView.keyboardDismissMode = UIScrollView.KeyboardDismissMode.onDrag
+//        scrollView.delegate = self
+//        return scrollView
+//    }()
     
     let shapeLayer = CAShapeLayer()
+    
+    var dayWeatherView: UIView = {
+        let view = UIView()
+        view.layer.cornerRadius = 10
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = UIColor(red: 0.125, green: 0.306, blue: 0.78, alpha: 1)
+        return view
+    }()
     
     var arcView: UIView = {
         let arc = UIView()
@@ -174,26 +182,24 @@ class DayWeatherCell: UICollectionViewCell, UIScrollViewDelegate {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        contentView.addSubview(scrollView)
-        contentView.addSubview(arcView)
-        contentView.addSubview(mainTemperatureLabel)
-        contentView.addSubview(minTemperatureLabel)
-        contentView.addSubview(slash)
-        contentView.addSubview(maxTemperatureLabel)
-        contentView.addSubview(weatherDescriptionLabel)
-        contentView.addSubview(windSpeedLabel)
-        contentView.addSubview(cloudsLabel)
-        contentView.addSubview(humidityLabel)
-        contentView.addSubview(sunrise)
-        contentView.addSubview(sunset)
-        contentView.addSubview(dateLabel)
-        contentView.addSubview(sunriseImageView)
-        contentView.addSubview(sunsetImageView)
-        contentView.addSubview(cloudImageView)
-        contentView.addSubview(windImageView)
-        contentView.addSubview(humidityImageView)
-        
-        contentView.addSubview(arcView)
+        contentView.addSubview(dayWeatherView)
+        dayWeatherView.addSubview(arcView)
+        dayWeatherView.addSubview(mainTemperatureLabel)
+        dayWeatherView.addSubview(minTemperatureLabel)
+        dayWeatherView.addSubview(slash)
+        dayWeatherView.addSubview(maxTemperatureLabel)
+        dayWeatherView.addSubview(weatherDescriptionLabel)
+        dayWeatherView.addSubview(windSpeedLabel)
+        dayWeatherView.addSubview(cloudsLabel)
+        dayWeatherView.addSubview(humidityLabel)
+        dayWeatherView.addSubview(sunrise)
+        dayWeatherView.addSubview(sunset)
+        dayWeatherView.addSubview(dateLabel)
+        dayWeatherView.addSubview(sunriseImageView)
+        dayWeatherView.addSubview(sunsetImageView)
+        dayWeatherView.addSubview(cloudImageView)
+        dayWeatherView.addSubview(windImageView)
+        dayWeatherView.addSubview(humidityImageView)
                 
         drawRectangle()
         
@@ -201,16 +207,17 @@ class DayWeatherCell: UICollectionViewCell, UIScrollViewDelegate {
         
         let constraints = [
             
-            arcView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
-            arcView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor, constant: -100),
+            arcView.topAnchor.constraint(equalTo: dayWeatherView.topAnchor, constant: 20),
+            arcView.centerXAnchor.constraint(equalTo: dayWeatherView.centerXAnchor, constant: -100),
             
-            scrollView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            scrollView.leftAnchor.constraint(equalTo: contentView.leftAnchor),
-            scrollView.rightAnchor.constraint(equalTo: contentView.rightAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            dayWeatherView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 120),
+            dayWeatherView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            dayWeatherView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 15),
+            dayWeatherView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15),
+            dayWeatherView.heightAnchor.constraint(equalToConstant: 200),
             
-            minTemperatureLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 40),
-            minTemperatureLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor, constant: -20),
+            minTemperatureLabel.topAnchor.constraint(equalTo: dayWeatherView.topAnchor, constant: 40),
+            minTemperatureLabel.centerXAnchor.constraint(equalTo: dayWeatherView.centerXAnchor, constant: -20),
             
             slash.topAnchor.constraint(equalTo: minTemperatureLabel.topAnchor, constant: 0),
             slash.leadingAnchor.constraint(equalTo: minTemperatureLabel.trailingAnchor, constant: 10),
@@ -219,13 +226,13 @@ class DayWeatherCell: UICollectionViewCell, UIScrollViewDelegate {
             maxTemperatureLabel.leadingAnchor.constraint(equalTo: slash.trailingAnchor, constant: 10),
         
             mainTemperatureLabel.topAnchor.constraint(equalTo: minTemperatureLabel.topAnchor, constant: 30),
-            mainTemperatureLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            mainTemperatureLabel.centerXAnchor.constraint(equalTo: dayWeatherView.centerXAnchor),
             
             weatherDescriptionLabel.topAnchor.constraint(equalTo: mainTemperatureLabel.topAnchor, constant: 30),
-            weatherDescriptionLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            weatherDescriptionLabel.centerXAnchor.constraint(equalTo: dayWeatherView.centerXAnchor),
             
             windSpeedLabel.topAnchor.constraint(equalTo: weatherDescriptionLabel.topAnchor, constant: 30),
-            windSpeedLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            windSpeedLabel.centerXAnchor.constraint(equalTo: dayWeatherView.centerXAnchor),
             
             windImageView.topAnchor.constraint(equalTo: windSpeedLabel.topAnchor, constant: 0),
             windImageView.trailingAnchor.constraint(equalTo: windSpeedLabel.leadingAnchor, constant: -5),
@@ -233,7 +240,7 @@ class DayWeatherCell: UICollectionViewCell, UIScrollViewDelegate {
             windImageView.widthAnchor.constraint(equalToConstant: 20),
             
             cloudsLabel.topAnchor.constraint(equalTo: windSpeedLabel.topAnchor, constant: 0),
-            cloudsLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor, constant: -80),
+            cloudsLabel.centerXAnchor.constraint(equalTo: dayWeatherView.centerXAnchor, constant: -80),
             
             cloudImageView.topAnchor.constraint(equalTo: cloudsLabel.topAnchor, constant: 0),
             cloudImageView.trailingAnchor.constraint(equalTo: cloudsLabel.leadingAnchor, constant: -5),
@@ -241,7 +248,7 @@ class DayWeatherCell: UICollectionViewCell, UIScrollViewDelegate {
             cloudImageView.widthAnchor.constraint(equalToConstant: 20),
             
             humidityLabel.topAnchor.constraint(equalTo: windSpeedLabel.topAnchor, constant: 0),
-            humidityLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor, constant: 80),
+            humidityLabel.centerXAnchor.constraint(equalTo: dayWeatherView.centerXAnchor, constant: 80),
             
             humidityImageView.topAnchor.constraint(equalTo: humidityLabel.topAnchor, constant: 0),
             humidityImageView.trailingAnchor.constraint(equalTo: humidityLabel.leadingAnchor, constant: -5),
@@ -249,15 +256,15 @@ class DayWeatherCell: UICollectionViewCell, UIScrollViewDelegate {
             humidityImageView.widthAnchor.constraint(equalToConstant: 20),
             
             dateLabel.topAnchor.constraint(equalTo: windSpeedLabel.topAnchor, constant: 40),
-            dateLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            dateLabel.centerXAnchor.constraint(equalTo: dayWeatherView.centerXAnchor),
             
-            sunriseImageView.topAnchor.constraint(equalTo: contentView.centerYAnchor, constant: 0),
-            sunriseImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
+            sunriseImageView.topAnchor.constraint(equalTo: dayWeatherView.centerYAnchor, constant: 0),
+            sunriseImageView.leadingAnchor.constraint(equalTo: dayWeatherView.leadingAnchor, constant: 10),
             sunriseImageView.heightAnchor.constraint(equalToConstant: 30),
             sunriseImageView.widthAnchor.constraint(equalToConstant: 30),
             
-            sunsetImageView.topAnchor.constraint(equalTo: contentView.centerYAnchor, constant: 0),
-            sunsetImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
+            sunsetImageView.topAnchor.constraint(equalTo: dayWeatherView.centerYAnchor, constant: 0),
+            sunsetImageView.trailingAnchor.constraint(equalTo: dayWeatherView.trailingAnchor, constant: -10),
             sunsetImageView.heightAnchor.constraint(equalToConstant: 30),
             sunsetImageView.widthAnchor.constraint(equalToConstant: 30),
             
