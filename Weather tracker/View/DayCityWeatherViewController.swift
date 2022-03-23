@@ -187,7 +187,7 @@ class DayCityWeatherViewController: UIViewController {
         blueView.addSubview(diagonalView)
         diagonalView.backgroundColor = UIColor(red: 0.914, green: 0.933, blue: 0.98, alpha: 1)
         
-        let lineView = LineView(frame: CGRect(x: 0, y: 160, width: view.frame.width, height: 10)) //Можно ли это разместить констрейнтом?
+        let lineView = LineView(frame: CGRect(x: 0, y: 160, width: view.frame.width, height: 30)) //Можно ли это разместить констрейнтом?
         blueView.addSubview(lineView)
         lineView.backgroundColor = UIColor(red: 0.914, green: 0.933, blue: 0.98, alpha: 1)
         
@@ -269,7 +269,7 @@ class DiagonalView : UIView {
         //Диагональная линия
         UIColor(red: 103/255, green: 146/255, blue: 195/255, alpha: 1).set()
         let line = UIBezierPath()
-        line.move(to: CGPoint(x: 10, y:0))
+        line.move(to: CGPoint(x: 10, y:5))
         line.addLine(to: CGPoint(x: frame.width - 10, y:30))
         line.lineWidth = 2
         line.stroke()
@@ -277,13 +277,13 @@ class DiagonalView : UIView {
         //Точки
         UIColor.white.setFill()
 
-        let origins = [CGPoint(x: 10, y: 0),
-                       CGPoint(x: frame.width / 6, y: 5),
-                       CGPoint(x: frame.width / 3, y: 10),
+        let origins = [CGPoint(x: 8, y: 1),
+                       CGPoint(x: frame.width / 6, y: 6),
+                       CGPoint(x: frame.width / 3, y: 11),
                        CGPoint(x: frame.width / 2, y: 15),
-                       CGPoint(x: (frame.width / 3) * 2, y: 20),
-                       CGPoint(x: (frame.width / 6) * 5, y: 25),
-                       CGPoint(x: frame.width - 10, y: 30),]
+                       CGPoint(x: (frame.width / 3) * 2, y: 19),
+                       CGPoint(x: (frame.width / 6) * 5, y: 23),
+                       CGPoint(x: frame.width - 10, y: 27),]
 
         let size = CGSize(width: 8, height: 8)
 
@@ -295,7 +295,7 @@ class DiagonalView : UIView {
         //Пунктирная линия
         let  path = UIBezierPath()
         
-        let  p0 = CGPoint(x: 10, y: 0)
+        let  p0 = CGPoint(x: 10, y: 10)
         path.move(to: p0)
 
         let  p1 = CGPoint(x: 10, y: 35)
@@ -352,21 +352,21 @@ class LineView : UIView {
         //Линия
         UIColor(red: 103/255, green: 146/255, blue: 195/255, alpha: 1).set()
         let line = UIBezierPath()
-        line.move(to: CGPoint(x: 10, y:0))
-        line.addLine(to: CGPoint(x: frame.width - 10, y:0))
+        line.move(to: CGPoint(x: 10, y:5))
+        line.addLine(to: CGPoint(x: frame.width - 10, y:5))
         line.lineWidth = 2
         line.stroke()
 
         //Точки
         UIColor.white.setFill()
 
-        let origins = [CGPoint(x: 10, y: 0),
-                       CGPoint(x: frame.width / 6, y: 0),
-                       CGPoint(x: frame.width / 3, y: 0),
-                       CGPoint(x: frame.width / 2, y: 0),
-                       CGPoint(x: (frame.width / 3) * 2, y: 0),
-                       CGPoint(x: (frame.width / 6) * 5, y: 0),
-                       CGPoint(x: frame.width - 10, y: 0),]
+        let origins = [CGPoint(x: 10, y: 1),
+                       CGPoint(x: frame.width / 6, y: 1),
+                       CGPoint(x: frame.width / 3, y: 1),
+                       CGPoint(x: frame.width / 2, y: 1),
+                       CGPoint(x: (frame.width / 3) * 2, y: 1),
+                       CGPoint(x: (frame.width / 6) * 5, y: 1),
+                       CGPoint(x: frame.width - 10, y: 1),]
 
         let size = CGSize(width: 8, height: 8)
 
@@ -463,13 +463,13 @@ class TempValuesView: UIView {
         setupViews()
         setTemperatureValue()
         
-        tempOneLabel.frame = CGRect(x: 10, y: 20, width: 30, height: 30)
-        tempTwoLabel.frame = CGRect(x: frame.width / 6, y: 25, width: 30, height: 30)
-        tempThreeLabel.frame = CGRect(x: frame.width / 3, y: 30, width: 30, height: 30)
-        tempFourLabel.frame = CGRect(x: frame.width / 2, y: 35, width: 30, height: 30)
-        tempFiveLabel.frame = CGRect(x: (frame.width / 3) * 2, y: 40, width: 30, height: 30)
-        tempSixLabel.frame = CGRect(x: (frame.width / 6) * 5, y: 45, width: 30, height: 30)
-        tempSevenLabel.frame = CGRect(x: frame.width - 30, y: 50, width: 30, height: 30)
+        tempOneLabel.frame = CGRect(x: 5, y: 15, width: 30, height: 30)
+        tempTwoLabel.frame = CGRect(x: (frame.width / 6) - 5, y: 20, width: 30, height: 30)
+        tempThreeLabel.frame = CGRect(x: (frame.width / 3) - 5, y: 25, width: 30, height: 30)
+        tempFourLabel.frame = CGRect(x: (frame.width / 2) - 5, y: 30, width: 30, height: 30)
+        tempFiveLabel.frame = CGRect(x: ((frame.width / 3) * 2) - 5, y: 35, width: 30, height: 30)
+        tempSixLabel.frame = CGRect(x: ((frame.width / 6) * 5) - 5, y: 40, width: 30, height: 30)
+        tempSevenLabel.frame = CGRect(x: frame.width - 30, y: 45, width: 30, height: 30)
         
     }
     

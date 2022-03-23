@@ -84,7 +84,8 @@ class MainScrenenViewController: UIViewController {
     //UIPage Controller
     lazy var pageControl: UIPageControl = {
         let pageControl = UIPageControl()
-        pageControl.numberOfPages = 3
+        pageControl.pageIndicatorTintColor = .gray
+        
         pageControl.currentPageIndicatorTintColor = .black
         pageControl.translatesAutoresizingMaskIntoConstraints = false
         pageControl.addTarget(self, action: #selector(pageControlTapHandler(sender:)), for: .touchUpInside)
@@ -189,6 +190,7 @@ class MainScrenenViewController: UIViewController {
         
         for city in realmCities {
             self.viewModel.userDidSelectNewCity(name: city.city)
+            pageControl.numberOfPages = realmCities.count
         }
         
     }
@@ -211,7 +213,7 @@ class MainScrenenViewController: UIViewController {
         view.addSubview(everydayLabel)
         view.addSubview(twentyFiveDayButton)
         
-        scrollView.backgroundColor = .red
+        scrollView.delegate = self
         
         let attributeString = NSMutableAttributedString(string: "Подробнее на 24 часа", attributes: yourAttributes)
         let twentyFiveDayButtonAttributeString = NSMutableAttributedString(string: "25 дней", attributes: yourAttributes)
@@ -299,7 +301,7 @@ class MainScrenenViewController: UIViewController {
             mainCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             
             pageControl.topAnchor.constraint(equalTo: cityLabel.bottomAnchor, constant: 10),
-            pageControl.widthAnchor.constraint(equalToConstant: 100),
+            pageControl.widthAnchor.constraint(equalTo: view.widthAnchor),
             pageControl.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             
             detauls24Button.heightAnchor.constraint(equalToConstant: 20),
@@ -356,6 +358,8 @@ class MainScrenenViewController: UIViewController {
         if currentPage != currentIndex {
             updateLabels(with: currentPage)
         }
+        
+        pageControl.currentPage = currentPage
         
     }
     
@@ -768,7 +772,7 @@ extension MainScrenenViewController: UICollectionViewDelegateFlowLayout {
         if collectionView == self.mainCollectionView {
             return 0
         } else if collectionView == self.todayCollectionView {
-            return 3
+            return 4
         } else {
             return 4
         }
