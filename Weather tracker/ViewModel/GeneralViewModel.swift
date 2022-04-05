@@ -57,14 +57,15 @@ class GeneralViewModel {
     //Вызывается только при добавлении нового города!
     func userDidSelectNewCity(name: String) {
         locationGroup.addLocation(name) { [weak self] info in //Передаём название города в декодер
-            guard let city = info.response.geoObjectCollection.featureMember.first?.geoObject.point.pos else { return }
+            let cityLat = info.lat
+            let cityLon = info.lon
             
-            let splits = city.split(separator: " ").map(String.init)
+            //let splits = city.split(separator: " ").map(String.init)
             
-            let lat = ((splits[1]) as NSString).doubleValue
-            let lon = ((splits[0]) as NSString).doubleValue
+            //let lat = ((splits[1]) as NSString).doubleValue
+            //let lon = ((splits[0]) as NSString).doubleValue
             
-            let location = CLLocation(latitude: lat, longitude: lon)
+            let location = CLLocation(latitude: cityLat, longitude: cityLon)
             self?.fetchData(for: location)
         }
     }

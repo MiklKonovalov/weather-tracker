@@ -49,6 +49,7 @@
 		C67BA08B27590EB800CBA2FA /* TwentyFourHoursWeatherData.swift in Sources */ = {isa = PBXBuildFile; fileRef = C67BA08A27590EB800CBA2FA /* TwentyFourHoursWeatherData.swift */; };
 		C67BA08E275911CB00CBA2FA /* TwentyFourHoursMainScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C67BA08D275911CB00CBA2FA /* TwentyFourHoursMainScreenViewModel.swift */; };
 		C67BA0902759131500CBA2FA /* TwentyFourHoursViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C67BA08F2759131500CBA2FA /* TwentyFourHoursViewModel.swift */; };
+		C691534E27FB2A37008A47FF /* PageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C691534D27FB2A35008A47FF /* PageViewController.swift */; };
 		C69F8E60279AC2F100839967 /* DateWeekWeatherScreenCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C69F8E5F279AC2F100839967 /* DateWeekWeatherScreenCell.swift */; };
 		C6A80AE427E8AC4600F3E106 /* SwipingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6A80AE327E8AC4500F3E106 /* SwipingController.swift */; };
 		C6A8C6A727B955D700AB7BFC /* NewCityWeatherData.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6A8C6A627B955D700AB7BFC /* NewCityWeatherData.swift */; };
@@ -128,6 +129,7 @@
 		C67BA08A27590EB800CBA2FA /* TwentyFourHoursWeatherData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwentyFourHoursWeatherData.swift; sourceTree = "<group>"; };
 		C67BA08D275911CB00CBA2FA /* TwentyFourHoursMainScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwentyFourHoursMainScreenViewModel.swift; sourceTree = "<group>"; };
 		C67BA08F2759131500CBA2FA /* TwentyFourHoursViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwentyFourHoursViewModel.swift; sourceTree = "<group>"; };
+		C691534D27FB2A35008A47FF /* PageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageViewController.swift; sourceTree = "<group>"; };
 		C69F8E5F279AC2F100839967 /* DateWeekWeatherScreenCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateWeekWeatherScreenCell.swift; sourceTree = "<group>"; };
 		C6A80AE327E8AC4500F3E106 /* SwipingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipingController.swift; sourceTree = "<group>"; };
 		C6A8C6A627B955D700AB7BFC /* NewCityWeatherData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewCityWeatherData.swift; sourceTree = "<group>"; };
@@ -284,6 +286,7 @@
 			isa = PBXGroup;
 			children = (
 				C66BCCBF273D9AF9001F63B3 /* WelcomeViewController.swift */,
+				C691534D27FB2A35008A47FF /* PageViewController.swift */,
 				C66BCC90273D98C9001F63B3 /* MainScrenenViewController.swift */,
 				C67834BB27451E0D0036378C /* DayCityWeatherViewController.swift */,
 				C6774EFB2792E5C700B291F1 /* WeekCityWeatherViewController.swift */,
@@ -675,6 +678,7 @@
 				C631A2F92763869E00B98147 /* WeekViewModel.swift in Sources */,
 				C631A2F6276252D900B98147 /* WeekMainScreenViewModel.swift in Sources */,
 				C67BA08B27590EB800CBA2FA /* TwentyFourHoursWeatherData.swift in Sources */,
+				C691534E27FB2A37008A47FF /* PageViewController.swift in Sources */,
 				C626C52F278745F300688FE4 /* NewCityTFHWeatherService.swift in Sources */,
 				C69F8E60279AC2F100839967 /* DateWeekWeatherScreenCell.swift in Sources */,
 				C67834BC27451E0D0036378C /* DayCityWeatherViewController.swift in Sources */,

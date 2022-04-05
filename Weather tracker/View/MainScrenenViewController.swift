@@ -45,12 +45,12 @@ class MainScrenenViewController: UIViewController {
     
     //MARK: - Views
     
-    lazy var scrollView: UIScrollView = {
-        let scrollView = UIScrollView()
-        scrollView.keyboardDismissMode = UIScrollView.KeyboardDismissMode.onDrag
-        scrollView.delegate = self
-        return scrollView
-    }()
+//    lazy var scrollView: UIScrollView = {
+//        let scrollView = UIScrollView()
+//        scrollView.keyboardDismissMode = UIScrollView.KeyboardDismissMode.onDrag
+//        scrollView.delegate = self
+//        return scrollView
+//    }()
     
     //UILabel
     var cityLabel: UILabel = {
@@ -82,15 +82,15 @@ class MainScrenenViewController: UIViewController {
     }()
     
     //UIPage Controller
-    lazy var pageControl: UIPageControl = {
-        let pageControl = UIPageControl()
-        pageControl.pageIndicatorTintColor = .gray
-        
-        pageControl.currentPageIndicatorTintColor = .black
-        pageControl.translatesAutoresizingMaskIntoConstraints = false
-        pageControl.addTarget(self, action: #selector(pageControlTapHandler(sender:)), for: .touchUpInside)
-        return pageControl
-    }()
+//    lazy var pageControl: UIPageControl = {
+//        let pageControl = UIPageControl()
+//        pageControl.pageIndicatorTintColor = .gray
+//
+//        pageControl.currentPageIndicatorTintColor = .black
+//        pageControl.translatesAutoresizingMaskIntoConstraints = false
+//        pageControl.addTarget(self, action: #selector(pageControlTapHandler(sender:)), for: .touchUpInside)
+//        return pageControl
+//    }()
     
     //UIView slider and Scroll View
     var mainCollectionView: UICollectionView = {
@@ -172,9 +172,10 @@ class MainScrenenViewController: UIViewController {
     
     //MARK: - Initialization
     
-    init(viewModel: GeneralViewModel, locationViewModel: LocationViewModel) {
+    init(viewModel: GeneralViewModel, locationViewModel: LocationViewModel, currentIndex: Int) {
         self.viewModel = viewModel
         self.locationViewModel = locationViewModel
+        self.currentIndex = currentIndex
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -190,7 +191,7 @@ class MainScrenenViewController: UIViewController {
         
         for city in realmCities {
             self.viewModel.userDidSelectNewCity(name: city.city)
-            pageControl.numberOfPages = realmCities.count
+            //pageControl.numberOfPages = realmCities.count
         }
         
     }
@@ -200,20 +201,20 @@ class MainScrenenViewController: UIViewController {
         
         view.backgroundColor = .white
         
-        view.addSubview(scrollView)
+        //view.addSubview(scrollView)
         
         view.addSubview(settingsButton)
         view.addSubview(locationButton)
         view.addSubview(cityLabel)
         view.addSubview(mainCollectionView)
-        view.addSubview(pageControl)
+        //view.addSubview(pageControl)
         view.addSubview(detauls24Button)
         view.addSubview(todayCollectionView)
         view.addSubview(weekCollectionView)
         view.addSubview(everydayLabel)
         view.addSubview(twentyFiveDayButton)
         
-        scrollView.delegate = self
+        //scrollView.delegate = self
         
         let attributeString = NSMutableAttributedString(string: "Подробнее на 24 часа", attributes: yourAttributes)
         let twentyFiveDayButtonAttributeString = NSMutableAttributedString(string: "25 дней", attributes: yourAttributes)
@@ -263,7 +264,7 @@ class MainScrenenViewController: UIViewController {
         }
         
         locationViewModel.newCityAdded = { city in
-            self.viewModel.userDidSelectNewCity(name: city.geoObject.name)
+            self.viewModel.userDidSelectNewCity(name: city)
         }
         
         //Получено текущее местоположение
@@ -278,10 +279,10 @@ class MainScrenenViewController: UIViewController {
         
         let constraints = [
         
-            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            scrollView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor),
-            scrollView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+//            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+//            scrollView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor),
+//            scrollView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor),
+//            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             
             settingsButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
             settingsButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10),
@@ -300,9 +301,9 @@ class MainScrenenViewController: UIViewController {
             mainCollectionView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor),
             mainCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             
-            pageControl.topAnchor.constraint(equalTo: cityLabel.bottomAnchor, constant: 10),
-            pageControl.widthAnchor.constraint(equalTo: view.widthAnchor),
-            pageControl.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+//            pageControl.topAnchor.constraint(equalTo: cityLabel.bottomAnchor, constant: 10),
+//            pageControl.widthAnchor.constraint(equalTo: view.widthAnchor),
+//            pageControl.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             
             detauls24Button.heightAnchor.constraint(equalToConstant: 20),
             detauls24Button.trailingAnchor.constraint(equalTo: mainCollectionView.trailingAnchor, constant: -2),
@@ -334,34 +335,34 @@ class MainScrenenViewController: UIViewController {
         return 1
     }
     
-    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        
-        let offSet = scrollView.contentOffset.x
-        let width = scrollView.frame.width
-        let horizontalCenter = width / 2
-        
-        let currentPage = Int(offSet + horizontalCenter) / Int(width)
-        
-        if !decelerate {
-            updateLabels(with: currentPage)
-        }
-    }
+//    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+//
+//        let offSet = scrollView.contentOffset.x
+//        let width = scrollView.frame.width
+//        let horizontalCenter = width / 2
+//
+//        let currentPage = Int(offSet + horizontalCenter) / Int(width)
+//
+//        if !decelerate {
+//            updateLabels(with: currentPage)
+//        }
+//    }
     
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        
-        let offSet = scrollView.contentOffset.x
-        let width = scrollView.frame.width
-        let horizontalCenter = width / 2
-        
-        let currentPage = Int(offSet + horizontalCenter) / Int(width)
-        
-        if currentPage != currentIndex {
-            updateLabels(with: currentPage)
-        }
-        
-        pageControl.currentPage = currentPage
-        
-    }
+//    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+//
+//        let offSet = scrollView.contentOffset.x
+//        let width = scrollView.frame.width
+//        let horizontalCenter = width / 2
+//
+//        let currentPage = Int(offSet + horizontalCenter) / Int(width)
+//
+//        if currentPage != currentIndex {
+//            updateLabels(with: currentPage)
+//        }
+//
+//        pageControl.currentPage = currentPage
+//
+//    }
     
     func updateLabels(with index: Int) {
         

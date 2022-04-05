@@ -24,25 +24,35 @@ class LocationGroup: ILocationGroup {
     func addLocation(_ name: String, completion: @escaping ((NewCityData) -> Void)) {
         
         //2.Подставляем полученное в MainScreenViewController name в геокодинг
-        var components = URLComponents(string: "https://geocode-maps.yandex.ru/1.x")
+//        var components = URLComponents(string: "http://api.openweathermap.org/geo/1.0/direct?")
+//
+//        let items: [URLQueryItem] = [
+//            .init(name: "limit", value: "5"),
+//            .init(name: "apikey", value: "98261efd556de6cce8807e2a7fd18fef"),
+//            .init(name: "q=", value: "\(name)"),
+//        ]
         
-        let items: [URLQueryItem] = [
-            .init(name: "format", value: "json"),
-            .init(name: "apikey", value: "eb4f47dd-5f32-454e-b59c-4685eb278597"),
-            .init(name: "geocode", value: "\(name)"),
-        ]
+//        var components = URLComponents(string: "https://geocode-maps.yandex.ru/1.x")
+//
+//        let items: [URLQueryItem] = [
+//            .init(name: "format", value: "json"),
+//            .init(name: "apikey", value: "eb4f47dd-5f32-454e-b59c-4685eb278597"),
+//            .init(name: "geocode", value: "\(name)"),
+//        ]
         
         //3. Парсим JSON
-        components?.queryItems = items
+        //components?.queryItems = items
         
-        guard let url = components?.url else { return }
+        //guard let url = components?.url else { return }
+        
+        guard let url = URL(string: "http://api.openweathermap.org/geo/1.0/direct?q=\(name)&limit=5&appid=98261efd556de6cce8807e2a7fd18fef") else { return }
         
         let task = URLSession.shared.dataTask(with: url) { data, response, error in
             guard let data = data, error == nil else { return }
     
             do {
-                let result = try JSONDecoder().decode(NewCityData.self, from: data)
-                completion(result)
+                let result = try JSONDecoder().decode([NewCityData].self, from: data)
+                completion(result.first!)
                 //3.Сохраняем массив (координаты) в UserDefaults
                 UserDefaults.standard.set(data, forKey: "Coord")
             }
@@ -56,17 +66,20 @@ class LocationGroup: ILocationGroup {
     
     func fetchLocation() -> CLLocationCoordinate2D? {
         let decoder = JSONDecoder()
-        guard let data = UserDefaults.standard.object(forKey: "Coord") as? Data, let coordinates = try? decoder.decode(NewCityData.self, from: data).response
+        guard let data = UserDefaults.standard.object(forKey: "Coord") as? Data, let coordinates = try? decoder.decode(NewCityData.self, from: data)
         else {
             return nil
         }
 
-        let latAndLon = coordinates.geoObjectCollection.featureMember.first?.geoObject.point.pos
+        let lat = coordinates.lat
+        let lon = coordinates.lon
         
-        let splits = latAndLon?.split(separator: " ").map(String.init)
+        //let latAndLon = coordinates.geoObjectCollection.featureMember.first?.geoObject.point.pos
         
-        let lat = ((splits?[0] ?? "0") as NSString).doubleValue
-        let lon = ((splits?[1] ?? "1") as NSString).doubleValue
+        //let splits = latAndLon?.split(separator: " ").map(String.init)
+        
+        //let lat = ((splits?[0] ?? "0") as NSString).doubleValue
+        //let lon = ((splits?[1] ?? "1") as NSString).doubleValue
 
         return .init(latitude: lat, longitude: lon)
     }

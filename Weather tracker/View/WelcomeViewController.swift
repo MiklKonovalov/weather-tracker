@@ -15,6 +15,8 @@ class WelcomeViewController: UIViewController {
     let locationViewModel = LocationViewModel(locationService: LocationManager(), locationGroup: LocationGroup())
     let locationGroup = LocationGroup()
     
+    var currentIndex: Int?
+    
     var onboardImage: UIImageView = {
         var onboardImage = UIImageView()
         onboardImage.translatesAutoresizingMaskIntoConstraints = false
@@ -141,7 +143,7 @@ class WelcomeViewController: UIViewController {
         
         WelcomeCore.shared.setIsNotNewUser()
         
-        let mainScreenViewController = MainScrenenViewController(viewModel: viewModel, locationViewModel: locationViewModel)
+        let mainScreenViewController = MainScrenenViewController(viewModel: viewModel, locationViewModel: locationViewModel, currentIndex: currentIndex ?? 0)
         
         let navigationControllerForAgree = UINavigationController(rootViewController: mainScreenViewController)
         navigationControllerForAgree.modalPresentationStyle = .fullScreen

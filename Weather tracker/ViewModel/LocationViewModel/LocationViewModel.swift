@@ -35,7 +35,7 @@ class LocationViewModel {
     
     func userDidSelectNewCity(name: String) {
         locationGroup.addLocation(name) { [weak self] info in
-            guard let city = info.response.geoObjectCollection.featureMember.first else { return }
+            let city = info.name
             self?.newCityAdded?(city)
         }
     }
@@ -51,7 +51,7 @@ class LocationViewModel {
     }
     
     var locationDidChange: (() -> Void)?
-    var newCityAdded: ((FeatureMember) -> Void)?
+    var newCityAdded: ((String) -> Void)?
 }
 
 
