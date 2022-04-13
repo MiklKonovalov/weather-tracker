@@ -23,7 +23,7 @@ enum WeekWeatherServiceError: Error {
 final class WeekWeatherService: IWeekWeatherService {
     
     func weatherURLString(forCoordinates coordinates: CLLocationCoordinate2D) -> String {
-       return "https://api.openweathermap.org/data/2.5/onecall?lat=\(coordinates.latitude)&lon=\(coordinates.longitude)&exclude=hourly&units=metric&appid=98261efd556de6cce8807e2a7fd18fef&lang=ru"
+       return "https://api.openweathermap.org/data/2.5/onecall?lat=\(coordinates.latitude)&lon=\(coordinates.longitude)&exclude=hourly&units=metric&appid=6554673c226a724c0b5a9afa11ed4d6f&lang=ru"
     }
     
     func getCitiesWeather(location: CLLocation? = nil,

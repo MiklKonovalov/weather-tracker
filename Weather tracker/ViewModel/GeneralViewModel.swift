@@ -29,11 +29,21 @@ class GeneralViewModel {
     var twentyFourHoursWeather: TwentyFourHoursMainScreenWeatherModel?
     var weekWeather: WeekMainScreenViewModel?
     
+    var cityName: String = ""
+    
     private(set) var weather = [CityWeather]()
     
     //MARK:-Initialization
     
-    init(locationGroup: LocationGroup, locationManager: LocationManager, weatherService: IWeatherService, twentyFourHoursWeatherService: ITwentyFourHoursWeatherService, weekWeatherService: IWeekWeatherService, newWeatherService: NewCityWeatherService, newTFHWeatherService: NewCityTFHWeatherService, newCityWeekWeatherService: NewCityWeekWeatherService) {
+    init(locationGroup: LocationGroup,
+         locationManager: LocationManager,
+         weatherService: IWeatherService,
+         twentyFourHoursWeatherService: ITwentyFourHoursWeatherService,
+         weekWeatherService: IWeekWeatherService,
+         newWeatherService: NewCityWeatherService,
+         newTFHWeatherService: NewCityTFHWeatherService,
+         newCityWeekWeatherService: NewCityWeekWeatherService)
+    {
         self.locationGroup = locationGroup
         self.locationManager = locationManager
         self.weatherService = weatherService
@@ -47,25 +57,21 @@ class GeneralViewModel {
     var viewModelDidChange: (() -> Void)?
     var viewModelForNewCityDidChange: (() -> Void)?
     
-    func viewDidLoad() {
-        
- 
-    }
-    
     //MARK:-Functions
     
     //Вызывается только при добавлении нового города!
     func userDidSelectNewCity(name: String) {
         locationGroup.addLocation(name) { [weak self] info in //Передаём название города в декодер
-            let cityLat = info.lat
-            let cityLon = info.lon
+            //let lat = info.lat
+            //let lon = info.lon
+            guard let city = info.response.geoObjectCollection.featureMember.first?.geoObject.point.pos else { return }
             
-            //let splits = city.split(separator: " ").map(String.init)
+            let splits = city.split(separator: " ").map(String.init)
             
-            //let lat = ((splits[1]) as NSString).doubleValue
-            //let lon = ((splits[0]) as NSString).doubleValue
+            let lat = ((splits[1]) as NSString).doubleValue
+            let lon = ((splits[0]) as NSString).doubleValue
             
-            let location = CLLocation(latitude: cityLat, longitude: cityLon)
+            let location = CLLocation(latitude: lat, longitude: lon)
             self?.fetchData(for: location)
         }
     }

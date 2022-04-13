@@ -15,7 +15,9 @@ class WelcomeViewController: UIViewController {
     let locationViewModel = LocationViewModel(locationService: LocationManager(), locationGroup: LocationGroup())
     let locationGroup = LocationGroup()
     
-    var currentIndex: Int?
+    var city: String?
+    
+    var currentIndex = 0
     
     var onboardImage: UIImageView = {
         var onboardImage = UIImageView()
@@ -143,9 +145,10 @@ class WelcomeViewController: UIViewController {
         
         WelcomeCore.shared.setIsNotNewUser()
         
-        let mainScreenViewController = MainScrenenViewController(viewModel: viewModel, locationViewModel: locationViewModel, currentIndex: currentIndex ?? 0)
+        let mainScreenViewController = MainScrenenViewController(viewModel: viewModel, locationViewModel: locationViewModel, currentIndex: currentIndex)
+        let pageViewController = PageViewController(viewModel: viewModel, locationViewModel: locationViewModel, currentIndex: currentIndex ?? 0)
         
-        let navigationControllerForAgree = UINavigationController(rootViewController: mainScreenViewController)
+        let navigationControllerForAgree = UINavigationController(rootViewController: pageViewController)
         navigationControllerForAgree.modalPresentationStyle = .fullScreen
         present(navigationControllerForAgree, animated: true, completion: nil)
         

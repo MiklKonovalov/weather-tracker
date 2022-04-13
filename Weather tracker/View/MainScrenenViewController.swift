@@ -12,26 +12,38 @@ import CoreData
 import Locksmith
 import RealmSwift
  
-//MARK: -Realm
+protocol AddNewCityDelegate: AnyObject {
+    func newCityDidSelected(name: Cities)
+}
 
+//MARK: -Realm
 class Cities: Object {
+    // TODO: RENAME TO name
     @objc dynamic var city = ""
 }
 
-class MainScrenenViewController: UIViewController {
+class MainScrenenViewController: UIViewController, ChangeWeatherDelegate {
     
     let viewModel: GeneralViewModel
     
     let locationViewModel: LocationViewModel
     
-    var currentIndex = 0
+    var currentIndex = 0 {
+        didSet {
+            mainCollectionView.reloadData()
+            todayCollectionView.reloadData()
+            weekCollectionView.reloadData()
+        }
+    }
+    
+    var selectionDelegate: AddNewCityDelegate?
     
     //MARK: -Realm
     let realm = try! Realm()
  
-    //MARK: -CoreData
+    var newCityDelegate: AddNewCityDelegate?
     
-    var cities = [CitiesMemory?]() {
+    var cities = [String?]() {
         didSet {
             DispatchQueue.main.async {
                 self.mainCollectionView.reloadData()
@@ -40,8 +52,6 @@ class MainScrenenViewController: UIViewController {
             }
         }
     }
-    
-    var cityNames = [String]()
     
     //MARK: - Views
     
@@ -187,11 +197,15 @@ class MainScrenenViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
+//        let pageViewController = PageViewController(viewModel: viewModel, locationViewModel: locationViewModel)
+//        
+//        pageViewController.changingDelegate = self
+        
         let realmCities = realm.objects(Cities.self)
         
         for city in realmCities {
             self.viewModel.userDidSelectNewCity(name: city.city)
-            //pageControl.numberOfPages = realmCities.count
+            
         }
         
     }
@@ -264,7 +278,7 @@ class MainScrenenViewController: UIViewController {
         }
         
         locationViewModel.newCityAdded = { city in
-            self.viewModel.userDidSelectNewCity(name: city)
+            self.viewModel.userDidSelectNewCity(name: city.geoObject.name)
         }
         
         //Получено текущее местоположение
@@ -379,52 +393,52 @@ class MainScrenenViewController: UIViewController {
     }
     
     //MARK: -CoreData
-    func saveCities(title: String) {
-        
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
-        
-        let persistanceConteiner = appDelegate.persistentContainer
-        
-        func newBackgroundContext() -> NSManagedObjectContext {
-            return persistanceConteiner.newBackgroundContext()
-        }
-        
-        //Переносим в фоновый поток
-        let context = newBackgroundContext()
-        
-        //Создаём объект
-        context.perform {
-            let citiesMemory = CitiesMemory(context: context)
-            citiesMemory.title = title
-            //Сохраняем данные
-            do {
-                try context.save()
-                self.cityNames.append(title)
-            } catch let error as NSError {
-                print(error.localizedDescription)
-            }
-        }
-    }
+//    func saveCities(title: String) {
+//        
+//        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+//        
+//        let persistanceConteiner = appDelegate.persistentContainer
+//        
+//        func newBackgroundContext() -> NSManagedObjectContext {
+//            return persistanceConteiner.newBackgroundContext()
+//        }
+//        
+//        //Переносим в фоновый поток
+//        let context = newBackgroundContext()
+//        
+//        //Создаём объект
+//        context.perform {
+//            let citiesMemory = CitiesMemory(context: context)
+//            citiesMemory.title = title
+//            //Сохраняем данные
+//            do {
+//                try context.save()
+//                self.cityNames.append(title)
+//            } catch let error as NSError {
+//                print(error.localizedDescription)
+//            }
+//        }
+//    }
     
-    func fetchCities() {
-
-        let fetchRequest: NSFetchRequest<CitiesMemory> = CitiesMemory.fetchRequest()
-        _ = title
-        let predicate = NSPredicate(format: "%K = %@", #keyPath(CitiesMemory.title))
-        fetchRequest.predicate = predicate
-        
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        let context = appDelegate.persistentContainer.viewContext
-
-        context.perform {
-            do {
-                let result = try context.fetch(fetchRequest)
-                self.cities = result
-            } catch let error as NSError {
-                print(error.localizedDescription)
-            }
-        }
-    }
+//    func fetchCities() {
+//
+//        let fetchRequest: NSFetchRequest<CitiesMemory> = CitiesMemory.fetchRequest()
+//        _ = title
+//        let predicate = NSPredicate(format: "%K = %@", #keyPath(CitiesMemory.title))
+//        fetchRequest.predicate = predicate
+//        
+//        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+//        let context = appDelegate.persistentContainer.viewContext
+//
+//        context.perform {
+//            do {
+//                let result = try context.fetch(fetchRequest)
+//                self.cities = result
+//            } catch let error as NSError {
+//                print(error.localizedDescription)
+//            }
+//        }
+//    }
             
     //MARK: - Selectors
     
@@ -455,6 +469,7 @@ class MainScrenenViewController: UIViewController {
                     self.realm.add([city])
                 }
                 
+                self.selectionDelegate?.newCityDidSelected(name: city)
             }
             
         })
