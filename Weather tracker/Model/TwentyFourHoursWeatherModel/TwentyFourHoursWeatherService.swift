@@ -24,7 +24,7 @@ enum TwentyFourHoursWeatherServiceError: Error {
 final class TwentyFourHoursWeatherService: ITwentyFourHoursWeatherService {
     
     func weatherURLString(forCoordinates coordinates: CLLocationCoordinate2D) -> String {
-       return "https://api.openweathermap.org/data/2.5/forecast?lat=\(coordinates.latitude)&lon=\(coordinates.longitude)&cnt=7&units=metric&appid=6554673c226a724c0b5a9afa11ed4d6f"
+       return "https://api.openweathermap.org/data/2.5/forecast?lat=\(coordinates.latitude)&lon=\(coordinates.longitude)&cnt=7&units=metric&appid=04865a1fa3d5d2578d52f3d8970c7bf9"
     }
     
     func getCitiesWeather(location: CLLocation?, completion: @escaping (Result<TwentyFourHoursCitiesWeather, Error>) -> Void) {

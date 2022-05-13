@@ -6,22 +6,6 @@
 //
 
 import Foundation
-//Openweathermap geodecode key
-/*struct NewCityData: Codable {
-    let name: String
-    let localNames: [String: String]?
-    let lat, lon: Double
-    let country, state: String?
-
-    enum CodingKeys: String, CodingKey {
-        case name
-        case localNames = "local_names"
-        case lat, lon, country, state
-    }
-}
-
-typealias NewCityDatum = [NewCityData]*/
-//Yandex geodecode key
 
 // MARK: - NewCityData
 struct NewCityData: Decodable {

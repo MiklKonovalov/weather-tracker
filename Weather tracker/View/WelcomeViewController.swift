@@ -145,8 +145,7 @@ class WelcomeViewController: UIViewController {
         
         WelcomeCore.shared.setIsNotNewUser()
         
-        let mainScreenViewController = MainScrenenViewController(viewModel: viewModel, locationViewModel: locationViewModel, currentIndex: currentIndex)
-        let pageViewController = PageViewController(viewModel: viewModel, locationViewModel: locationViewModel, currentIndex: currentIndex ?? 0)
+        let pageViewController = PageViewController(viewModel: viewModel, locationViewModel: locationViewModel, currentIndex: currentIndex)
         
         let navigationControllerForAgree = UINavigationController(rootViewController: pageViewController)
         navigationControllerForAgree.modalPresentationStyle = .fullScreen
@@ -163,7 +162,9 @@ class WelcomeViewController: UIViewController {
                         weekWeatherService: WeekWeatherService(),
                         newWeatherService: NewCityWeatherService(),
                         newTFHWeatherService: NewCityTFHWeatherService(),
-                        newCityWeekWeatherService: NewCityWeekWeatherService()))
+                        newCityWeekWeatherService: NewCityWeekWeatherService()),
+                        locationViewModel: locationViewModel)
+        
         let navigationController = UINavigationController(rootViewController: noCityWeatherViewController)
         navigationController.modalPresentationStyle = .fullScreen
         present(navigationController, animated: true, completion: nil)

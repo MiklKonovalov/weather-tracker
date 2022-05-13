@@ -13,7 +13,7 @@ class TwentyFourHoursCollectionViewCell: UICollectionViewCell {
         let label = UILabel()
         label.font = UIFont(name: "Rubik-Medium", size: 16)
         label.textColor = .black
-        label.textAlignment = .right
+        label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -22,7 +22,7 @@ class TwentyFourHoursCollectionViewCell: UICollectionViewCell {
         let label = UILabel()
         label.font = UIFont(name: "Rubik-Medium", size: 12)
         label.textColor = UIColor(red: 0.613, green: 0.592, blue: 0.592, alpha: 1)
-        label.textAlignment = .right
+        label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()

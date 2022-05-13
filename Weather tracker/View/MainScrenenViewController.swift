@@ -13,20 +13,22 @@ import Locksmith
 import RealmSwift
  
 protocol AddNewCityDelegate: AnyObject {
-    func newCityDidSelected(name: Cities)
+    func newCityDidSelected(name: String)
 }
 
 //MARK: -Realm
 class Cities: Object {
-    // TODO: RENAME TO name
     @objc dynamic var city = ""
+    @objc dynamic var id = 0
 }
 
-class MainScrenenViewController: UIViewController, ChangeWeatherDelegate {
+class MainScrenenViewController: UIViewController {
     
     let viewModel: GeneralViewModel
     
     let locationViewModel: LocationViewModel
+    
+    weak var pageViewController: PageViewController?
     
     var currentIndex = 0 {
         didSet {
@@ -36,31 +38,14 @@ class MainScrenenViewController: UIViewController, ChangeWeatherDelegate {
         }
     }
     
-    var selectionDelegate: AddNewCityDelegate?
+    weak var selectionDelegate: AddNewCityDelegate?
     
     //MARK: -Realm
     let realm = try! Realm()
  
     var newCityDelegate: AddNewCityDelegate?
     
-    var cities = [String?]() {
-        didSet {
-            DispatchQueue.main.async {
-                self.mainCollectionView.reloadData()
-                self.todayCollectionView.reloadData()
-                self.weekCollectionView.reloadData()
-            }
-        }
-    }
-    
     //MARK: - Views
-    
-//    lazy var scrollView: UIScrollView = {
-//        let scrollView = UIScrollView()
-//        scrollView.keyboardDismissMode = UIScrollView.KeyboardDismissMode.onDrag
-//        scrollView.delegate = self
-//        return scrollView
-//    }()
     
     //UILabel
     var cityLabel: UILabel = {
@@ -91,17 +76,6 @@ class MainScrenenViewController: UIViewController, ChangeWeatherDelegate {
         return settingsButton
     }()
     
-    //UIPage Controller
-//    lazy var pageControl: UIPageControl = {
-//        let pageControl = UIPageControl()
-//        pageControl.pageIndicatorTintColor = .gray
-//
-//        pageControl.currentPageIndicatorTintColor = .black
-//        pageControl.translatesAutoresizingMaskIntoConstraints = false
-//        pageControl.addTarget(self, action: #selector(pageControlTapHandler(sender:)), for: .touchUpInside)
-//        return pageControl
-//    }()
-    
     //UIView slider and Scroll View
     var mainCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -113,7 +87,6 @@ class MainScrenenViewController: UIViewController, ChangeWeatherDelegate {
         collectionView.backgroundColor = .white
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.isPagingEnabled = true
-        
         return collectionView
     }()
     
@@ -182,11 +155,15 @@ class MainScrenenViewController: UIViewController, ChangeWeatherDelegate {
     
     //MARK: - Initialization
     
-    init(viewModel: GeneralViewModel, locationViewModel: LocationViewModel, currentIndex: Int) {
+    init(viewModel: GeneralViewModel,
+         locationViewModel: LocationViewModel,
+         currentIndex: Int
+        ) {
         self.viewModel = viewModel
         self.locationViewModel = locationViewModel
         self.currentIndex = currentIndex
-        super.init(nibName: nil, bundle: nil)
+        super.init(nibName: nil, bundle: nil
+        )
     }
     
     required init?(coder: NSCoder) {
@@ -197,17 +174,11 @@ class MainScrenenViewController: UIViewController, ChangeWeatherDelegate {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-//        let pageViewController = PageViewController(viewModel: viewModel, locationViewModel: locationViewModel)
-//        
-//        pageViewController.changingDelegate = self
-        
         let realmCities = realm.objects(Cities.self)
         
         for city in realmCities {
-            self.viewModel.userDidSelectNewCity(name: city.city)
-            
+            self.viewModel.userDidSelectNewCity(name: city.city, id: city.id)
         }
-        
     }
 
     override func viewDidLoad() {
@@ -215,20 +186,15 @@ class MainScrenenViewController: UIViewController, ChangeWeatherDelegate {
         
         view.backgroundColor = .white
         
-        //view.addSubview(scrollView)
-        
         view.addSubview(settingsButton)
         view.addSubview(locationButton)
         view.addSubview(cityLabel)
         view.addSubview(mainCollectionView)
-        //view.addSubview(pageControl)
         view.addSubview(detauls24Button)
         view.addSubview(todayCollectionView)
         view.addSubview(weekCollectionView)
         view.addSubview(everydayLabel)
         view.addSubview(twentyFiveDayButton)
-        
-        //scrollView.delegate = self
         
         let attributeString = NSMutableAttributedString(string: "Подробнее на 24 часа", attributes: yourAttributes)
         let twentyFiveDayButtonAttributeString = NSMutableAttributedString(string: "25 дней", attributes: yourAttributes)
@@ -273,30 +239,34 @@ class MainScrenenViewController: UIViewController, ChangeWeatherDelegate {
                 self.mainCollectionView.reloadData()
                 self.todayCollectionView.reloadData()
                 self.weekCollectionView.reloadData()
-                self.cityLabel.text = self.viewModel.weather[self.currentIndex].now.name
+                
+                if self.realm.objects(Cities.self).first == nil {
+                    self.cityLabel.text = self.viewModel.weather.first?.now.name
+                    
+                    guard let firstCity = self.viewModel.weather.first?.now.name else { return }
+                    
+                    let city = Cities()
+                    city.city = firstCity
+                    city.id = 0
+
+                    try! self.realm.write {
+                        self.realm.add([city])
+                    }
+                } else {
+                    self.cityLabel.text = self.realm.objects(Cities.self)[self.currentIndex].city
+                }
             }
         }
         
         locationViewModel.newCityAdded = { city in
-            self.viewModel.userDidSelectNewCity(name: city.geoObject.name)
+            self.viewModel.userDidSelectNewCity(name: city.geoObject.name, id: city.geoObject.name.count)
         }
-        
-        //Получено текущее местоположение
-        locationViewModel.locationDidLoad()
-        locationViewModel.newLocationDidLoad()
-        
     }
     
     //MARK: -Functions
     
     func setupConstraints() {
-        
         let constraints = [
-        
-//            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-//            scrollView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor),
-//            scrollView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor),
-//            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             
             settingsButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
             settingsButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10),
@@ -314,10 +284,6 @@ class MainScrenenViewController: UIViewController, ChangeWeatherDelegate {
             mainCollectionView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor),
             mainCollectionView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor),
             mainCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            
-//            pageControl.topAnchor.constraint(equalTo: cityLabel.bottomAnchor, constant: 10),
-//            pageControl.widthAnchor.constraint(equalTo: view.widthAnchor),
-//            pageControl.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             
             detauls24Button.heightAnchor.constraint(equalToConstant: 20),
             detauls24Button.trailingAnchor.constraint(equalTo: mainCollectionView.trailingAnchor, constant: -2),
@@ -349,38 +315,9 @@ class MainScrenenViewController: UIViewController, ChangeWeatherDelegate {
         return 1
     }
     
-//    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-//
-//        let offSet = scrollView.contentOffset.x
-//        let width = scrollView.frame.width
-//        let horizontalCenter = width / 2
-//
-//        let currentPage = Int(offSet + horizontalCenter) / Int(width)
-//
-//        if !decelerate {
-//            updateLabels(with: currentPage)
-//        }
-//    }
-    
-//    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-//
-//        let offSet = scrollView.contentOffset.x
-//        let width = scrollView.frame.width
-//        let horizontalCenter = width / 2
-//
-//        let currentPage = Int(offSet + horizontalCenter) / Int(width)
-//
-//        if currentPage != currentIndex {
-//            updateLabels(with: currentPage)
-//        }
-//
-//        pageControl.currentPage = currentPage
-//
-//    }
-    
-    func updateLabels(with index: Int) {
+    func updateLabels(with id: Int) {
         
-        currentIndex = index
+        currentIndex = id
 
         if currentIndex == viewModel.weather.count {
                 currentIndex = 0
@@ -391,55 +328,7 @@ class MainScrenenViewController: UIViewController, ChangeWeatherDelegate {
         self.todayCollectionView.reloadData()
         self.weekCollectionView.reloadData()
     }
-    
-    //MARK: -CoreData
-//    func saveCities(title: String) {
-//        
-//        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
-//        
-//        let persistanceConteiner = appDelegate.persistentContainer
-//        
-//        func newBackgroundContext() -> NSManagedObjectContext {
-//            return persistanceConteiner.newBackgroundContext()
-//        }
-//        
-//        //Переносим в фоновый поток
-//        let context = newBackgroundContext()
-//        
-//        //Создаём объект
-//        context.perform {
-//            let citiesMemory = CitiesMemory(context: context)
-//            citiesMemory.title = title
-//            //Сохраняем данные
-//            do {
-//                try context.save()
-//                self.cityNames.append(title)
-//            } catch let error as NSError {
-//                print(error.localizedDescription)
-//            }
-//        }
-//    }
-    
-//    func fetchCities() {
-//
-//        let fetchRequest: NSFetchRequest<CitiesMemory> = CitiesMemory.fetchRequest()
-//        _ = title
-//        let predicate = NSPredicate(format: "%K = %@", #keyPath(CitiesMemory.title))
-//        fetchRequest.predicate = predicate
-//        
-//        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-//        let context = appDelegate.persistentContainer.viewContext
-//
-//        context.perform {
-//            do {
-//                let result = try context.fetch(fetchRequest)
-//                self.cities = result
-//            } catch let error as NSError {
-//                print(error.localizedDescription)
-//            }
-//        }
-//    }
-            
+
     //MARK: - Selectors
     
     //MARK: - UIAlertController
@@ -458,22 +347,9 @@ class MainScrenenViewController: UIViewController, ChangeWeatherDelegate {
 
                 //Передаю значение textField в функцию в качестве параметра
                 guard let text = textField?.text else { return }
-                
-                self.viewModel.userDidSelectNewCity(name: text)
-            
-                //Сохраняем данные в Realm
-                let city = Cities()
-                city.city = text
-                
-                try! self.realm.write {
-                    self.realm.add([city])
-                }
-                
-                self.selectionDelegate?.newCityDidSelected(name: city)
+                self.selectionDelegate?.newCityDidSelected(name: text)
             }
-            
         })
-        
         
         alert.addAction(UIAlertAction(title: "Отмена", style: .default, handler: nil))
 
@@ -482,7 +358,6 @@ class MainScrenenViewController: UIViewController, ChangeWeatherDelegate {
     
     //ShowSettingsController
     @objc func settingsButtonTap() {
-        
         let settingsViewController = SettingsViewController()
         let navigationController2 = UINavigationController(rootViewController: settingsViewController)
         navigationController2.modalPresentationStyle = .fullScreen
@@ -500,21 +375,17 @@ class MainScrenenViewController: UIViewController, ChangeWeatherDelegate {
         navigationController.modalPresentationStyle = .fullScreen
         present(navigationController, animated: true, completion: nil)
     }
-    
 }
 
 //MARK: - Collection
-
 extension MainScrenenViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if collectionView == self.mainCollectionView {
-            return viewModel.weather.count
+            return 1
         } else if collectionView == self.todayCollectionView {
-            //currentIndex - это количество имеющихся городов. При загрузке приложения этот индекс = 0, так как у нас есть 1 город. Если при загрузке информация ещё не загрузилась, то мы покажем 7 ячеек
-            if currentIndex != 0 {
-                //Я хочу показать количество ячеек равное 7 и в list их 7
-                return viewModel.weather[currentIndex].day.list.count
+            if currentIndex > viewModel.weather.startIndex {
+                return 7
             } else {
                 return 7
             }
@@ -523,59 +394,120 @@ extension MainScrenenViewController: UICollectionViewDataSource {
         }
     }
 
-    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         //MARK: -Now Cell
         if collectionView == self.mainCollectionView {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "sliderCell", for: indexPath) as! DayWeatherCell
-             
-            if let main = viewModel.weather[indexPath.item].now.main?.temp {
-                cell.mainTemperatureLabel.text = String(format: "%.0f", main) + "°"
+            
+            if currentIndex > viewModel.weather.startIndex && currentIndex < viewModel.weather.endIndex {
+                if let main = viewModel.weather[currentIndex].now.main?.temp {
+                    cell.mainTemperatureLabel.text = String(format: "%.0f", main) + "°"
+                } else {
+                    cell.mainTemperatureLabel.text = "?"
+                }
             } else {
-                cell.mainTemperatureLabel.text = "?"
+                if let main = viewModel.weather.first?.now.main?.temp {
+                    cell.mainTemperatureLabel.text = String(format: "%.0f", main) + "°"
+                } else {
+                    cell.mainTemperatureLabel.text = "?"
+                }
             }
             
-            if let minTemp = viewModel.weather[indexPath.item].now.main?.temp_min {
-                cell.minTemperatureLabel.text = String(format: "%.0f", minTemp) + "°"
+            if currentIndex > viewModel.weather.startIndex && currentIndex < viewModel.weather.endIndex {
+                if let minTemp = viewModel.weather[currentIndex].now.main?.temp_min {
+                    cell.minTemperatureLabel.text = String(format: "%.0f", minTemp) + "°"
+                } else {
+                    cell.minTemperatureLabel.text = "?"
+                }
             } else {
-                cell.minTemperatureLabel.text = "?"
+                if let minTemp = viewModel.weather.first?.now.main?.temp_min {
+                    cell.minTemperatureLabel.text = String(format: "%.0f", minTemp) + "°"
+                } else {
+                    cell.minTemperatureLabel.text = "?"
+                }
             }
             
-            if let maxTemp = viewModel.weather[indexPath.item].now.main?.temp_max {
-                cell.maxTemperatureLabel.text = String(format: "%.0f", maxTemp) + "°"
+            if currentIndex > viewModel.weather.startIndex && currentIndex < viewModel.weather.endIndex {
+                if let maxTemp = viewModel.weather[currentIndex].now.main?.temp_max {
+                    cell.maxTemperatureLabel.text = String(format: "%.0f", maxTemp) + "°"
+                } else {
+                    cell.maxTemperatureLabel.text = "?"
+                }
             } else {
-                cell.maxTemperatureLabel.text = "?"
+                if let maxTemp = viewModel.weather.first?.now.main?.temp_max {
+                    cell.maxTemperatureLabel.text = String(format: "%.0f", maxTemp) + "°"
+                } else {
+                    cell.maxTemperatureLabel.text = "?"
+                }
             }
             
-            if let description = viewModel.weather[indexPath.item].now.weather?[0].description {
-                cell.weatherDescriptionLabel.text = description
-            }
-            
-            if let windSpeed = viewModel.weather[indexPath.item].now.wind?.speed {
-                cell.windSpeedLabel.text = String(format: "%.0f", windSpeed) + "м/с"
+            if currentIndex > viewModel.weather.startIndex && currentIndex < viewModel.weather.endIndex {
+                if let description = viewModel.weather[currentIndex].now.weather?[0].description {
+                    cell.weatherDescriptionLabel.text = description
+                }
+                
+                if let windSpeed = viewModel.weather[currentIndex].now.wind?.speed {
+                    cell.windSpeedLabel.text = String(format: "%.0f", windSpeed) + "м/с"
+                } else {
+                    cell.windSpeedLabel.text = "?"
+                }
             } else {
-                cell.windSpeedLabel.text = "?"
+                if let description = viewModel.weather.first?.now.weather?[0].description {
+                    cell.weatherDescriptionLabel.text = description
+                }
+                
+                if let windSpeed = viewModel.weather.first?.now.wind?.speed {
+                    cell.windSpeedLabel.text = String(format: "%.0f", windSpeed) + "м/с"
+                } else {
+                    cell.windSpeedLabel.text = "?"
+                }
             }
             
-            if let clouds = viewModel.weather[indexPath.item].now.clouds?.all {
-                cell.cloudsLabel.text = String(format: "%.0f", clouds)
+            if currentIndex > viewModel.weather.startIndex && currentIndex < viewModel.weather.endIndex {
+                if let clouds = viewModel.weather[currentIndex].now.clouds?.all {
+                    cell.cloudsLabel.text = String(format: "%.0f", clouds)
+                } else {
+                    cell.cloudsLabel.text = "?"
+                }
             } else {
-                cell.cloudsLabel.text = "?"
+                if let clouds = viewModel.weather.first?.now.clouds?.all {
+                    cell.cloudsLabel.text = String(format: "%.0f", clouds)
+                } else {
+                    cell.cloudsLabel.text = "?"
+                }
             }
             
-            if let humidity = viewModel.weather[indexPath.item].now.main?.humidity {
-                cell.humidityLabel.text = String(format: "%.0f", humidity) + "%"
+            if currentIndex > viewModel.weather.startIndex && currentIndex < viewModel.weather.endIndex {
+                if let humidity = viewModel.weather[currentIndex].now.main?.humidity {
+                    cell.humidityLabel.text = String(format: "%.0f", humidity) + "%"
+                } else {
+                    cell.humidityLabel.text = "?"
+                }
             } else {
-                cell.humidityLabel.text = "?"
+                if let humidity = viewModel.weather.first?.now.main?.humidity {
+                    cell.humidityLabel.text = String(format: "%.0f", humidity) + "%"
+                } else {
+                    cell.humidityLabel.text = "?"
+                }
             }
             
-            let dateSunrise = viewModel.weather[indexPath.item].now.sys?.sunrise
-            let formateSunrise = dateSunrise?.getFormattedDate(format: "HH:mm")
-            cell.sunrise.text = formateSunrise
-            
-            let dateSunset = viewModel.weather[indexPath.item].now.sys?.sunset
-            let formateSunset = dateSunset?.getFormattedDate(format: "HH:mm")
-            cell.sunset.text = formateSunset
+            if currentIndex > viewModel.weather.startIndex && currentIndex < viewModel.weather.endIndex {
+                let dateSunrise = viewModel.weather[currentIndex].now.sys?.sunrise
+                let formateSunrise = dateSunrise?.getFormattedDate(format: "HH:mm")
+                cell.sunrise.text = formateSunrise
+                
+                let dateSunset = viewModel.weather[currentIndex].now.sys?.sunset
+                let formateSunset = dateSunset?.getFormattedDate(format: "HH:mm")
+                cell.sunset.text = formateSunset
+            } else {
+                let dateSunrise = viewModel.weather.first?.now.sys?.sunrise
+                let formateSunrise = dateSunrise?.getFormattedDate(format: "HH:mm")
+                cell.sunrise.text = formateSunrise
+                
+                let dateSunset = viewModel.weather.first?.now.sys?.sunset
+                let formateSunset = dateSunset?.getFormattedDate(format: "HH:mm")
+                cell.sunset.text = formateSunset
+            }
             
             let date = Date()
             let dateFormatter = DateFormatter()
@@ -595,8 +527,6 @@ extension MainScrenenViewController: UICollectionViewDataSource {
             cellTwo.layer.cornerRadius = 22
             
             //MARK: -Temp
-            
-            //Проверим, есть ли в viewModel.weather значения. Если значений нет, то покажем первый элемент массива?
             if currentIndex > viewModel.weather.startIndex && currentIndex < viewModel.weather.endIndex {
                 let arrayTemp = viewModel.weather[currentIndex].day.list[indexPath.item].main.temp
                 cellTwo.mainTemperatureLabel.text = String(format: "%.0f", arrayTemp) + "°"
@@ -622,16 +552,9 @@ extension MainScrenenViewController: UICollectionViewDataSource {
             
                 let dateString = dateFormatter2.string(from: dateDate ?? Date())
                 cellTwo.timeLabel.text = dateString
-                
-                if indexPath.item == 1 {
-                    cellTwo.backgroundColor = UIColor.blue
-                    cellTwo.timeLabel.textColor = UIColor.white
-                    cellTwo.mainTemperatureLabel.textColor = UIColor.white
-                }
-            
             }
             //MARK: -Icon
-            if currentIndex > viewModel.weather.startIndex || currentIndex < viewModel.weather.endIndex {
+            if currentIndex > viewModel.weather.startIndex && currentIndex < viewModel.weather.endIndex  {
                 if let icon = viewModel.weather[currentIndex].week.daily[indexPath.item].weather[0].icon {
                     let urlStr = "http://openweathermap.org/img/w/" + (icon) + ".png"
                         let url = URL(string: urlStr)
@@ -641,23 +564,19 @@ extension MainScrenenViewController: UICollectionViewDataSource {
                         }
                     }
             } else {
-                if currentIndex > viewModel.weather.startIndex || currentIndex < viewModel.weather.endIndex {
-                    if let icon = viewModel.weather.first?.week.daily[indexPath.item].weather[0].icon {
+                if let icon = viewModel.weather.first?.week.daily[indexPath.item].weather[0].icon {
                         let urlStr = "http://openweathermap.org/img/w/" + (icon) + ".png"
                             let url = URL(string: urlStr)
                             cellTwo.imageView.kf.setImage(with: url) { result in
-                                print(result)
                                 cellTwo.setNeedsLayout()
                             }
                         }
-                }
             }
             
         return cellTwo
         
         } else {
         //MARK: -WeekWeather
-            
         let cellThree = collectionView.dequeueReusableCell(withReuseIdentifier: "bottomCell", for: indexPath) as! WeekCollectionViewCell
             
             //MARK: -Date
@@ -676,7 +595,7 @@ extension MainScrenenViewController: UICollectionViewDataSource {
             } 
           
             //MARK: -Icon
-            if currentIndex > viewModel.weather.startIndex || currentIndex < viewModel.weather.endIndex {
+            if currentIndex > viewModel.weather.startIndex && currentIndex < viewModel.weather.endIndex {
                 if let icon = viewModel.weather[currentIndex].week.daily[indexPath.item].weather[0].icon {
                     let urlStr = "http://openweathermap.org/img/w/" + (icon) + ".png"
                         let url = URL(string: urlStr)
@@ -686,8 +605,7 @@ extension MainScrenenViewController: UICollectionViewDataSource {
                         }
                     }
             } else {
-                if currentIndex > viewModel.weather.startIndex || currentIndex < viewModel.weather.endIndex {
-                    if let icon = viewModel.weather.first?.week.daily[indexPath.item].weather[0].icon {
+                if let icon = viewModel.weather.first?.week.daily[indexPath.item].weather[0].icon {
                         let urlStr = "http://openweathermap.org/img/w/" + (icon) + ".png"
                             let url = URL(string: urlStr)
                             cellThree.weatherImageView.kf.setImage(with: url) { result in
@@ -695,22 +613,22 @@ extension MainScrenenViewController: UICollectionViewDataSource {
                                 cellThree.setNeedsLayout()
                             }
                         }
-                }
             }
             
             //MARK: -Rain
-            if currentIndex > 0 {
+            if currentIndex > viewModel.weather.startIndex && currentIndex < viewModel.weather.endIndex  {
                 if let arrayRain = viewModel.weather[currentIndex].week.daily[indexPath.item].rain {
-                    cellThree.rainLabel.text = String(format: "%.0f", arrayRain)
+                    cellThree.rainLabel.text = String(format: "%.0f", arrayRain) + "%"
                 }
-            } else {
-                if let arrayRain = viewModel.weather.first?.week.daily[indexPath.item].rain {
-                cellThree.rainLabel.text = String(format: "%.0f", arrayRain)
+            } else if let arrayRain = viewModel.weather.first?.week.daily[indexPath.item].rain {
+                    cellThree.rainLabel.text = String(format: "%.0f", arrayRain) + "%"
                 }
+             else if viewModel.weather.first?.week.daily[indexPath.item].rain == nil {
+                cellThree.rainLabel.text = "0%"
             }
             
             //MARK: -Description
-            if currentIndex > viewModel.weather.startIndex || currentIndex < viewModel.weather.endIndex {
+            if currentIndex > viewModel.weather.startIndex && currentIndex < viewModel.weather.endIndex  {
                 let weatherDescription = viewModel.weather[currentIndex].week.daily[indexPath.item].weather[0].description
                 cellThree.weatherDescriptionLabel.text = weatherDescription
             } else {
@@ -719,7 +637,7 @@ extension MainScrenenViewController: UICollectionViewDataSource {
             }
             
             //MARK: -minTemp
-            if currentIndex > viewModel.weather.startIndex && currentIndex < viewModel.weather.endIndex {
+            if currentIndex > viewModel.weather.startIndex && currentIndex < viewModel.weather.endIndex  {
             
                 if let minTemp = viewModel.weather[currentIndex].week.daily[indexPath.row].temp.min {
                 let minTempString = String(format: "%.0f", minTemp)
@@ -736,7 +654,7 @@ extension MainScrenenViewController: UICollectionViewDataSource {
             }
             
             //MARK: -maxTemp
-            if currentIndex > viewModel.weather.startIndex && currentIndex < viewModel.weather.endIndex {
+            if currentIndex > viewModel.weather.startIndex && currentIndex < viewModel.weather.endIndex  {
             
                 if let maxTemp = viewModel.weather[currentIndex].week.daily[indexPath.row].temp.max {
                     let maxTempString = String(format: "%.0f", maxTemp)

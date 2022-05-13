@@ -74,7 +74,6 @@ class DayCityWeatherViewController: UIViewController {
     //Diagonal
     var diagonalView: UIView = {
         let diagonalView = UIView()
-        //diagonalView.backgroundColor = .clear
         diagonalView.translatesAutoresizingMaskIntoConstraints = false
         return diagonalView
     }()
@@ -124,7 +123,6 @@ class DayCityWeatherViewController: UIViewController {
     let mask = CAShapeLayer()
     
     //MARK: -Selectors
-    
     @objc func arrowButtonTap() {
         navigationController?.dismiss(animated: true, completion: nil)
     }
@@ -144,10 +142,7 @@ class DayCityWeatherViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-
         self.tableview.deselectSelectedRow(animated: true)
-        
-        
     }
     
     override func viewDidLoad() {
@@ -187,17 +182,9 @@ class DayCityWeatherViewController: UIViewController {
         blueView.addSubview(diagonalView)
         diagonalView.backgroundColor = UIColor(red: 0.914, green: 0.933, blue: 0.98, alpha: 1)
         
-        let lineView = LineView(frame: CGRect(x: 0, y: 160, width: view.frame.width, height: 30)) //Можно ли это разместить констрейнтом?
+        let lineView = LineView(frame: CGRect(x: 0, y: 160, width: view.frame.width, height: 30))
         blueView.addSubview(lineView)
         lineView.backgroundColor = UIColor(red: 0.914, green: 0.933, blue: 0.98, alpha: 1)
-        
-        //Создаём простую прямоугольную вью с градиентом
-        let triangleView = TriangleView(frame: CGRect(x: 0, y: 200, width: view.frame.width, height: 50))
-        self.view.addSubview(triangleView)
-        //Устанавливаем градиент (и, соотетственно, цвет)
-        gradientLayer.frame = triangleView.bounds
-        gradientLayer.colors = [UIColor(red: 0.914, green: 0.933, blue: 0.98, alpha: 1).cgColor, UIColor.blue.cgColor, UIColor(red: 0.914, green: 0.933, blue: 0.98, alpha: 1).cgColor]
-        triangleView.layer.insertSublayer(gradientLayer, at: 0)
         
         //Создаём вью с треугольников (фон - прозрачный, треугольник - синий)
         let maskTriangleView = MaskTriangleView(frame: CGRect(x: 0, y: 150, width: view.frame.width, height: 50))
@@ -313,11 +300,6 @@ class DiagonalView : UIView {
         path.stroke()
         
     }
-    
-}
-
-//MARK: -Вью для треугольника с градиентом
-class TriangleView: UIView {
     
 }
 
@@ -665,7 +647,7 @@ extension DayCityWeatherViewController: UITableViewDataSource {
         if rain != nil {
             cell.rainValueLabel.text = String(format: "%.0f", rain!) + "%"
         } else {
-            cell.rainValueLabel.text = "?"
+            cell.rainValueLabel.text = "0 %"
         }
         //MARK: -Cloud Value
         let cloud = viewModel.weather[currentIndex].day.list[indexPath.item].clouds.all
@@ -696,6 +678,5 @@ extension UITableView {
             self.deselectRow(at: indexPathForSelectedRow, animated: animated)
         }
     }
-
 }
 

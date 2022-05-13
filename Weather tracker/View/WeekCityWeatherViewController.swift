@@ -1438,23 +1438,23 @@ extension WeekCityWeatherViewController: UICollectionViewDelegate {
         
         //MARK: -Day feels like
         let dayFeelsLike = viewModel.weather[currentIndex].week.daily[selectedIndex].feelsLike.day
-            feelsLikeValueLabel.text = "\(dayFeelsLike) °"
+            feelsLikeValueLabel.text = String(format: "%.0f", dayFeelsLike) + " " + "°"
         
         //MARK: -Wind
         let wind = viewModel.weather[currentIndex].week.daily[selectedIndex].windSpeed
-            windValueLabel.text = "\(wind) м/с"
+            windValueLabel.text = String(format: "%.0f", wind) + " " + "м/с"
         
         //MARK: -UF Index
         let ufIndex = viewModel.weather[currentIndex].week.daily[selectedIndex].uvi
-            ufIndexValueLabel.text = "\(ufIndex)"
+            ufIndexValueLabel.text = String(format: "%.0f", ufIndex)
         
         //MARK: -Rain
         let rainTop = viewModel.weather[currentIndex].week.daily[selectedIndex].rain
-        rainValueLabelBottom.text = "\(rainTop ?? 0) %"
+        rainValueLabelBottom.text = String(format: "%.0f", rainTop ?? 0) + " " + "%"
         
         //MARK: -Clouds
         let cloud = viewModel.weather[currentIndex].week.daily[selectedIndex].clouds
-        cloudsValueLabel.text = "\(cloud) %"
+        cloudsValueLabel.text = String(format: "%.0f", cloud) + " " + "%"
         
     //MARK: -BottomView
         
@@ -1491,24 +1491,24 @@ extension WeekCityWeatherViewController: UICollectionViewDelegate {
         
         //MARK: -Day feels like
         let dayFeelsLikeBottom = viewModel.weather[currentIndex].week.daily[selectedIndex].feelsLike.night
-            feelsLikeValueLabelBottom.text = "\(dayFeelsLikeBottom) °"
+            feelsLikeValueLabelBottom.text = String(format: "%.0f", dayFeelsLikeBottom) + " " + "°"
         
         //MARK: -Wind
         let windBottom = viewModel.weather[currentIndex].week.daily[selectedIndex].windSpeed
-            windValueLabelBottom.text = "\(windBottom) м/с"
+            windValueLabelBottom.text = String(format: "%.0f", windBottom) + " " + "м/с"
         
         //MARK: -UF Index
         let ufIndexBottom = viewModel.weather[currentIndex].week.daily[selectedIndex].uvi
-            ufIndexValueLabelBottom.text = "\(ufIndexBottom) %"
+            ufIndexValueLabelBottom.text = String(format: "%.0f", ufIndexBottom)
 
         
         //MARK: -Rain
         let rainBottom = viewModel.weather[currentIndex].week.daily[selectedIndex].rain
-        rainValueLabelBottom.text = "\(rainBottom ?? 0) %"
+        rainValueLabelBottom.text = String(format: "%.0f", rainBottom ?? 0) + " " + "%"
         
         //MARK: -Clouds
         let cloudBottom = viewModel.weather[currentIndex].week.daily[selectedIndex].clouds
-        cloudsValueLabelBottom.text = "\(cloudBottom) %"
+        cloudsValueLabelBottom.text = String(format: "%.0f", cloudBottom) + " " + "%"
         
         self.dateCollectionView.reloadData()
         

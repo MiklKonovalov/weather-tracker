@@ -23,7 +23,7 @@ class LocationManager: NSObject, ILocationService, CLLocationManagerDelegate {
     
     //Получение локации!
     public func getUserLocation(completion: @escaping ((CLLocation) -> Void)) {
-        self.completion = completion //Что это значит?
+        self.completion = completion 
         manager.requestWhenInUseAuthorization()
         manager.delegate = self
         manager.startUpdatingLocation()

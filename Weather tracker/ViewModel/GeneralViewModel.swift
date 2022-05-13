@@ -7,11 +7,12 @@
 
 import Foundation
 import CoreLocation
+import RealmSwift
 
 //Данная Вью Модель связывает все сервисы, получение текущей локации, получение локации нового города и передаёёт в контроллер
 class GeneralViewModel {
     
-    typealias CityWeather = (now: CitiesWeather, day: TwentyFourHoursCitiesWeather, week: WeekWeather)
+    typealias CityWeather = (now: CitiesWeather, day: TwentyFourHoursCitiesWeather, week: WeekWeather, id: Int)
     
     //MARK:-Properties
     let locationManager: LocationManager 
@@ -24,6 +25,10 @@ class GeneralViewModel {
     let newWeatherService: NewCityWeatherService
     let newTFHWeatherService: NewCityTFHWeatherService
     let newCityWeekWeatherService: NewCityWeekWeatherService
+    
+    let realm = try! Realm()
+    
+    var id: Int?
     
     var currentWeather: MainScreenViewModel?
     var twentyFourHoursWeather: TwentyFourHoursMainScreenWeatherModel?
@@ -60,10 +65,9 @@ class GeneralViewModel {
     //MARK:-Functions
     
     //Вызывается только при добавлении нового города!
-    func userDidSelectNewCity(name: String) {
+    func userDidSelectNewCity(name: String, id: Int) {
         locationGroup.addLocation(name) { [weak self] info in //Передаём название города в декодер
-            //let lat = info.lat
-            //let lon = info.lon
+
             guard let city = info.response.geoObjectCollection.featureMember.first?.geoObject.point.pos else { return }
             
             let splits = city.split(separator: " ").map(String.init)
@@ -80,6 +84,7 @@ class GeneralViewModel {
         locationManager.getUserLocation(completion: completion)
     }
     
+    //Новая погода
     func fetchNewData(for location: CLLocation) {
         let dispatchGroup = DispatchGroup()
         var now: CitiesWeather?
@@ -120,13 +125,15 @@ class GeneralViewModel {
         }
         
         dispatchGroup.notify(queue: DispatchQueue.main) {
-            guard let now = now, let day = day, let week = week else { return }
-            self.weather.append((now: now, day: day, week: week))
+            self.id = self.realm.objects(Cities.self).first?.id
+            guard let now = now, let day = day, let week = week, let id = self.id else { return }
+            self.weather.append((now: now, day: day, week: week, id: id))
             self.viewModelForNewCityDidChange?()
         }
         
     }
     
+    //Получение локации
     func fetchData(for location: CLLocation) {
         let dispatchGroup = DispatchGroup()
         var now: CitiesWeather?
@@ -169,9 +176,9 @@ class GeneralViewModel {
         
         
         dispatchGroup.notify(queue: DispatchQueue.main) {
-            guard let now = now, let day = day, let week = week else { return }
-            self.weather.append((now: now, day: day, week: week)) //Почему добавляются 2 Москвы?
-            print(self.weather.endIndex)
+            self.id = 0
+            guard let now = now, let day = day, let week = week, let id = self.id else { return }
+            self.weather.append((now: now, day: day, week: week, id: id))
             self.viewModelDidChange?()
         }
     }

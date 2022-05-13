@@ -18,7 +18,7 @@ final class NewCityWeekWeatherService {
     var locationGroup: LocationGroup?
     
     func weatherURLString(coordinatesOne: Double, coordinatesTwo: Double) -> String {
-        return "https://api.openweathermap.org/data/2.5/onecall?lat=\(coordinatesOne)&lon=\(coordinatesTwo)&exclude=hourly&units=metric&appid=6554673c226a724c0b5a9afa11ed4d6f&lang=ru"
+        return "https://api.openweathermap.org/data/2.5/onecall?lat=\(coordinatesOne)&lon=\(coordinatesTwo)&exclude=hourly&units=metric&appid=04865a1fa3d5d2578d52f3d8970c7bf9&lang=ru"
     }
     
     func getNewCitiesWeather(location: CLLocation?, completion: @escaping (Result<WeekWeather, Error>) -> Void) {

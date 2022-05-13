@@ -8,13 +8,7 @@
 import UIKit
 import RealmSwift
 
-protocol ChangeWeatherDelegate {
-    func updateLabels(with index: Int)
-}
-
 class PageViewController: UIViewController, UIPageViewControllerDelegate, UIPageViewControllerDataSource {
-
-    var changingDelegate: ChangeWeatherDelegate?
     
     let viewModel: GeneralViewModel
     
@@ -32,11 +26,15 @@ class PageViewController: UIViewController, UIPageViewControllerDelegate, UIPage
     
     var pendingIndex = 0
     
-    init(viewModel: GeneralViewModel, locationViewModel: LocationViewModel, currentIndex: Int) {
+    init(viewModel: GeneralViewModel,
+         locationViewModel: LocationViewModel,
+         currentIndex: Int
+        ) {
         self.viewModel = viewModel
         self.locationViewModel = locationViewModel
         self.currentIndex = currentIndex
-        super.init(nibName: nil, bundle: nil)
+        super.init(nibName: nil, bundle: nil
+        )
     }
     
     required init?(coder: NSCoder) {
@@ -45,70 +43,57 @@ class PageViewController: UIViewController, UIPageViewControllerDelegate, UIPage
     
     //MARK: -Lifecycle
     
-    //Тест Вариант 3
-    
-//    override func viewDidAppear(animated: Bool) {
-//        super.viewDidAppear(animated)
-//        let viewControllers: [UIViewControllers] = [UIViewController()]
-//        if let pageViewController = parentViewController as? UIPageViewController {
-//            pageViewController.setViewControllers(viewControllers, direction: .Forward, animated: true, completion: nil)
-//        }
-//    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         pageController = UIPageViewController(transitionStyle: .scroll,
-                                                      navigationOrientation: .horizontal,
-                                                      options: nil)
+                                              navigationOrientation: .horizontal,
+                                              options: nil
+                                                )
         pageController.delegate = self
         pageController.dataSource = self
         
-        
+        self.navigationController?.navigationBar.isHidden = true
         
         addChild(pageController)
         view.addSubview(pageController.view)
         
-//        NSLayoutConstraint.activate([
-//            pageController.view.topAnchor.constraint(equalTo: view.topAnchor),
-//            pageController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-//            pageController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-//            pageController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-//        ])
+        NSLayoutConstraint.activate([
+            pageController.view.topAnchor.constraint(equalTo: view.topAnchor),
+            pageController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            pageController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            pageController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
         
-        let views = ["pageController": pageController.view] as [String: AnyObject]
-                view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[pageController]|", options: [], metrics: nil, views: views))
-                view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[pageController]|", options: [], metrics: nil, views: views))
+//        let views = ["pageController": pageController.view] as [String: AnyObject]
+//                view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[pageController]|", options: [], metrics: nil, views: views))
+//                view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[pageController]|", options: [], metrics: nil, views: views))
         
         if realm.objects(Cities.self).first != nil {
             for (index, _) in realm.objects(Cities.self).enumerated() {
-                let mainScreenViewController = MainScrenenViewController(viewModel: self.viewModel, locationViewModel: self.locationViewModel, currentIndex: currentIndex)
+                let mainScreenViewController = MainScrenenViewController(
+                        viewModel: self.viewModel,
+                        locationViewModel: self.locationViewModel,
+                        currentIndex: currentIndex
+                )
+                mainScreenViewController.currentIndex += index
                 mainScreenViewController.selectionDelegate = self
-                mainScreenViewController.currentIndex += (index)
                 self.controllers.append(mainScreenViewController)
             }
         } else {
-            
-                let mainScreenViewController = MainScrenenViewController(viewModel: self.viewModel, locationViewModel: self.locationViewModel, currentIndex: currentIndex)
-                self.controllers.append(mainScreenViewController)
-            
-            
+            let mainScreenViewController = MainScrenenViewController(
+                    viewModel: self.viewModel,
+                    locationViewModel: self.locationViewModel,
+                    currentIndex: currentIndex
+            )
+            mainScreenViewController.selectionDelegate = self
+            self.controllers.append(mainScreenViewController)
         }
         
         pageController.setViewControllers([controllers[0]], direction: .forward, animated: false)
         
         setupPageControl()
     
-    }
-    
-    func firstCityDidLoaded() {
-        let mainScreenViewController = MainScrenenViewController(viewModel: self.viewModel, locationViewModel: self.locationViewModel, currentIndex: currentIndex )
-        self.controllers.append(mainScreenViewController)
     }
     
     func setupPageControl() {
@@ -129,7 +114,6 @@ class PageViewController: UIViewController, UIPageViewControllerDelegate, UIPage
         //Если индекс = первому индексу в котором значение появляется в коллекци
             if let index = controllers.firstIndex(of: viewController) {
                 if index > 0 {
-                    
                     return controllers[index-1]
                 } else {
                     return nil
@@ -141,7 +125,6 @@ class PageViewController: UIViewController, UIPageViewControllerDelegate, UIPage
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
             if let index = controllers.firstIndex(of: viewController) {
                 if index < controllers.count - 1 {
-                    
                     return controllers[index+1]
                 } else {
                     return nil
@@ -166,13 +149,24 @@ class PageViewController: UIViewController, UIPageViewControllerDelegate, UIPage
 
 extension PageViewController: AddNewCityDelegate {
 
-    func newCityDidSelected(name: Cities) {
-
-            guard let lastCity = realm.objects(Cities.self).index(of: name) else { return }
-
-            let mainScreenViewController = MainScrenenViewController(viewModel: self.viewModel, locationViewModel: self.locationViewModel, currentIndex: lastCity)
-
-            self.controllers.append(mainScreenViewController)
-
+    func newCityDidSelected(name: String) {
+        
+        let city = Cities()
+        city.city = name
+        city.id = controllers.count
+        
+        try! self.realm.write {
+            self.realm.add([city])
+        }
+        
+        let mainScreenViewController = MainScrenenViewController(
+                viewModel: self.viewModel,
+                locationViewModel: self.locationViewModel,
+            currentIndex: controllers.count
+        )
+        mainScreenViewController.selectionDelegate = self
+        controllers.append(mainScreenViewController)
+        pageController.reloadInputViews()
+        pageControl.numberOfPages = controllers.count
     }
 }

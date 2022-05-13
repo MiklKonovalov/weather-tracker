@@ -37,8 +37,6 @@ class LocationGroup: ILocationGroup {
         
         guard let url = components?.url else { return }
         
-        //guard let url = URL(string: "http://api.openweathermap.org/geo/1.0/direct?q=\(name)&limit=5&appid=6554673c226a724c0b5a9afa11ed4d6f") else { return }
-        
         let task = URLSession.shared.dataTask(with: url) { data, response, error in
             guard let data = data, error == nil else { return }
     
@@ -62,12 +60,8 @@ class LocationGroup: ILocationGroup {
         else {
             return nil
         }
-
-//        let lat = coordinates.lat
-//        let lon = coordinates.lon
         
         let latAndLon = coordinates.geoObjectCollection.featureMember.first?.geoObject.point.pos
-        //coordinates.geoObjectCollection.featureMember.first?.geoObject.point.pos
         
         let splits = latAndLon?.split(separator: " ").map(String.init)
         
